@@ -183,8 +183,8 @@ The **standalone examples 01-10** were authored and checked offline but have **n
 Use this BibTeX template now, and replace the provisional author group, repository URL and commit with the approved publication information:
 
 ```bibtex
-@software{OpenDSSSim_v0_1_0a6,
-  author  = {{OpenDSSSim contributors}},
+@software{OpenDSSSim_v0_1,
+  author  = {{Ninad Gaikwad and Anamika Dubey}},
   title   = {{OpenDSSSim}: A Generalized Gymnasium Framework for Distribution-System Simulation and Control},
   year    = {2026},
   version = {0.1.0a6},
