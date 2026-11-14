@@ -1,0 +1,13 @@
+# Preserve byte-for-byte original source/DSS/captured scientific files.
+# Git's global core.autocrlf setting must NOT alter their SHA-256 hashes.
+* -text
+# New educational/docs files are normalized LF where safe.
+README.md text eol=lf
+CONTRIBUTING.md text eol=lf
+SECURITY.md text eol=lf
+examples/ieee123_course/*.py text eol=lf
+examples/ieee123_course/lessons/*.py text eol=lf
+examples/ieee123_course/course_utils/*.py text eol=lf
+examples/ieee123_course/scripts/*.sh text eol=lf
+examples/ieee123_course/scripts/*.ps1 text eol=lf
+docs/tutorial/*.md text eol=lf

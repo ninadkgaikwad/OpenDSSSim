@@ -1,0 +1,15 @@
+﻿{
+    "schema":  "opendsssim.pesgm2027.ieee123_baseline_inventory.v1",
+    "source_circuit":  "ieee123",
+    "capacitor_objects_in_master":  4,
+    "switch_like_lines_in_master":  8,
+    "regcontrol_objects_total":  7,
+    "load_objects":  91,
+    "pv_objects":  0,
+    "notes":  [
+                  "Canonical baseline is preserved without P1/P2 augmentation.",
+                  "PESGM P1 target control counts are experiment selections/additions, not baseline claims.",
+                  "PV systems are not introduced by this baseline bootstrap.",
+                  "The shared working copy will later be augmented for both P1 and P2."
+              ]
+}

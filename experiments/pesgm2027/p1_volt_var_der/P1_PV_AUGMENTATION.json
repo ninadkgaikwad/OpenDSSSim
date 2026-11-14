@@ -1,0 +1,128 @@
+{
+  "schema": "opendsssim.pesgm2027.p1.pv_augmentation.v1",
+  "patch_id": "OpenDSSSim_PESGM2027_P1_IEEE123_PVAugmentation_v01R1_20261012",
+  "baseline_peak_load_kw": 3490.0,
+  "fleet_pmpp_kw": 700.0,
+  "pv_penetration_percent_of_baseline_peak": 20.05730659025788,
+  "inverter_oversize_ratio_kva_per_kw": 1.1,
+  "native_regulators_modified": false,
+  "native_capacitors_modified": false,
+  "native_regcontrol_count_expected": 7,
+  "native_capacitor_count_expected": 4,
+  "added_pv_count": 10,
+  "three_phase_distribution_pv_count": 3,
+  "single_phase_residential_pv_count": 7,
+  "residential_phase_counts": {
+    "A": 3,
+    "B": 2,
+    "C": 2
+  },
+  "distribution_pv": [
+    {
+      "name": "PVD47",
+      "bus": "47",
+      "phases": [
+        1,
+        2,
+        3
+      ],
+      "kv": 4.16,
+      "pmpp_kw": 210,
+      "kva": 231
+    },
+    {
+      "name": "PVD76",
+      "bus": "76",
+      "phases": [
+        1,
+        2,
+        3
+      ],
+      "kv": 4.16,
+      "pmpp_kw": 210,
+      "kva": 231
+    },
+    {
+      "name": "PVD105",
+      "bus": "105",
+      "phases": [
+        1,
+        2,
+        3
+      ],
+      "kv": 4.16,
+      "pmpp_kw": 210,
+      "kva": 231
+    }
+  ],
+  "residential_pv": [
+    {
+      "name": "PVR20A",
+      "bus": "20",
+      "phase": "A",
+      "node": 1,
+      "kv": 2.4,
+      "pmpp_kw": 10,
+      "kva": 11
+    },
+    {
+      "name": "PVR38B",
+      "bus": "38",
+      "phase": "B",
+      "node": 2,
+      "kv": 2.4,
+      "pmpp_kw": 10,
+      "kva": 11
+    },
+    {
+      "name": "PVR41C",
+      "bus": "41",
+      "phase": "C",
+      "node": 3,
+      "kv": 2.4,
+      "pmpp_kw": 10,
+      "kva": 11
+    },
+    {
+      "name": "PVR56B",
+      "bus": "56",
+      "phase": "B",
+      "node": 2,
+      "kv": 2.4,
+      "pmpp_kw": 10,
+      "kva": 11
+    },
+    {
+      "name": "PVR70A",
+      "bus": "70",
+      "phase": "A",
+      "node": 1,
+      "kv": 2.4,
+      "pmpp_kw": 10,
+      "kva": 11
+    },
+    {
+      "name": "PVR103C",
+      "bus": "103",
+      "phase": "C",
+      "node": 3,
+      "kv": 2.4,
+      "pmpp_kw": 10,
+      "kva": 11
+    },
+    {
+      "name": "PVR113A",
+      "bus": "113",
+      "phase": "A",
+      "node": 1,
+      "kv": 2.4,
+      "pmpp_kw": 10,
+      "kva": 11
+    }
+  ],
+  "capability_math": {
+    "dynamic_qmax": "sqrt(S_rated^2 - P_av(t)^2)",
+    "distribution_qmax_at_full_active_kvar": 96.23408959407264,
+    "residential_qmax_at_full_active_kvar": 4.58257569495584
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "status": "NEEDS_HUMAN_REVIEW_BEFORE_PUBLIC_GITHUB_PUSH",
+  "note": "Potential matches are reported by relative filename and label; regex hits are not asserted to be secrets.",
+  "matched_files": {
+    "experiments/pesgm2027/feeders/_baseline_manifests/ieee906_european_lv_base_receipt.json": [
+      "dropbox_reference"
+    ],
+    "experiments/pesgm2027/feeders/_baseline_manifests/ieee8500_base_receipt.json": [
+      "dropbox_reference"
+    ],
+    "results/pesgm2027/rbc/2026-11-10_S10D_audited/evidence/RBC_S10C_Receipt_20261110T212402030029Z.json": [
+      "dropbox_reference"
+    ],
+    "results/pesgm2027/rbc/2026-11-10_S10D_audited/evidence/RBC_S10D_Pilot_20261110T224005116782Z_Receipt.json": [
+      "dropbox_reference"
+    ],
+    "results/pesgm2027/rbc/2026-11-10_S10D_audited/evidence/RBC_S10D_P2_Receipt_20261110T224009892176Z.json": [
+      "dropbox_reference"
+    ],
+    "results/pesgm2027/rbc/2026-11-10_S10D_audited/evidence/RBC_S10D_Qualify_20261110T222533634405Z_Receipt.json": [
+      "dropbox_reference"
+    ],
+    "docs/release/GITHUB_PUBLICATION_CHECKLIST.md": [
+      "windows_user_path",
+      "dropbox_reference"
+    ],
+    "docs/development/patches/OpenDSSSim_A02_Generalized_Engine_Circuit_Capability_Discovery_v01R1_20261007.md": [
+      "dropbox_reference"
+    ],
+    "docs/development/architecture/OpenDSSSim_A0_Architecture_Development_Plan_v01R1_20260930.md": [
+      "windows_user_path",
+      "dropbox_reference"
+    ],
+    "docs/development/architecture/OpenDSSSim_A0_SmartCommunitySim2_ReuseAdaptNewMatrix_v01_20260930.md": [
+      "windows_user_path",
+      "dropbox_reference"
+    ],
+    "docs/development/control_science/common/B00_V1_NativeControls_ScienceFreeze_20261105.md": [
+      "windows_user_path"
+    ],
+    "docs/development/control_science/common/RBC_P1_P2_DevelopmentHandoff_20261105.md": [
+      "windows_user_path",
+      "dropbox_reference"
+    ]
+  },
+  "matched_file_count": 12
+}

@@ -1,0 +1,24 @@
+name: IEEE123 course offline integrity
+on:
+  push:
+  pull_request:
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install just enough for pure-file/offline checks
+        run: python -m pip install 'numpy>=1.26,<3' 'matplotlib>=3.7,<4'
+      - name: Compile the educational code (no plant/solver run)
+        run: python -m compileall -q examples/ieee123_course
+      - name: Validate embedded input SHA-256 and course interfaces
+        run: python -m unittest discover -s examples/ieee123_course/tests -v
+      - name: Check release source hashes
+        run: python scripts/verify_release.py
+      - name: Verify pure-file course functionality
+        run: python examples/ieee123_course/run_course.py --lesson 00 --run-id github_ci_integrity
+      # AltDSS and proprietary Gurobi tests intentionally remain manual native
+      # qualification gates; this CI must never claim to validate AC operation.

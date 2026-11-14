@@ -1,0 +1,164 @@
+{
+  "common_fault_protocol": "fixed health all evaluation timesteps; pre-isolated unavailable equipment; env.step authoritative physical mutation during official controller comparisons",
+  "control_science": "P2_CONTROL_SCIENCE_BLOCKS_1_TO_11_FROZEN_UNCHANGED",
+  "deferred": [
+    "tie corridor length/conductor/impedance/ampacity",
+    "native AltDSS electrical qualification",
+    "voltage and thermal constraints",
+    "load priority and curtailability",
+    "common test load/forecast and time horizon",
+    "MPC horizon",
+    "RL numerical training/testing settings"
+  ],
+  "documentation_path": "docs/development/control_science/P2_reconfiguration_restoration/P2_IEEE123_MF01_MF02_ExperimentalDesign_RATIFIED_V01_20261028.md",
+  "new_switches": {
+    "SW10": {
+      "a": "72",
+      "b": "89",
+      "default": "open",
+      "in": [
+        "MF02"
+      ],
+      "phases": "ABC"
+    },
+    "SW11": {
+      "a": "P2SW11MID",
+      "b": "78",
+      "default": "closed",
+      "in": [
+        "MF02"
+      ],
+      "phases": "ABC",
+      "preserve_line": "L78; original LineCode=6, Length=0.1, moved far terminal to P2SW11MID"
+    },
+    "SW9": {
+      "a": "81",
+      "b": "87",
+      "default": "open",
+      "in": [
+        "MF01",
+        "MF02"
+      ],
+      "phases": "ABC"
+    }
+  },
+  "ratified_date": "2026-10-28",
+  "scenario_families": {
+    "MF01": {
+      "example_close": [
+        "SW8",
+        "SW9"
+      ],
+      "feeder": "experiments/pesgm2027/feeders/ieee123_p2_mf01_simple",
+      "health_down": [
+        "L45",
+        "L77",
+        "L93",
+        "SW7"
+      ],
+      "initial_closed": [
+        "SW1",
+        "SW2",
+        "SW3",
+        "SW4",
+        "SW5",
+        "SW6"
+      ],
+      "initial_open": [
+        "SW7",
+        "SW8",
+        "SW9"
+      ],
+      "name": "P2-MF01-SIMPLE",
+      "required_stay_open": [
+        "SW7"
+      ],
+      "switches_count": 9,
+      "topological_demo": {
+        "after_kw": 2975,
+        "after_loads": 84,
+        "pre_kw": 2715,
+        "pre_loads": 76,
+        "unreachable_nominal_kw": 515
+      }
+    },
+    "MF02": {
+      "alternative_actions": {
+        "A": {
+          "close": [
+            "SW7",
+            "SW8",
+            "SW9"
+          ],
+          "open": [
+            "SW10"
+          ],
+          "ops": 3,
+          "sw11": "closed"
+        },
+        "B": {
+          "close": [
+            "SW7",
+            "SW8",
+            "SW10"
+          ],
+          "open": [
+            "SW9"
+          ],
+          "ops": 3,
+          "sw11": "closed"
+        },
+        "C": {
+          "close": [
+            "SW7",
+            "SW8",
+            "SW9",
+            "SW10"
+          ],
+          "open": [
+            "SW11"
+          ],
+          "ops": 5,
+          "sw11": "open"
+        },
+        "REJECT": {
+          "close": [
+            "SW7",
+            "SW8",
+            "SW9",
+            "SW10",
+            "SW11"
+          ],
+          "why": "nonradial bus-level cycle"
+        }
+      },
+      "feeder": "experiments/pesgm2027/feeders/ieee123_p2_mf02_exotic",
+      "health_down": [
+        "L45",
+        "L77",
+        "L93"
+      ],
+      "initial_closed": [
+        "SW1",
+        "SW2",
+        "SW3",
+        "SW4",
+        "SW5",
+        "SW6",
+        "SW11"
+      ],
+      "initial_open": [
+        "SW7",
+        "SW8",
+        "SW9",
+        "SW10"
+      ],
+      "name": "P2-MF02-EXOTIC",
+      "switches_count": 11,
+      "topological_nominal_kw": 3490
+    }
+  },
+  "schema": "opendsssim.pesgm2027.p2.ratified_two_scenario_design.v01",
+  "source_snapshot_sha256": "79123A0C9B1C54ACE2B12C83355D15FD571590AF72C010100A4C901157994BCE",
+  "status": "DESIGN_RATIFIED__NATIVE_ELECTRICAL_AND_EXPERIMENT_NUMERIC_FREEZE_PENDING"
+}

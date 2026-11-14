@@ -1,0 +1,8 @@
+case,name,faults,close_ties,bus_level_radial,bus_cycle_count,load_objects_fully_phase_connected,load_kw_fully_phase_connected,load_kw_missing_one_or_more_required_phases,all_91_loads_phase_connected,warning
+S00,Intact radial reference,,,True,0,91,3490.0,0.0,True,"STATIC connectivity only. Not fault-current, relay, regulator power-flow, phase angle, line capacity or protection validation."
+S01,Single fault main lateral,L45,SW7,True,0,91,3490.0,0.0,True,"STATIC connectivity only. Not fault-current, relay, regulator power-flow, phase angle, line capacity or protection validation."
+S02,Single fault phase-A leaf,L93,SW8,True,0,91,3490.0,0.0,True,"STATIC connectivity only. Not fault-current, relay, regulator power-flow, phase angle, line capacity or protection validation."
+S03,"Two faults, two ties","L45,L93","SW7,SW8",True,0,91,3490.0,0.0,True,"STATIC connectivity only. Not fault-current, relay, regulator power-flow, phase angle, line capacity or protection validation."
+S04,Two faults with phase limitation,"L45,L77","SW7,SW8",True,0,85,3310.0,180.0,False,"STATIC connectivity only. Not fault-current, relay, regulator power-flow, phase angle, line capacity or protection validation."
+S05,Two faults that ties cannot fully serve,"L45,L48","SW7,SW8",False,1,89,3175.0,315.0,False,"STATIC connectivity only. Not fault-current, relay, regulator power-flow, phase angle, line capacity or protection validation."
+S06,Sw3 faulted/unavailable,SW3,SW7,True,0,91,3490.0,0.0,True,"STATIC connectivity only. Not fault-current, relay, regulator power-flow, phase angle, line capacity or protection validation."

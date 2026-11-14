@@ -1,0 +1,7 @@
+cff-version: 1.2.0
+message: "Cite the software version and commit; cite the associated IEEE paper separately when published. Replace provisional author and URL metadata before public release."
+type: software
+title: "OpenDSSSim: A Generalized Gymnasium Framework for Distribution-System Simulation and Control"
+authors:
+  - name: "OpenDSSSim contributors"
+version: "0.1.0a6"

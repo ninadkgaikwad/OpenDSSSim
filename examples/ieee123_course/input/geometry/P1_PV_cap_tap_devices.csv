@@ -1,0 +1,22 @@
+device_type,entity,bus_or_affected_object,phase_or_affects,nameplate_kva,rated_kvar,initial_tap_index,x,y,location_method,coordinate_provenance
+PV,pvsystem.pvd105,105,"[[""105"", 1], [""105"", 2], [""105"", 3]]",231.0,,,3525.0,2725.0,equipment_bus,public_reference_diagram_not_geographic
+PV,pvsystem.pvd47,47,"[[""47"", 1], [""47"", 2], [""47"", 3]]",231.0,,,1975.0,3275.0,equipment_bus,public_reference_diagram_not_geographic
+PV,pvsystem.pvd76,76,"[[""76"", 1], [""76"", 2], [""76"", 3]]",231.0,,,3525.0,1375.0,equipment_bus,public_reference_diagram_not_geographic
+PV,pvsystem.pvr103c,103,"[[""103"", 3]]",11.0,,,4075.0,2450.0,equipment_bus,public_reference_diagram_not_geographic
+PV,pvsystem.pvr113a,113,"[[""113"", 1]]",11.0,,,4800.0,2925.0,equipment_bus,public_reference_diagram_not_geographic
+PV,pvsystem.pvr20a,20,"[[""20"", 1]]",11.0,,,925.0,2325.0,equipment_bus,public_reference_diagram_not_geographic
+PV,pvsystem.pvr38b,38,"[[""38"", 2]]",11.0,,,2325.0,2000.0,equipment_bus,public_reference_diagram_not_geographic
+PV,pvsystem.pvr41c,41,"[[""41"", 3]]",11.0,,,2300.0,2575.0,equipment_bus,public_reference_diagram_not_geographic
+PV,pvsystem.pvr56b,56,"[[""56"", 2]]",11.0,,,2875.0,1500.0,equipment_bus,public_reference_diagram_not_geographic
+PV,pvsystem.pvr70a,70,"[[""70"", 1]]",11.0,,,4325.0,1850.0,equipment_bus,public_reference_diagram_not_geographic
+capacitor,capacitor.c83,83,"[[""83"", 1], [""83"", 2], [""83"", 3]]",,600.0,,4275.0,175.0,equipment_bus,public_reference_diagram_not_geographic
+capacitor,capacitor.c88a,88,"[[""88"", 1]]",,50.0,,2950.0,1300.0,equipment_bus,public_reference_diagram_not_geographic
+capacitor,capacitor.c90b,90,"[[""90"", 2]]",,50.0,,2775.0,900.0,equipment_bus,public_reference_diagram_not_geographic
+capacitor,capacitor.c92c,92,"[[""92"", 3]]",,50.0,,2550.0,825.0,equipment_bus,public_reference_diagram_not_geographic
+regulator,Transformer.reg1a,150r,"[[""Transformer.reg1a"", 1, 0.012500000000000004], [""Transformer.reg1a"", 2, 0.012500000000000004], [""Transformer.reg1a"", 3, 0.012500000000000004]]",,,5,100.0,1500.0,transformer_child_bus,public_reference_diagram_not_geographic
+regulator,Transformer.reg2a,9r,"[[""Transformer.reg2a"", 1, 0.012500000000000004]]",,,0,1200.0,1725.0,transformer_child_bus,public_reference_diagram_not_geographic
+regulator,Transformer.reg3a,25r,"[[""Transformer.reg3a"", 1, 0.012500000000000004]]",,,2,1500.0,3150.0,transformer_child_bus,public_reference_diagram_not_geographic
+regulator,Transformer.reg3c,25r,"[[""Transformer.reg3c"", 3, 0.012500000000000004]]",,,0,1500.0,3150.0,transformer_child_bus,public_reference_diagram_not_geographic
+regulator,Transformer.reg4a,160r,"[[""Transformer.reg4a"", 1, 0.012500000000000004]]",,,9,3175.0,1850.0,transformer_child_bus,public_reference_diagram_not_geographic
+regulator,Transformer.reg4b,160r,"[[""Transformer.reg4b"", 2, 0.012500000000000004]]",,,4,3175.0,1850.0,transformer_child_bus,public_reference_diagram_not_geographic
+regulator,Transformer.reg4c,160r,"[[""Transformer.reg4c"", 3, 0.012500000000000004]]",,,6,3175.0,1850.0,transformer_child_bus,public_reference_diagram_not_geographic

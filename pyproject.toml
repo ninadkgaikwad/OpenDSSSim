@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "opendsssim"
+version = "0.1.0a6"
+description = "Generalized AltDSS-backed Gymnasium simulator for distribution-system studies and control."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "altdss==0.2.4",
+    "gymnasium>=1.2,<2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

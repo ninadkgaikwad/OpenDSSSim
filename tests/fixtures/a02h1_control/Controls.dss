@@ -1,0 +1,5 @@
+New RegControl.RC1 Transformer=RegX Winding=2 VReg=120 Band=3 PTRatio=60
+
+New CapControl.CC1 Element=Line.Feeder Terminal=2 Capacitor=Cap1 Type=Voltage OnSetting=118 OffSetting=122 PTRatio=60
+
+New SwtControl.SC1 SwitchedObj=Line.Feeder SwitchedTerm=1 Normal=Closed State=Closed

@@ -1,0 +1,27 @@
+! =============================================================================
+! OpenDSSSim PESGM-2027 P1 PV augmentation
+! Patch: OpenDSSSim_PESGM2027_P1_IEEE123_PVAugmentation_v01R1_20261012
+! =============================================================================
+! Canonical IEEE-123 regulators and capacitors are NOT modified.
+! No InvControl objects are defined. Reactive-power commands are supplied later
+! through the OpenDSSSim P1 action contract.
+!
+! 3 distribution PVs: 210 kW Pmpp, 231 kVA, 3-phase, 4.16 kV LL
+! 7 residential PVs :  10 kW Pmpp,  11 kVA, 1-phase, 2.4 kV LN
+! Fleet Pmpp = 700 kW = 20.0573% of canonical 3490 kW peak load.
+! =============================================================================
+
+! --- Three-phase distribution PVs ---
+New PVSystem.PVD47  phases=3 bus1=47.1.2.3  conn=wye kv=4.16 Pmpp=210 kVA=231 irradiance=1.0 kvar=0 kvarMax=231 kvarMaxAbs=231 WattPriority=Yes %PminNoVars=0 %PminkvarMax=0
+New PVSystem.PVD76  phases=3 bus1=76.1.2.3  conn=wye kv=4.16 Pmpp=210 kVA=231 irradiance=1.0 kvar=0 kvarMax=231 kvarMaxAbs=231 WattPriority=Yes %PminNoVars=0 %PminkvarMax=0
+New PVSystem.PVD105 phases=3 bus1=105.1.2.3 conn=wye kv=4.16 Pmpp=210 kVA=231 irradiance=1.0 kvar=0 kvarMax=231 kvarMaxAbs=231 WattPriority=Yes %PminNoVars=0 %PminkvarMax=0
+
+! --- Single-phase residential / house-like PVs ---
+! Phase count: A=3, B=2, C=2.
+New PVSystem.PVR20A  phases=1 bus1=20.1  conn=wye kv=2.4 Pmpp=10 kVA=11 irradiance=1.0 kvar=0 kvarMax=11 kvarMaxAbs=11 WattPriority=Yes %PminNoVars=0 %PminkvarMax=0
+New PVSystem.PVR38B  phases=1 bus1=38.2  conn=wye kv=2.4 Pmpp=10 kVA=11 irradiance=1.0 kvar=0 kvarMax=11 kvarMaxAbs=11 WattPriority=Yes %PminNoVars=0 %PminkvarMax=0
+New PVSystem.PVR41C  phases=1 bus1=41.3  conn=wye kv=2.4 Pmpp=10 kVA=11 irradiance=1.0 kvar=0 kvarMax=11 kvarMaxAbs=11 WattPriority=Yes %PminNoVars=0 %PminkvarMax=0
+New PVSystem.PVR56B  phases=1 bus1=56.2  conn=wye kv=2.4 Pmpp=10 kVA=11 irradiance=1.0 kvar=0 kvarMax=11 kvarMaxAbs=11 WattPriority=Yes %PminNoVars=0 %PminkvarMax=0
+New PVSystem.PVR70A  phases=1 bus1=70.1  conn=wye kv=2.4 Pmpp=10 kVA=11 irradiance=1.0 kvar=0 kvarMax=11 kvarMaxAbs=11 WattPriority=Yes %PminNoVars=0 %PminkvarMax=0
+New PVSystem.PVR103C phases=1 bus1=103.3 conn=wye kv=2.4 Pmpp=10 kVA=11 irradiance=1.0 kvar=0 kvarMax=11 kvarMaxAbs=11 WattPriority=Yes %PminNoVars=0 %PminkvarMax=0
+New PVSystem.PVR113A phases=1 bus1=113.1 conn=wye kv=2.4 Pmpp=10 kVA=11 irradiance=1.0 kvar=0 kvarMax=11 kvarMaxAbs=11 WattPriority=Yes %PminNoVars=0 %PminkvarMax=0

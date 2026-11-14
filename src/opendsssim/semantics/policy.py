@@ -1,0 +1,158 @@
+"""Frozen A03 semantic-policy identity and explicit class mappings."""
+
+from __future__ import annotations
+
+SEMANTIC_POLICY_BASE_SHA256 = "51062A587FF88E8B33A1CA2F6BA57B182D58AF8A83A16EE8D0CA0F7D072A98E3"
+# SHA-256 of the separately approved, immutable S06 policy extension document.
+SEMANTIC_POLICY_SHA256 = "ACDABA0A469FBEB1A1B0950016B53EE8E3EBB9742BD9830C7EBC68770EDC5FBB"
+SEMANTIC_POLICY_IDENTITY_VERSION = "S06_GENERAL_CONTROLLER_CAPABILITIES_V01"
+
+STATIC_PARAMETER_PROPERTIES: dict[str, tuple[str, ...]] = {
+    "Load": ("kV", "kVA", "Phases", "Conn", "Model"),
+    "PVSystem": (
+        "kV",
+        "kVA",
+        "Pmpp",
+        "kvarMax",
+        "kvarMaxAbs",
+        "Phases",
+        "Conn",
+        "Model",
+    ),
+    "Storage": (
+        "kV",
+        "kVA",
+        "kWRated",
+        "kWhRated",
+        "kvarMax",
+        "kvarMaxAbs",
+        "Phases",
+        "Conn",
+        "Model",
+    ),
+    "Capacitor": (
+        "kV",
+        "kvar",
+        "Phases",
+        "Conn",
+        "NormAmps",
+        "EmergAmps",
+    ),
+    "Transformer": (
+        "kVs",
+        "kVAs",
+        "MinTap",
+        "MaxTap",
+        "NumTaps",
+        "Phases",
+        "NormAmps",
+        "EmergAmps",
+    ),
+    "AutoTrans": (
+        "kVs",
+        "kVAs",
+        "MinTap",
+        "MaxTap",
+        "NumTaps",
+        "Phases",
+        "NormAmps",
+        "EmergAmps",
+    ),
+    "Line": (
+        "Length",
+        "Units",
+        "NormAmps",
+        "EmergAmps",
+        "Phases",
+        "Switch",
+    ),
+    "Generator": ("kV", "kVA", "Phases", "Conn", "Model"),
+    "RegControl": (
+        "VReg",
+        "Band",
+        "Delay",
+        "TapDelay",
+        "TapWinding",
+        "Winding",
+        "PTRatio",
+    ),
+    "CapControl": (
+        "OnSetting",
+        "OffSetting",
+        "Delay",
+        "DelayOff",
+        "Type",
+        "Terminal",
+        "PTRatio",
+    ),
+    "InvControl": ("Mode", "CombiMode", "DERList", "Voltage_CurveX_Ref"),
+    "ExpControl": ("DERList", "PVSystemList", "VReg", "Slope", "VRegTau"),
+    "SwtControl": ("Delay", "Normal", "SwitchedObj", "SwitchedTerm"),
+    "StorageController": (
+        "Element",
+        "Terminal",
+        "ElementList",
+        "ModeDischarge",
+        "ModeCharge",
+    ),
+    "GenDispatcher": ("Element", "Terminal", "GenList", "kWLimit", "kWBand"),
+    "ESPVLControl": (
+        "Element",
+        "Terminal",
+        "LocalControlList",
+        "PVSystemList",
+        "StorageList",
+    ),
+    "UPFCControl": ("UPFCList",),
+    "Relay": ("MonitoredObj", "MonitoredTerm", "SwitchedObj", "SwitchedTerm", "Type"),
+    "Recloser": ("MonitoredObj", "MonitoredTerm", "SwitchedObj", "SwitchedTerm"),
+    "Fuse": ("MonitoredObj", "MonitoredTerm", "SwitchedObj", "SwitchedTerm"),
+}
+
+CONSTRAINT_PARAMETER_PROPERTIES: dict[str, tuple[str, ...]] = {
+    "PVSystem": ("kVA", "kvarMax", "kvarMaxAbs"),
+    "Storage": ("kW", "kWRated", "kWhRated", "kVA", "kvarMax", "kvarMaxAbs"),
+    "Capacitor": ("States",),
+    "Transformer": ("MinTap", "MaxTap", "NumTaps"),
+    "AutoTrans": ("MinTap", "MaxTap", "NumTaps"),
+    "Line": ("NormAmps", "EmergAmps"),
+    "Generator": ("kVA",),
+}
+
+NATIVE_CONTROL_CAPABILITY: dict[str, str] = {
+    "RegControl": "native_control.regulator",
+    "CapControl": "native_control.capacitor",
+    "InvControl": "native_control.inverter",
+    "ExpControl": "native_control.exp_control",
+    "SwtControl": "native_control.switch",
+    "StorageController": "native_control.storage",
+    "GenDispatcher": "native_control.generator_dispatch",
+    "ESPVLControl": "native_control.espvl",
+    "UPFCControl": "native_control.upfc",
+    "Relay": "native_control.relay",
+    "Recloser": "native_control.recloser",
+    "Fuse": "native_control.fuse",
+}
+
+SUPPORTED_NATIVE_CLASSES = (
+    "Load",
+    "PVSystem",
+    "Storage",
+    "Capacitor",
+    "Transformer",
+    "AutoTrans",
+    "Line",
+    "Generator",
+    "RegControl",
+    "CapControl",
+    "InvControl",
+    "ExpControl",
+    "SwtControl",
+    "StorageController",
+    "GenDispatcher",
+    "ESPVLControl",
+    "UPFCControl",
+    "Relay",
+    "Recloser",
+    "Fuse",
+)

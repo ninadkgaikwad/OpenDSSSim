@@ -1,0 +1,147 @@
+[
+  {
+    "bytes": 394744,
+    "path": "b00_native/ieee123_pesgm2027/inventory/IEEE123Master__2B684A398505D6DFCF909899.json",
+    "sha256": "99B830515D231911CB2A90DF86811F2C9D1BC49052988E167FD162A57626B6F9"
+  },
+  {
+    "bytes": 1455,
+    "path": "b00_native/ieee123_pesgm2027/preflight/problem_AB6DAACA817AEF5A__0A84526785EF61A7AAB8C56F.json",
+    "sha256": "B2F147530B9430A77D9D8141D07508AD8C8D1DAAAF4549BFF79E7AF682585003"
+  },
+  {
+    "bytes": 281658,
+    "path": "b00_native/ieee123_pesgm2027/result.json",
+    "sha256": "C6637EEBC64CCC162C743D5117A41C85825C111EE48E49B4C2B0BF44B398B1E6"
+  },
+  {
+    "bytes": 1866795,
+    "path": "b00_native/ieee123_pesgm2027/semantics/IEEE123Master__EB290DEBB6D83A5F92C9C5F2.json",
+    "sha256": "15F735DB4E4393E2E786D1F7E4467583C86C7709E98BBCCCDA4D8060A5A6F2A1"
+  },
+  {
+    "bytes": 3694,
+    "path": "b00_native/ieee123_pesgm2027/summary.csv",
+    "sha256": "9D2B68760A42AF64455181BBBBDF144E83F711E42D896481E750BDFF13D0921C"
+  },
+  {
+    "bytes": 729,
+    "path": "b00_native/ieee123_pesgm2027/truth_load_multiplier.csv",
+    "sha256": "3D89D382F3086AD7BFC79E3C6AEDB6D36226CFDCB5F36CF2BC5091D362023A3C"
+  },
+  {
+    "bytes": 740,
+    "path": "b00_native/ieee123_pesgm2027/truth_pv_irradiance.csv",
+    "sha256": "E9CA193D97A6FAD9595407D288F02139512C867A9FAB5FA1A9ABE0ED4EF29136"
+  },
+  {
+    "bytes": 95,
+    "path": "ieee123_p2_mf01_simple/candidate_screen.csv",
+    "sha256": "D3DF98A6D7EE74F6CC7D5A2F23E7D9AD4458035E06FF9645BE98EF01A7DC645E"
+  },
+  {
+    "bytes": 378256,
+    "path": "ieee123_p2_mf01_simple/live_inventory/IEEE123Master__F2425D8D4A486E53A820B0B6.json",
+    "sha256": "4EDDCF8A022BA9138117939A7620EB9BA5AE403C8EF3093008323321F6D2D1D4"
+  },
+  {
+    "bytes": 1455,
+    "path": "ieee123_p2_mf01_simple/live_preflight/problem_F07CF3C40EC02F87__AD3734348ECC5BF0F96FAD87.json",
+    "sha256": "BB06FC9FC51458C52F1D5D88290E857A0E9F4E8535204A794010AB62A0CA11CF"
+  },
+  {
+    "bytes": 1800330,
+    "path": "ieee123_p2_mf01_simple/live_semantics/IEEE123Master__B309E9CF9CCCE0384AE8CA8C.json",
+    "sha256": "B98904C985F547DE20DDEF21AF7C0644F571C1804F59FADBB513ED921B2C215E"
+  },
+  {
+    "bytes": 2459,
+    "path": "ieee123_p2_mf01_simple/structural_preview.json",
+    "sha256": "A0A4954662B6C84DDAFB69835442F426255212D4225CE807C84DC6779EA94F26"
+  },
+  {
+    "bytes": 216,
+    "path": "ieee123_p2_mf02_exotic/candidate_screen.csv",
+    "sha256": "24A57736AF3C79FD132C88715E95C934050545A0C051F45545673BF3F53EE848"
+  },
+  {
+    "bytes": 381219,
+    "path": "ieee123_p2_mf02_exotic/live_inventory/IEEE123Master__16B347A8B93191D875F1430F.json",
+    "sha256": "E068180672107491C33F92639EF163ABE915DCEC73A133470E4527510E6244D5"
+  },
+  {
+    "bytes": 1455,
+    "path": "ieee123_p2_mf02_exotic/live_preflight/problem_C7F4266CE5240EF9__C6E842E3A89AA4AB0B76B05A.json",
+    "sha256": "5C183E37A0ACD52CA98379B5ECEC71A80158A102F7071856F778E2205FEEFC2A"
+  },
+  {
+    "bytes": 1815850,
+    "path": "ieee123_p2_mf02_exotic/live_semantics/IEEE123Master__4908356D00B8C82A944CD27C.json",
+    "sha256": "5F983F46A87D1AB0D7441A734452B9BB37B972E3A1756647A3E074ED197BA5D2"
+  },
+  {
+    "bytes": 2508,
+    "path": "ieee123_p2_mf02_exotic/structural_preview.json",
+    "sha256": "9425B2B01BAE564E3166261EC4F60A1D9F829F03191C6A160B3C1D6F38400AF7"
+  },
+  {
+    "bytes": 5191,
+    "path": "index.html",
+    "sha256": "6CFFD5C2B0B649AF1ADDA3D3033571EB29E5A7216F18CAE426953C529B1BE9F4"
+  },
+  {
+    "bytes": 3169,
+    "path": "p1_comparison.csv",
+    "sha256": "0052DA0A4E82794CAEFA20C8C1A50BB810BBBDA1DC207CDF3F0BFB6FBCE41C5B"
+  },
+  {
+    "bytes": 2717,
+    "path": "p1_comparison.svg",
+    "sha256": "073B30FED92A4FB8B7A24E92E64CBED9C471431105ABB857A1DA7B79794F067B"
+  },
+  {
+    "bytes": 190632,
+    "path": "p1_rbc/decisions.jsonl",
+    "sha256": "233C6C86845930DB48A0DDB6E8C083762F5A6EE2EEF78374A25AB1305572EB6C"
+  },
+  {
+    "bytes": 2561,
+    "path": "p1_rbc/device_mapping.json",
+    "sha256": "D27D0C7017C39ADAFA15203A69FA2F627F9B5CE16B3FC23B6D40B631FA83CE7B"
+  },
+  {
+    "bytes": 394744,
+    "path": "p1_rbc/inventory/IEEE123Master__2B684A398505D6DFCF909899.json",
+    "sha256": "99B830515D231911CB2A90DF86811F2C9D1BC49052988E167FD162A57626B6F9"
+  },
+  {
+    "bytes": 1455,
+    "path": "p1_rbc/preflight/problem_30EADA5FC8394D96__D397B71986884BA9BBD1136C.json",
+    "sha256": "9CD6F19BD3C7B035425E7F80C54B5FDB26073C7AB908D4FA85AFD176B6BD8677"
+  },
+  {
+    "bytes": 729,
+    "path": "p1_rbc/replay/truth_load_multiplier.csv",
+    "sha256": "08F24DF35D92EF97B6D921E2B3D0721B0FC48A724A84F47715C55C0A3DF6882C"
+  },
+  {
+    "bytes": 740,
+    "path": "p1_rbc/replay/truth_pv_irradiance.csv",
+    "sha256": "F0C4CBB54B0AC0F55436EE0B6E44F6074B585834CDBF04288BB37B0F1252FE4D"
+  },
+  {
+    "bytes": 1866795,
+    "path": "p1_rbc/semantics/IEEE123Master__EB290DEBB6D83A5F92C9C5F2.json",
+    "sha256": "15F735DB4E4393E2E786D1F7E4467583C86C7709E98BBCCCDA4D8060A5A6F2A1"
+  },
+  {
+    "bytes": 3399,
+    "path": "p1_rbc/timeseries.csv",
+    "sha256": "9D77E958409BCE9D5B6E4107F1ADCB15389172065B40BDD232E794054DAEF7C2"
+  },
+  {
+    "bytes": 6490,
+    "path": "receipt.json",
+    "sha256": "47582B4BDB06E927F2B5A2B9B57D94D1EDFC131CE0D0473EF21112466D72EEE7"
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "feeders": {
+    "ieee123_base": {
+      "master": "/mnt/data/OpenDSSSim_GitHub_Release/examples/ieee123_course/input/feeders/ieee123_base/IEEE123Master.dss",
+      "master_sha256": "21BFAB1A3C956D347DC491436AE839281BF7DB4ECECC405E10DDEB04D3AB00EC"
+    },
+    "ieee123_p2_mf01_simple": {
+      "master": "/mnt/data/OpenDSSSim_GitHub_Release/examples/ieee123_course/input/feeders/ieee123_p2_mf01_simple/IEEE123Master.dss",
+      "master_sha256": "9EBC5873E039F4488797606B8E1F79BFBDA0EAFBE26053361EE725A0724C7AC2"
+    },
+    "ieee123_p2_mf02_exotic": {
+      "master": "/mnt/data/OpenDSSSim_GitHub_Release/examples/ieee123_course/input/feeders/ieee123_p2_mf02_exotic/IEEE123Master.dss",
+      "master_sha256": "1451EB668F4EE52D33785562FD7C91A7CDA99165515218DAD888477F710E975A"
+    },
+    "ieee123_pesgm2027": {
+      "master": "/mnt/data/OpenDSSSim_GitHub_Release/examples/ieee123_course/input/feeders/ieee123_pesgm2027/IEEE123Master.dss",
+      "master_sha256": "890F683614AC740D20564700CBF0EC99EA07A30C9602A9FC9D1C8E17AF50D020"
+    }
+  },
+  "input_manifest_sha256": "0F79A5EB9D6A21F210BA7C00B5D2A18640A3AF5F897EB639F0B29129EC13DA36",
+  "lesson": "00_input_integrity",
+  "physics_changed": false,
+  "status": "PASS",
+  "verified_input_files": 55
+}

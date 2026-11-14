@@ -1,0 +1,66 @@
+{
+  "fresh_directed_sha256": "2DD98724E846BBE9B46C9C9C36E05C5E0E5EF0413B8A8A352B6AD695A9F77707",
+  "fresh_tree_sha256": "4C87652C1E30495D47402A649792F381BD02EBF8A3C250CCE397A0964E48870E",
+  "install_receipt_sha256": "F020897BA551BE14E35D4049B860351B4E6B2987D0D362E7AC5883804FED933C",
+  "issues": [],
+  "milestone": "RBC_S10D_PHASE_DISJOINT_REGULATOR_GRAPH_FIX_V1",
+  "mode": "Qualify",
+  "p2_files_preserved_expected": 56,
+  "package_files_verified": 17,
+  "predecessor_sha256": "9BCB14EC9551E18E45A93751B3F5ECB029517F65082BE62B2A1B9C910F0975C3",
+  "repo": "C:\\Users\\ninad\\Dropbox\\NinadGaikwad_PhD\\Gaikwad_Research\\Gaikwad_Research_Work\\OpenDSSSim",
+  "status": "PASS_S10D_CONTROLLER_NATIVE_REGRESSION_PENDING_INDEPENDENT_AUDIT",
+  "tests": [
+    {
+      "exit_code": 0,
+      "log": "s10d_phase_graph.log",
+      "log_sha256": "32879713949C182961D12F4C2C5C24A862AD67B4734EDAF4130E59C2A049FFE1",
+      "name": "s10d_phase_graph",
+      "status": "PASS"
+    },
+    {
+      "exit_code": 0,
+      "log": "s09_rule_math.log",
+      "log_sha256": "5C0A35DEA88CD64DF8C987E6EAD504D5394DB2714ABDF9DB65F3CA8A52628170",
+      "name": "s09_rule_math",
+      "status": "PASS"
+    },
+    {
+      "exit_code": 0,
+      "log": "s09_native_contract.log",
+      "log_sha256": "611A8D972246B1CA23B343D2D993CDFFFF9D6E01B234703D07614A8C057C5EA1",
+      "name": "s09_native_contract",
+      "status": "PASS"
+    },
+    {
+      "exit_code": 0,
+      "log": "b00_native.log",
+      "log_sha256": "BD3179429E802D44F71EA508636BBE3334ADE2AC44F3B84CFECC87DE42EF504F",
+      "name": "b00_native",
+      "status": "PASS"
+    },
+    {
+      "exit_code": 0,
+      "log": "full_regression_1.log",
+      "log_sha256": "02EE99365709D66FE4480102665B9DEEE11E0C97466DFAA3E70A926BF7B684CF",
+      "name": "full_regression_1",
+      "status": "PASS"
+    },
+    {
+      "exit_code": 0,
+      "log": "full_regression_2.log",
+      "log_sha256": "21F3C1A0E4D3ADE06DA9765CE65853B059CCDCD8BA40B6C62ED0E58B6752B497",
+      "name": "full_regression_2",
+      "status": "PASS"
+    },
+    {
+      "exit_code": 0,
+      "log": "full_regression_3.log",
+      "log_sha256": "E9BFCB417E5BE5565D3A5BE226CE55B6034871D28B472F3D7A6CD420D67D2830",
+      "name": "full_regression_3",
+      "status": "PASS"
+    }
+  ],
+  "timestamp_utc": "20261110T222533634405Z",
+  "verified_successor_files_post_native": 333
+}

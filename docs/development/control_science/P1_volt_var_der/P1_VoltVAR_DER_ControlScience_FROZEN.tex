@@ -1,0 +1,1283 @@
+% ============================================================================
+% OpenDSSSim P1 Volt/VAR + DER Controller Science
+% STATUS: DAY-2 CONTROLLER MATHEMATICS RATIFIED
+% Date: 2026-10-10
+%
+% This document is complete at the controller-mathematics level for P1.
+% Remaining experiment/configuration items before final campaign freeze:
+%   (i) exact IEEE-123 device placement/ratings;
+%   (ii) one fixed numerical common-cost weight set after scale verification;
+%   (iii) RL training-budget/hyperparameter qualification.
+%
+% No generalized controller implementation may hard-code IEEE-123 object names,
+% device counts, phase counts, or experiment default values.
+% ============================================================================
+
+\section{P1 Volt/VAR and DER Coordination}
+\label{sec:p1_control_science}
+
+\subsection{Scope, sources, and design principle}
+\label{subsec:p1_scope}
+
+The P1 benchmark defines one physical Volt/VAR coordination problem and three
+controller paradigms:
+\begin{enumerate}
+    \item a deterministic local rule-based controller (RBC);
+    \item a centralized LinDistFlow mixed-integer quadratic model predictive controller
+          (MIQP-MPC);
+    \item an MPC-inspired, model-free branching dueling double deep Q-network (BDQ).
+\end{enumerate}
+All three controllers operate the same OpenDSSSim plant and the same selected physical
+actuators.  Their distinction lies in the decision mechanism, not in the plant.
+
+The physical VVC/Gym framing is grounded in PowerGym~\cite{fan2022powergym} and the
+graph-policy VVC study of Lee et al.~\cite{lee2022graph}.  Forecast-aware unbalanced
+predictive control with taps, capacitors, and inverter-based DER is informed by
+Erazo-Caicedo et al.~\cite{erazo2022model}.  The exact radial DistFlow starting point
+follows Baran and Wu~\cite{baran1989sizing}; the multiphase linearized extension is
+consistent with established linear approximations for unbalanced radial networks
+\cite{gan2014multiphase}.  The high-dimensional discrete RL architecture follows
+Tavakoli et al.~\cite{tavakoli2018branching}.  The OpenDSS native control semantics used
+to motivate the RBC are documented by the OpenDSS project
+\cite{opendss_invcontrol,opendss_capcontrol,opendss_regcontrol}.
+
+The controller mathematics is cardinality-agnostic.  The selected IEEE-123 experiment
+may instantiate a particular number of devices, but the controller equations and source
+must not assume those counts.
+
+\subsection{Network and device sets}
+\label{subsec:p1_sets}
+
+Let the radial feeder be a directed graph
+\[
+\mathcal G=(\mathcal N,\mathcal E),
+\]
+oriented away from the source/root bus $0$.  Let $\Phi_i\subseteq\{a,b,c\}$ denote the
+phases present at bus $i$, and let
+\[
+\mathcal B_{\Phi}
+=
+\{(i,\phi):i\in\mathcal N,\ \phi\in\Phi_i\}
+\]
+be the active bus--phase set.
+
+The selected controllable device-channel sets are
+\[
+\mathcal R,\qquad
+\mathcal C,\qquad
+\mathcal P,
+\]
+for regulator/tap, capacitor, and PV-inverter reactive-power channels, respectively, with
+\[
+N_R=|\mathcal R|,\qquad
+N_C=|\mathcal C|,\qquad
+N_P=|\mathcal P|.
+\]
+No equation below assumes fixed $N_R$, $N_C$, or $N_P$.  The PESGM IEEE-123 experiment
+is expected to use ten channels of each type, but this is an experiment configuration,
+not a controller assumption.
+
+\subsection{Common time and exogenous information}
+\label{subsec:p1_time_info}
+
+For the PESGM experiment the source-backed control interval and predictive horizon are
+\[
+\Delta t = 5~\mathrm{min},
+\qquad
+H=12,
+\qquad
+H\Delta t = 1~\mathrm{h},
+\]
+following the predictive timing used by Erazo-Caicedo et al.~\cite{erazo2022model}.
+The generalized implementations keep both $\Delta t$ and $H$ configurable.
+
+At time $t$, the exogenous electrical input is
+\[
+d_t
+=
+\begin{bmatrix}
+(\mathbf p_t^L)^\top &
+(\mathbf q_t^L)^\top &
+(\mathbf p_t^{PV,\mathrm{av}})^\top
+\end{bmatrix}^{\top}.
+\]
+PV active power follows available generation,
+\[
+\mathbf p_t^{PV}
+=
+\mathbf p_t^{PV,\mathrm{av}},
+\]
+and is not a P1 control variable.
+
+MPC and RL receive the same authorized forecast tensor
+\[
+\widehat{\mathbf D}_t
+=
+\left\{
+\hat d_{t+k|t}
+\right\}_{k=0}^{H-1},
+\]
+where
+\[
+\hat d_{t+k|t}
+=
+\begin{bmatrix}
+(\hat{\mathbf p}_{t+k|t}^{L})^\top &
+(\hat{\mathbf q}_{t+k|t}^{L})^\top &
+(\hat{\mathbf p}_{t+k|t}^{PV,\mathrm{av}})^\top
+\end{bmatrix}^{\top}.
+\]
+Forecast access by RL is an explicit benchmark adaptation for fair information access; the
+Lee et al. source policy itself does not require this forecast tensor.
+
+\subsection{Common observation and requested action}
+\label{subsec:p1_obs_action}
+
+Let $x_t$ denote the full physical plant state and
+\[
+o_t=h(x_t)
+\]
+the authorized controller observation.  The P1 observation contains the available
+bus--phase voltage magnitudes, realized regulator states, realized capacitor states, PV
+active/reactive operating points, and authorized current load/PV quantities.  MPC and RL
+may additionally use $\widehat{\mathbf D}_t$.
+
+Every paradigm emits the same physical requested-action structure,
+\[
+a_t^{\mathrm{req}}
+=
+\begin{bmatrix}
+\Delta\boldsymbol\tau_t^\top &
+(\mathbf c_t^{\mathrm{cmd}})^\top &
+(\mathbf q_t^{PV,\mathrm{cmd}})^\top
+\end{bmatrix}^{\top},
+\]
+with
+\[
+\Delta\tau_{r,t}\in\{-1,0,+1\},
+\qquad r\in\mathcal R,
+\]
+\[
+c_{c,t}^{\mathrm{cmd}}\in\{0,1\},
+\qquad c\in\mathcal C.
+\]
+PV reactive-power commands satisfy the instantaneous inverter capability defined below.
+
+OpenDSSSim owns
+\[
+a_t^{\mathrm{req}}
+\longrightarrow
+a_t^{\mathrm{app}}
+\longrightarrow
+a_t^{\mathrm{real}}
+\]
+and the authoritative plant transition
+\[
+x_{t+1}
+=
+F_{\mathrm{DSS}}
+\!\left(
+x_t,a_t^{\mathrm{app}},d_t
+\right).
+\]
+Controllers never directly mutate AltDSS.  Each control interval has exactly one
+\texttt{env.step(...)} call containing the complete requested action vector.
+
+\subsection{Common physical device constraints}
+\label{subsec:p1_device_constraints}
+
+For inverter $p\in\mathcal P$, with nameplate apparent-power rating
+$S_p^{\mathrm{rated}}$,
+\[
+\left(P_{p,t}^{PV,\mathrm{av}}\right)^2
++
+\left(q_{p,t}^{PV}\right)^2
+\le
+\left(S_p^{\mathrm{rated}}\right)^2.
+\]
+Since active PV power is fixed at forecast/realized availability, define
+\[
+Q_{p,t}^{\max}
+=
+\sqrt{
+\left(S_p^{\mathrm{rated}}\right)^2
+-
+\left(P_{p,t}^{PV,\mathrm{av}}\right)^2
+},
+\]
+giving
+\[
+-Q_{p,t}^{\max}
+\le
+q_{p,t}^{PV}
+\le
+Q_{p,t}^{\max}.
+\]
+
+The desired operating voltage band is
+\[
+\underline V=0.95,
+\qquad
+\overline V=1.05
+\quad\mathrm{p.u.},
+\]
+consistent with the P1 source literature
+\cite{fan2022powergym,erazo2022model,lee2022graph}.
+
+\subsection{Common stage-cost semantics}
+\label{subsec:p1_common_cost}
+
+Let
+\[
+e_{i,\phi,t}^{V,+}
+=
+\left(|V_{i,\phi,t}|-\overline V\right)^+,
+\qquad
+e_{i,\phi,t}^{V,-}
+=
+\left(\underline V-|V_{i,\phi,t}|\right)^+,
+\]
+where $(z)^+=\max(z,0)$.  A cardinality-normalized voltage-violation metric is
+\[
+J_t^V
+=
+\frac{1}{|\mathcal B_\Phi|}
+\sum_{(i,\phi)\in\mathcal B_\Phi}
+\left[
+\left(e_{i,\phi,t}^{V,+}\right)^2
++
+\left(e_{i,\phi,t}^{V,-}\right)^2
+\right].
+\]
+
+Mechanical switching effort is
+\[
+J_t^{\mathrm{sw}}
+=
+\frac{1}{N_R+N_C}
+\left[
+\sum_{r\in\mathcal R}
+\left|\Delta\tau_{r,t}\right|
++
+\sum_{c\in\mathcal C}
+\left|c_{c,t}-c_{c,t-1}\right|
+\right].
+\]
+
+Normalized inverter reactive-power effort is
+\[
+J_t^Q
+=
+\frac{1}{N_P}
+\sum_{p\in\mathcal P}
+\left(
+\frac{q_{p,t}^{PV}}
+{\max(Q_{p,t}^{\max},\epsilon_Q)}
+\right)^2,
+\]
+where $\epsilon_Q>0$ prevents division by zero when no reactive headroom remains.
+
+The common stage cost is
+\[
+\boxed{
+\ell_t
+=
+w_V J_t^V
++
+w_{\mathrm{sw}}J_t^{\mathrm{sw}}
++
+w_QJ_t^Q
+}
+\]
+with fixed positive weights satisfying the intended priority
+\[
+w_V\gg w_{\mathrm{sw}}>w_Q.
+\]
+The project uses one fixed basic weight assignment after scale verification and does not
+perform a Pareto study or select weights using test-set controller performance.
+
+% ============================================================================
+\subsection{Rule-based controller}
+\label{subsec:p1_rbc}
+
+The RBC is model-free and defined entirely by local engineering logic,
+\[
+a_t^{\mathrm{RBC}}
+=
+\mu_{\mathrm{RBC}}(o_t).
+\]
+
+\subsubsection{Configurable local monitor reduction}
+
+For each device channel $j$, let $\mathbf V_{j,t}^{\mathrm{mon}}$ contain the configured
+voltage channels associated with that device.  A configurable reduction operator
+$\rho_j$ forms the scalar local control voltage
+\[
+V_{j,t}^{\mathrm{mon}}
+=
+\rho_j\!\left(
+\mathbf V_{j,t}^{\mathrm{mon}}
+\right).
+\]
+The generalized RBC may support configured phase selection and reductions such as
+\texttt{AVG}, \texttt{MIN}, or \texttt{MAX} as applicable.  For the PESGM experiment,
+all multiphase P1 RBC monitors use
+\[
+\boxed{
+\rho_j=\mathrm{AVG}.
+}
+\]
+For a single-phase channel this reduces trivially to that phase voltage.
+
+\subsubsection{PV Volt/VAR rule}
+
+For inverter $p$ define the normalized reactive command
+\[
+q_{p,t}^{PV,\mathrm{req}}
+=
+Q_{p,t}^{\max}\,
+g_p\!\left(
+V_{p,t}^{\mathrm{mon}}
+\right),
+\]
+where the generic breakpoint set is configurable.  The PESGM default curve is
+\[
+g_p(V)
+=
+\begin{cases}
++1,
+&
+V\le 0.95,
+\\[2mm]
+\dfrac{0.99-V}{0.04},
+&
+0.95<V<0.99,
+\\[3mm]
+0,
+&
+0.99\le V\le1.01,
+\\[2mm]
+\dfrac{1.01-V}{0.04},
+&
+1.01<V<1.05,
+\\[3mm]
+-1,
+&
+V\ge1.05.
+\end{cases}
+\]
+Thus undervoltage requests reactive injection, overvoltage requests reactive absorption,
+and the request is always scaled by the currently available inverter headroom.
+The Volt/VAR principle is source-backed by native inverter-control practice
+\cite{opendss_invcontrol}; the exact four breakpoints above are an OpenDSSSim experiment
+adaptation.
+
+\subsubsection{Capacitor hysteresis rule}
+
+For capacitor channel $c$,
+\[
+c_{c,t}^{\mathrm{req}}
+=
+\begin{cases}
+1,
+&
+V_{c,t}^{\mathrm{mon}}
+\le V_c^{\mathrm{on}},
+\\
+0,
+&
+V_{c,t}^{\mathrm{mon}}
+\ge V_c^{\mathrm{off}},
+\\
+c_{c,t-1}^{\mathrm{real}},
+&
+V_c^{\mathrm{on}}
+<
+V_{c,t}^{\mathrm{mon}}
+<
+V_c^{\mathrm{off}}.
+\end{cases}
+\]
+The generic thresholds are configurable.  The PESGM defaults are
+\[
+\boxed{
+V_c^{\mathrm{on}}=0.97,
+\qquad
+V_c^{\mathrm{off}}=1.03.
+}
+\]
+Voltage-hysteresis switching follows conventional capacitor-control semantics
+\cite{opendss_capcontrol}; the numerical thresholds are an OpenDSSSim experiment
+adaptation.
+
+\subsubsection{Regulator deadband rule}
+
+For regulator channel $r$, let $V_r^{\mathrm{ref}}$ and $B_r$ denote the configurable
+per-unit reference and total deadband width.  Then
+\[
+\Delta\tau_{r,t}^{\mathrm{req}}
+=
+\begin{cases}
++1,
+&
+V_{r,t}^{\mathrm{mon}}
+<
+V_r^{\mathrm{ref}}-\dfrac{B_r}{2},
+\\[2mm]
+0,
+&
+\left|
+V_{r,t}^{\mathrm{mon}}-V_r^{\mathrm{ref}}
+\right|
+\le
+\dfrac{B_r}{2},
+\\[2mm]
+-1,
+&
+V_{r,t}^{\mathrm{mon}}
+>
+V_r^{\mathrm{ref}}+\dfrac{B_r}{2}.
+\end{cases}
+\]
+The sign is semantic: $+1$ requests one step that raises the controlled-side voltage and
+$-1$ requests one step that lowers it.  The PESGM defaults are
+\[
+\boxed{
+V_r^{\mathrm{ref}}=1.0,
+\qquad
+B_r=0.025,
+}
+\]
+giving the deadband
+\[
+[0.9875,\,1.0125]\ \mathrm{p.u.}
+\]
+These values are compatible with conventional RegControl reference/band concepts
+\cite{opendss_regcontrol}; the generic controller keeps them configurable.
+
+\subsubsection{Simultaneous local execution}
+
+There is no sequential PV--capacitor--regulator plant solve and no P1 controller delay.
+All local rules evaluate from the same observation,
+\[
+a_t^{\mathrm{RBC}}
+=
+\begin{bmatrix}
+\{\Delta\tau_{r,t}^{\mathrm{req}}\}_{r\in\mathcal R}\\
+\{c_{c,t}^{\mathrm{req}}\}_{c\in\mathcal C}\\
+\{q_{p,t}^{PV,\mathrm{req}}\}_{p\in\mathcal P}
+\end{bmatrix},
+\]
+and the complete vector is applied through one
+\[
+\texttt{env.step}(a_t^{\mathrm{RBC}}).
+\]
+
+% ============================================================================
+\subsection{Exact radial DistFlow starting point}
+\label{subsec:p1_distflow}
+
+Consider a single-phase branch $i\rightarrow j$ with series impedance
+\[
+z_{ij}=r_{ij}+\mathrm j x_{ij}.
+\]
+Ohm's law is
+\[
+V_j
+=
+V_i-z_{ij}I_{ij}.
+\]
+Define squared voltage and squared current magnitude
+\[
+v_i=|V_i|^2,
+\qquad
+\ell_{ij}=|I_{ij}|^2,
+\]
+and sending-end complex power
+\[
+S_{ij}
+=
+P_{ij}+\mathrm jQ_{ij}
+=
+V_iI_{ij}^{*}.
+\]
+Taking the squared magnitude of Ohm's law yields
+\[
+\boxed{
+v_j
+=
+v_i
+-
+2\left(
+r_{ij}P_{ij}
++
+x_{ij}Q_{ij}
+\right)
++
+\left(
+r_{ij}^{2}+x_{ij}^{2}
+\right)\ell_{ij}.
+}
+\]
+The magnitude relation $|S_{ij}|^2=|V_i|^2|I_{ij}|^2$ gives
+\[
+\boxed{
+v_i\ell_{ij}
+=
+P_{ij}^2+Q_{ij}^2.
+}
+\]
+
+Let $\mathcal C(j)$ denote the child buses downstream of $j$.  Including branch losses,
+the exact radial branch balances are
+\[
+\boxed{
+P_{ij}
+=
+p_j
++
+\sum_{m\in\mathcal C(j)}
+P_{jm}
++
+r_{ij}\ell_{ij},
+}
+\]
+\[
+\boxed{
+Q_{ij}
+=
+q_j
++
+\sum_{m\in\mathcal C(j)}
+Q_{jm}
++
+x_{ij}\ell_{ij}.
+}
+\]
+These equations form the standard DistFlow model
+\cite{baran1989sizing}.
+
+\subsection{LinDistFlow approximation}
+\label{subsec:p1_lindist}
+
+The internal MPC model neglects the terms proportional to $\ell_{ij}$:
+\[
+r_{ij}\ell_{ij},
+\qquad
+x_{ij}\ell_{ij},
+\qquad
+(r_{ij}^2+x_{ij}^2)\ell_{ij}.
+\]
+The resulting lossless radial LinDistFlow equations are
+\[
+\boxed{
+P_{ij}
+=
+p_j
++
+\sum_{m\in\mathcal C(j)}
+P_{jm},
+}
+\]
+\[
+\boxed{
+Q_{ij}
+=
+q_j
++
+\sum_{m\in\mathcal C(j)}
+Q_{jm},
+}
+\]
+\[
+\boxed{
+v_j
+=
+v_i
+-
+2(r_{ij}P_{ij}+x_{ij}Q_{ij}).
+}
+\]
+The nonlinear current equation is then no longer required in the internal prediction
+model.
+
+\subsection{Embedding PV and capacitor controls in LinDistFlow}
+\label{subsec:p1_lindist_devices}
+
+With the convention that positive $p_j$ and $q_j$ denote net consumption,
+\[
+p_{j,k}
+=
+\hat p_{j,k}^{L}
+-
+\hat p_{j,k}^{PV,\mathrm{av}},
+\]
+and
+\[
+q_{j,k}
+=
+\hat q_{j,k}^{L}
+-
+q_{j,k}^{PV}
+-
+q_{j,k}^{cap}.
+\]
+
+A switched capacitor with rated reactive injection $\bar q_c^{cap}$ is modeled internally
+as
+\[
+q_{c,k}^{cap}
+=
+\bar q_c^{cap}c_{c,k},
+\qquad
+c_{c,k}\in\{0,1\}.
+\]
+This constant-kvar approximation is deliberate: native voltage-dependent capacitor
+behavior remains in the OpenDSS plant, while the MPC prediction remains affine.
+
+Therefore PV and capacitor control enter the network through reactive balance,
+\[
+Q_{ij,k}
+=
+\hat q_{j,k}^{L}
+-
+q_{j,k}^{PV}
+-
+\bar q_j^{cap}c_{j,k}
++
+\sum_{m\in\mathcal C(j)}
+Q_{jm,k},
+\]
+with the obvious summation/mapping generalization when multiple devices connect to the
+same bus/phase.  Their voltage effect follows the chain
+\[
+q^{PV},c
+\longrightarrow
+q_j
+\longrightarrow
+Q_{ij}
+\longrightarrow
+v_j.
+\]
+
+\subsection{Embedding regulator taps in LinDistFlow}
+\label{subsec:p1_reg_lindist}
+
+For an ideal regulator/transformer with voltage ratio $a_{ij}$,
+\[
+\widetilde V_i
+=
+a_{ij}V_i
+\]
+and hence
+\[
+\widetilde v_i
+=
+a_{ij}^{2}v_i.
+\]
+With series impedance after the ratio transformation, the corresponding lossless
+single-phase voltage relation is conceptually
+\[
+v_j
+\simeq
+a_{ij}^{2}v_i
+-
+2(r_{ij}P_{ij}+x_{ij}Q_{ij}).
+\]
+
+Let tap position $\tau_r$ parameterize the ratio around a nominal value:
+\[
+a_r(\tau_r)
+=
+\bar a_r
++
+\Delta a_r
+(\tau_r-\bar\tau_r).
+\]
+For
+\[
+f(a,v)=a^2v,
+\]
+the first-order expansion about $(\bar a,\bar v)$ is
+\[
+a^2v
+\approx
+\bar a^2v
++
+2\bar a\bar v(a-\bar a).
+\]
+Around nominal $\bar a\simeq1$ and $\bar v\simeq1$,
+\[
+a^2v
+\approx
+v
++
+2\Delta a_r
+(\tau_r-\bar\tau_r).
+\]
+Define
+\[
+\kappa_r
+=
+2\bar a_r\bar v_r\Delta a_r
+\]
+(or the circuit/model-service-calibrated equivalent linear coefficient), giving the
+affine tap contribution
+\[
+\boxed{
+v_j
+=
+v_i
+-
+2(r_{ij}P_{ij}+x_{ij}Q_{ij})
++
+\kappa_r(\tau_r-\bar\tau_r).
+}
+\]
+
+Tap position is a persistent actuator state:
+\[
+\boxed{
+\tau_{r,k}
+=
+\tau_{r,k-1}
++
+\Delta\tau_{r,k},
+}
+\]
+with
+\[
+\Delta\tau_{r,k}\in\{-1,0,+1\},
+\qquad
+\tau_r^{\min}
+\le
+\tau_{r,k}
+\le
+\tau_r^{\max}.
+\]
+Thus $\Delta\tau$ is the movement command, while $\tau$ is the absolute predicted tap
+position used by the voltage equation.
+
+\subsection{Multiphase unbalanced LinDistFlow}
+\label{subsec:p1_multiphase}
+
+For a branch $(i,j)$, collect only the physically present phase quantities in
+\[
+\mathbf P_{ij,k},
+\qquad
+\mathbf Q_{ij,k},
+\qquad
+\mathbf v_{i,k}.
+\]
+Phase-wise branch balance is
+\[
+\mathbf P_{ij,k}
+=
+\mathbf p_{j,k}
++
+\sum_{m\in\mathcal C(j)}
+\mathbf P_{jm,k},
+\]
+\[
+\mathbf Q_{ij,k}
+=
+\mathbf q_{j,k}
++
+\sum_{m\in\mathcal C(j)}
+\mathbf Q_{jm,k}.
+\]
+A phase-aware linear voltage relation is written
+\[
+\boxed{
+\mathbf v_{j,k}
+=
+\mathbf v_{i,k}
+-
+\mathbf R_{ij}\mathbf P_{ij,k}
+-
+\mathbf X_{ij}\mathbf Q_{ij,k}
++
+\mathbf T_{ij}
+(\boldsymbol\tau_{ij,k}-\bar{\boldsymbol\tau}_{ij}).
+}
+\]
+The matrices $\mathbf R_{ij}$ and $\mathbf X_{ij}$ retain same-phase and cross-phase
+coupling; $\mathbf T_{ij}$ maps the available regulator tap channels to affected phase
+voltages.  This form is consistent with established multiphase linear approximations for
+radial distribution systems~\cite{gan2014multiphase}.
+
+Device-to-phase incidence matrices map controller channels to network injections:
+\[
+\mathbf q_{k}^{PV,\mathrm{bus}}
+=
+\mathbf M_{PV}\mathbf q_k^{PV},
+\]
+\[
+\mathbf q_{k}^{cap,\mathrm{bus}}
+=
+\mathbf M_C
+\operatorname{diag}(\bar{\mathbf q}^{cap})
+\mathbf c_k.
+\]
+The active net-injection vector is
+\[
+\mathbf p_k
+=
+\hat{\mathbf p}_k^L
+-
+\hat{\mathbf p}_k^{PV,\mathrm{av}},
+\]
+and the reactive net-consumption vector is
+\[
+\mathbf q_k
+=
+\hat{\mathbf q}_k^L
+-
+\mathbf M_{PV}\mathbf q_k^{PV}
+-
+\mathbf M_C
+\operatorname{diag}(\bar{\mathbf q}^{cap})
+\mathbf c_k.
+\]
+
+After eliminating branch-flow variables, the model can be represented in compact affine
+form
+\[
+\boxed{
+\mathbf v_k
+=
+\mathbf b_k
++
+\mathbf G_{PV}\mathbf q_k^{PV}
++
+\mathbf G_C\mathbf c_k
++
+\mathbf G_R\boldsymbol\tau_k,
+}
+\]
+where $\mathbf b_k$ contains the source-voltage and forecasted uncontrollable-injection
+contribution.  The branch-level equations remain the authoritative explanation of the
+physics; the compact form is the implementation convenience.
+
+% ============================================================================
+\subsection{MIQP-MPC formulation}
+\label{subsec:p1_mpc}
+
+At control time $t$, let
+\[
+\mathcal K=\{0,\ldots,H-1\}.
+\]
+The continuous decision variables include
+\[
+\mathbf P_{ij,k},
+\quad
+\mathbf Q_{ij,k},
+\quad
+\mathbf v_{i,k},
+\quad
+\mathbf q_k^{PV},
+\quad
+\boldsymbol\xi_k^{+},
+\quad
+\boldsymbol\xi_k^{-},
+\]
+and nonnegative switching auxiliaries.  The discrete variables include
+\[
+\mathbf c_k\in\{0,1\}^{N_C},
+\]
+\[
+\boldsymbol\tau_k\in\mathbb Z^{N_R},
+\qquad
+\Delta\boldsymbol\tau_k\in\{-1,0,+1\}^{N_R}.
+\]
+
+The voltage-band constraints use nonnegative slacks
+\[
+\underline V^2-\xi_{i,\phi,k}^{-}
+\le
+v_{i,\phi,k}
+\le
+\overline V^2+\xi_{i,\phi,k}^{+},
+\]
+\[
+\xi_{i,\phi,k}^{+}\ge0,
+\qquad
+\xi_{i,\phi,k}^{-}\ge0,
+\]
+to prevent artificial optimization infeasibility when the forecasted network cannot
+satisfy the desired voltage band.
+
+PV capability is
+\[
+-Q_{p,k}^{\max}
+\le
+q_{p,k}^{PV}
+\le
+Q_{p,k}^{\max},
+\]
+with
+\[
+Q_{p,k}^{\max}
+=
+\sqrt{
+(S_p^{\mathrm{rated}})^2
+-
+(\hat P_{p,k}^{PV,\mathrm{av}})^2
+}
+\]
+precomputed for each horizon step.
+
+Tap dynamics are
+\[
+\tau_{r,k}
+=
+\tau_{r,k-1}
++
+\Delta\tau_{r,k},
+\]
+with the first-step predecessor fixed by the currently realized plant tap,
+\[
+\tau_{r,-1|t}
+=
+\tau_{r,t}^{\mathrm{real}}.
+\]
+Tap bounds are
+\[
+\tau_r^{\min}
+\le
+\tau_{r,k}
+\le
+\tau_r^{\max}.
+\]
+
+For regulator movement introduce $s_{r,k}^{R}\ge0$ satisfying
+\[
+s_{r,k}^{R}
+\ge
+\Delta\tau_{r,k},
+\qquad
+s_{r,k}^{R}
+\ge
+-\Delta\tau_{r,k},
+\]
+so that minimization realizes
+\[
+s_{r,k}^{R}=|\Delta\tau_{r,k}|.
+\]
+For capacitor switching introduce $s_{c,k}^{C}\ge0$ satisfying
+\[
+s_{c,k}^{C}
+\ge
+c_{c,k}-c_{c,k-1},
+\]
+\[
+s_{c,k}^{C}
+\ge
+-(c_{c,k}-c_{c,k-1}),
+\]
+with
+\[
+c_{c,-1|t}
+=
+c_{c,t}^{\mathrm{real}}.
+\]
+
+The MPC solves
+\[
+\boxed{
+\begin{aligned}
+\min\quad
+&
+\sum_{k\in\mathcal K}
+\Bigg[
+w_V
+\frac{1}{|\mathcal B_\Phi|}
+\sum_{(i,\phi)\in\mathcal B_\Phi}
+\left(
+(\xi_{i,\phi,k}^{+})^2
++
+(\xi_{i,\phi,k}^{-})^2
+\right)
+\\
+&\qquad
++
+w_{\mathrm{sw}}
+\frac{
+\sum_{r\in\mathcal R}s_{r,k}^{R}
++
+\sum_{c\in\mathcal C}s_{c,k}^{C}
+}{
+N_R+N_C
+}
+\\
+&\qquad
++
+w_Q
+\frac{1}{N_P}
+\sum_{p\in\mathcal P}
+\left(
+\frac{q_{p,k}^{PV}}
+{\max(Q_{p,k}^{\max},\epsilon_Q)}
+\right)^2
+\Bigg]
+\end{aligned}
+}
+\]
+subject to the complete multiphase LinDistFlow balance, voltage, source/slack, mapping,
+tap, capacitor, PV capability, and variable-domain constraints above.
+
+All network relations are affine and the objective is convex quadratic in the continuous
+variables.  With integer/binary tap and capacitor decisions, this is a
+Gurobi-compatible MIQP.
+
+The receding-horizon controller applies only the first optimized action,
+\[
+\boxed{
+a_t^{\mathrm{MPC}}
+=
+u_{t|t}^{\star},
+}
+\]
+through the common OpenDSSSim \texttt{env.step(...)} boundary, receives the realized plant
+state, shifts the horizon, and resolves.
+
+% ============================================================================
+\subsection{MPC-inspired model-free branching DQN}
+\label{subsec:p1_rl}
+
+The RL controller uses the same physical problem semantics but no LinDistFlow or other
+transition model.  Its policy input is
+\[
+s_t^{RL}
+=
+\begin{bmatrix}
+o_t\\
+\widehat{\mathbf D}_t
+\end{bmatrix},
+\]
+after fixed normalization of continuous features.
+
+\subsubsection{Branch action sets}
+
+The number of action branches is
+\[
+N_A
+=
+N_R+N_C+N_P.
+\]
+For regulator branch $r$,
+\[
+\mathcal A_r^R
+=
+\{-1,0,+1\}.
+\]
+For capacitor branch $c$,
+\[
+\mathcal A_c^C
+=
+\{0,1\}.
+\]
+For PV branch $p$,
+\[
+\boxed{
+\mathcal A_p^{PV}
+=
+\{-1,-0.5,0,+0.5,+1\}.
+}
+\]
+If $\alpha_{p,t}\in\mathcal A_p^{PV}$ is selected,
+\[
+\boxed{
+q_{p,t}^{PV,\mathrm{req}}
+=
+\alpha_{p,t}Q_{p,t}^{\max}.
+}
+\]
+Thus the logical action remains normalized while its physical kvar value follows the
+time-varying inverter capability.
+
+A flat DQN would require the Cartesian action space
+\[
+3^{N_R}2^{N_C}5^{N_P},
+\]
+which grows combinatorially.  The branching architecture of
+Tavakoli et al.~\cite{tavakoli2018branching} instead uses a shared decision module and
+one output branch per action dimension.
+
+\subsubsection{Shared encoder and dueling branch values}
+
+Let the shared encoder produce
+\[
+h_t
+=
+f_\theta(s_t^{RL}).
+\]
+The common value stream produces $V(s_t)$ and branch $d$ produces advantages
+$A_d(s_t,a_d)$.  The branch action value is
+\[
+\boxed{
+Q_d(s_t,a_d)
+=
+V(s_t)
++
+A_d(s_t,a_d)
+-
+\frac{1}{|\mathcal A_d|}
+\sum_{a_d'\in\mathcal A_d}
+A_d(s_t,a_d').
+}
+\]
+The greedy branch action is
+\[
+a_{d,t}^{\star}
+=
+\arg\max_{a_d\in\mathcal A_d}
+Q_d(s_t,a_d).
+\]
+All branchwise choices are concatenated to form one simultaneous full requested action,
+\[
+a_t^{RL}
+=
+[
+a_{1,t}^{\star},
+\ldots,
+a_{N_A,t}^{\star}
+].
+\]
+The action is then applied by one
+\[
+\texttt{env.step}(a_t^{RL}).
+\]
+
+\subsubsection{Reward}
+
+The RL reward is the negative common physical stage cost,
+\[
+\boxed{
+r_t=-\ell_t.
+}
+\]
+Hence the learned controller is MPC-inspired through the shared physical objective,
+device semantics, bounds, and forecast information, while remaining model-free because
+its transition samples come exclusively from the OpenDSSSim environment.
+
+\subsubsection{Branching double-DQN target and loss}
+
+Let $\theta$ denote the online network and $\theta^{-}$ the target network.  The online
+network selects the next greedy action in branch $d$,
+\[
+a_{d,t+1}^{\star}
+=
+\arg\max_{a_d'}
+Q_d(s_{t+1},a_d';\theta),
+\]
+and the target network evaluates it.  Using the mean branch target,
+\[
+\boxed{
+y_t
+=
+r_t
++
+\gamma(1-\delta_t)
+\frac{1}{N_A}
+\sum_{d=1}^{N_A}
+Q_d
+\left(
+s_{t+1},
+a_{d,t+1}^{\star};
+\theta^{-}
+\right),
+}
+\]
+where $\delta_t$ indicates a true terminal transition.
+
+For a replayed transition, the training loss is
+\[
+\boxed{
+\mathcal L(\theta)
+=
+\mathbb E_{\mathcal D}
+\left[
+\frac{1}{N_A}
+\sum_{d=1}^{N_A}
+\left(
+y_t
+-
+Q_d(s_t,a_{d,t};\theta)
+\right)^2
+\right].
+}
+\]
+Training uses an experience replay buffer, a periodically or softly updated target
+network, and $\epsilon$-greedy exploration.  Numerical learning rate, batch size, replay
+capacity, target-update cadence, exploration schedule, total training budget, and seed
+set are configuration/training-protocol parameters rather than hard-coded controller
+science.
+
+\subsubsection{Stable-Baselines3 implementation boundary}
+
+Stable-Baselines3 2.8.0 provides DQN only for a single \texttt{Discrete} action space and
+does not implement the branching Dueling Double DQN algorithm or native DQN support for
+the required \texttt{MultiDiscrete}-like action structure~\cite{sb3_280}.  Therefore the
+P1 BDQ policy/learning algorithm is implemented explicitly in PyTorch.  Generic
+SB3/SB3-style utilities may be reused where they do not alter the ratified BDQ equations
+(e.g., replay-buffer patterns, schedules, callbacks, logging, and evaluation utilities).
+The implementation must not wrap the full joint action into one enormous flat
+\texttt{Discrete} space.
+
+\subsection{Fair-comparison contract}
+\label{subsec:p1_fairness}
+
+Within a P1 experiment, RBC, MPC, and RL use:
+\begin{itemize}
+    \item the same feeder and episode time axis;
+    \item the same realized load and available-PV trajectories;
+    \item the same selected physical controllable assets;
+    \item the same physical device limits;
+    \item the same voltage target and reported physical metrics;
+    \item the same initial realized device states;
+    \item the same control interval;
+    \item the same authoritative OpenDSSSim plant.
+\end{itemize}
+MPC and RL receive the same authorized forecast tensor.  RBC is intentionally defined as a
+current-state local heuristic and does not use future forecasts.
+
+The MPC has continuous inverter-$Q$ decisions while BDQ uses the five-level normalized
+discretization above.  This is a transparent paradigm-specific action representation, not
+a different physical inverter capability.
+
+\subsection{Capability and unsupported-circuit contract}
+\label{subsec:p1_capability}
+
+Generalized P1 source must instantiate from circuit/ProblemSpec metadata, not hard-coded
+IEEE-123 identifiers.  The required capabilities include:
+\begin{itemize}
+    \item active bus--phase voltage observations;
+    \item selected regulator/tap channels with states, bounds, and command semantics;
+    \item selected capacitor channels with states and reactive ratings;
+    \item selected PV-inverter channels with active power, apparent-power ratings, and
+          reactive command semantics;
+    \item load and PV current/exogenous data;
+    \item forecast view for MPC/RL;
+    \item for MPC, a radial phase-aware non-mutating model service sufficient to construct
+          LinDistFlow coefficients/mappings.
+\end{itemize}
+A controller that cannot instantiate its declared requirements returns an explicit
+machine-readable \texttt{UNSUPPORTED} result.  It does not silently degrade to another
+physical problem or bypass the plant.
+
+\subsection{Implementation and experiment freeze boundary}
+\label{subsec:p1_remaining}
+
+The controller mathematics in this document are ratified.  The following remain
+configuration/qualification items before the final PESGM P1 campaign freeze:
+\begin{enumerate}
+    \item exact IEEE-123 regulator, capacitor, PV device placements, phase mappings, and
+          ratings;
+    \item the single fixed numerical tuple $(w_V,w_{\mathrm{sw}},w_Q)$ after scale
+          verification, with no Pareto optimization;
+    \item the RL training-budget/hyperparameter protocol, seeds, and checkpoint-selection
+          rule;
+    \item measured validation of the LinDistFlow coefficients against the authoritative
+          OpenDSSSim plant for the selected experiment feeder.
+\end{enumerate}

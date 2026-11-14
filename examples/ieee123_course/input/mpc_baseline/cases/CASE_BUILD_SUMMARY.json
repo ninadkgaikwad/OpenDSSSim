@@ -1,0 +1,125 @@
+[
+  {
+    "variant": "ieee123_pesgm2027",
+    "status": "PASS_CASE_CONTRACT_NOT_NATIVE_CLOSED_LOOP",
+    "summary": {
+      "type": "P1Case",
+      "horizon": 12,
+      "nodes_or_buses": 278,
+      "branches": 134,
+      "loads": 278,
+      "pv": 10,
+      "capacitors": 4,
+      "taps": 7,
+      "notes": {
+        "scope": "APPROXIMATE_LINDISTFLOW_NOT_AC_EQUIVALENT",
+        "forecast": "PERSISTENCE_OF_CURRENT_NATIVE_PV_AND_DSS_NOMINAL_LOAD",
+        "transformer": "IDEAL_PU_BASE_TRANSFER_ZERO_LEAKAGE_APPROXIMATION",
+        "regulator": "LINEAR_TAP_LIFT_2_STEP_APPROXIMATION",
+        "delta_loads_50_50_phase_allocation": [
+          "load.s35a",
+          "load.s65a",
+          "load.s65b",
+          "load.s65c",
+          "load.s76a",
+          "load.s76b",
+          "load.s76c"
+        ],
+        "shared_capacitor_action_channel_requires_encoder_adapter": [
+          "capacitor.c83"
+        ],
+        "source_voltage": "CURRENT_NATIVE_VOLTAGE_PU_SQUARED_HELD_FIXED",
+        "ready_for_native_closed_loop": false,
+        "native_case_contract_valid": true
+      }
+    },
+    "source_master_sha256": "890F683614AC740D20564700CBF0EC99EA07A30C9602A9FC9D1C8E17AF50D020"
+  },
+  {
+    "variant": "ieee123_p2_mf01_simple",
+    "status": "PASS_CASE_CONTRACT_NOT_NATIVE_CLOSED_LOOP",
+    "summary": {
+      "type": "P2Case",
+      "horizon": 2,
+      "nodes_or_buses": 130,
+      "branches": 132,
+      "loads": 91,
+      "pv": 0,
+      "capacitors": 0,
+      "taps": 0,
+      "notes": {
+        "scope": "VOLTAGE_ONLY_EXPLORATORY_LINDISTFLOW",
+        "forecast": "PERSISTENCE_OF_DSS_NOMINAL_LOAD",
+        "transformer": "IDEAL_PU_ZERO_LEAKAGE_APPROXIMATION",
+        "delta_load": "EQUAL_TERMINAL_PHASE_POWER_ALLOCATION_APPROXIMATION",
+        "regulator_corridor_merge": [
+          [
+            "Transformer.reg3a",
+            "Transformer.reg3c"
+          ],
+          [
+            "Transformer.reg4a",
+            "Transformer.reg4b",
+            "Transformer.reg4c"
+          ]
+        ],
+        "load_priority": "ALL_PRIORITIES=1_EXPLORATORY_NOT_RATIFIED",
+        "curtailment": "NO_PARTIAL_LOAD_CURTAILMENT_ASSUMED",
+        "initial_switches": "NATIVE_ALTDSS_OPEN_TERMINAL_READBACK",
+        "faults": [
+          "Line.l45",
+          "Line.l77",
+          "Line.l93",
+          "Line.sw7"
+        ],
+        "thermal": "UNRATED_BRANCHES_VOLTAGE_ONLY_NO_THERMAL_SECURITY_CLAIM",
+        "ready_for_native_closed_loop": false,
+        "native_case_contract_valid": true
+      }
+    },
+    "source_master_sha256": "9EBC5873E039F4488797606B8E1F79BFBDA0EAFBE26053361EE725A0724C7AC2"
+  },
+  {
+    "variant": "ieee123_p2_mf02_exotic",
+    "status": "PASS_CASE_CONTRACT_NOT_NATIVE_CLOSED_LOOP",
+    "summary": {
+      "type": "P2Case",
+      "horizon": 2,
+      "nodes_or_buses": 131,
+      "branches": 134,
+      "loads": 91,
+      "pv": 0,
+      "capacitors": 0,
+      "taps": 0,
+      "notes": {
+        "scope": "VOLTAGE_ONLY_EXPLORATORY_LINDISTFLOW",
+        "forecast": "PERSISTENCE_OF_DSS_NOMINAL_LOAD",
+        "transformer": "IDEAL_PU_ZERO_LEAKAGE_APPROXIMATION",
+        "delta_load": "EQUAL_TERMINAL_PHASE_POWER_ALLOCATION_APPROXIMATION",
+        "regulator_corridor_merge": [
+          [
+            "Transformer.reg3a",
+            "Transformer.reg3c"
+          ],
+          [
+            "Transformer.reg4a",
+            "Transformer.reg4b",
+            "Transformer.reg4c"
+          ]
+        ],
+        "load_priority": "ALL_PRIORITIES=1_EXPLORATORY_NOT_RATIFIED",
+        "curtailment": "NO_PARTIAL_LOAD_CURTAILMENT_ASSUMED",
+        "initial_switches": "NATIVE_ALTDSS_OPEN_TERMINAL_READBACK",
+        "faults": [
+          "Line.l45",
+          "Line.l77",
+          "Line.l93"
+        ],
+        "thermal": "UNRATED_BRANCHES_VOLTAGE_ONLY_NO_THERMAL_SECURITY_CLAIM",
+        "ready_for_native_closed_loop": false,
+        "native_case_contract_valid": true
+      }
+    },
+    "source_master_sha256": "1451EB668F4EE52D33785562FD7C91A7CDA99165515218DAD888477F710E975A"
+  }
+]

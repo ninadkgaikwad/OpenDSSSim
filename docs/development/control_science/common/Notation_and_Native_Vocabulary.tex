@@ -1,0 +1,36 @@
+% OpenDSSSim controller-science notation scaffold.
+% Status: C0A. Symbols must be ratified during C1-C3 before use as frozen notation.
+
+\section*{Controller-Science Notation and Native Vocabulary}
+
+\paragraph{Principle.}
+OpenDSS/AltDSS class and property names remain canonical wherever practical.
+Mathematical notation provides a controller-facing abstraction but must preserve an
+explicit mapping to the corresponding OpenDSSSim registry identifiers.
+
+\paragraph{Action layers.}
+Let
+\[
+  a^{\mathrm{req}}_t
+\]
+denote the action requested by a controller,
+\[
+  a^{\mathrm{app}}_t
+\]
+the action admitted/applied by the explicit plant action-resolution policy, and
+\[
+  a^{\mathrm{real}}_t
+\]
+the realized post-solve physical/control value.
+
+No equality between these quantities is assumed unless the frozen plant policy establishes
+it.
+
+\paragraph{State and observation.}
+The full plant state and the controller observation are distinct. A controller consumes
+only the state/observation view authorized by the frozen \texttt{ProblemSpec}.
+
+\paragraph{Deferred symbols.}
+P1 electrical variables, P2 graph variables, horizon indices, forecast notation,
+constraint sets, objectives, rewards, and controller-specific decision variables are
+intentionally deferred until the source-backed C1--C3 contracts.

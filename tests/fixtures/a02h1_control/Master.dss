@@ -1,0 +1,6 @@
+Clear
+Redirect "Network.dss"
+Redirect "Controls.dss"
+
+Set VoltageBases=[12.47]
+CalcVoltageBases

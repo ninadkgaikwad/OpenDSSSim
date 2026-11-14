@@ -1,0 +1,84 @@
+{
+  "status": "CANDIDATE_STATIC_GRAPH_NOT_AC_VALIDATED",
+  "scenarios": [
+    {
+      "id": "S00",
+      "name": "Intact radial reference",
+      "faults": [],
+      "close": [],
+      "expected": "all-connected reference"
+    },
+    {
+      "id": "S01",
+      "name": "Single fault main lateral",
+      "faults": [
+        "L45"
+      ],
+      "close": [
+        "SW7"
+      ],
+      "expected": "three-phase alternate Sw7 path"
+    },
+    {
+      "id": "S02",
+      "name": "Single fault phase-A leaf",
+      "faults": [
+        "L93"
+      ],
+      "close": [
+        "SW8"
+      ],
+      "expected": "single-phase Sw8 path"
+    },
+    {
+      "id": "S03",
+      "name": "Two faults, two ties",
+      "faults": [
+        "L45",
+        "L93"
+      ],
+      "close": [
+        "SW7",
+        "SW8"
+      ],
+      "expected": "two distinct loop restorations"
+    },
+    {
+      "id": "S04",
+      "name": "Two faults with phase limitation",
+      "faults": [
+        "L45",
+        "L77"
+      ],
+      "close": [
+        "SW7",
+        "SW8"
+      ],
+      "expected": "phase-aware restoration may remain partial"
+    },
+    {
+      "id": "S05",
+      "name": "Two faults that ties cannot fully serve",
+      "faults": [
+        "L45",
+        "L48"
+      ],
+      "close": [
+        "SW7",
+        "SW8"
+      ],
+      "expected": "intentional insufficient/misaligned switching"
+    },
+    {
+      "id": "S06",
+      "name": "Sw3 faulted/unavailable",
+      "faults": [
+        "SW3"
+      ],
+      "close": [
+        "SW7"
+      ],
+      "expected": "faulted switch unavailable even with requested close"
+    }
+  ]
+}

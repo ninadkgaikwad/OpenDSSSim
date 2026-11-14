@@ -1,0 +1,9 @@
+New Circuit.A02H1 basekv=12.47 pu=1.0 phases=3 bus1=source
+
+New Line.Feeder Bus1=source.1.2.3 Bus2=loadbus.1.2.3 Phases=3 Length=1 Units=km R1=0.20 X1=0.40 R0=0.60 X0=1.20 C1=3.4 C0=1.6
+
+New Transformer.RegX Phases=3 Windings=2 XHL=1 Buses=(loadbus.1.2.3 regbus.1.2.3) Conns=(wye wye) kVs=(12.47 12.47) kVAs=(1000 1000)
+
+New Load.Load1 Bus1=regbus.1.2.3 Phases=3 Conn=wye Model=1 kV=7.20 kW=250 kvar=80
+
+New Capacitor.Cap1 Bus1=regbus.1.2.3 Phases=3 kV=12.47 kvar=300

@@ -1,0 +1,131 @@
+\section{PESGM-2027 P1 IEEE-123 PV Augmentation}
+\label{sec:p1_ieee123_pv_augmentation}
+
+\subsection{Scope and provenance}
+The P1 experiment uses the canonical OpenDSS IEEE 123-bus feeder as the physical
+baseline. The baseline regulator and capacitor equipment is preserved unchanged.
+The only P1-specific physical augmentation is the addition of ten photovoltaic
+(PV) inverter systems. The modified feeder is maintained as a separate working
+copy, while the source baseline remains immutable.
+
+The experiment instantiates the generalized controller cardinalities as
+\[
+N_R = 7,\qquad N_C = 4,\qquad N_P = 10.
+\]
+
+\subsection{PV composition}
+The ten added PV systems are divided into
+\[
+N_P = N_D + N_H = 3 + 7 = 10,
+\]
+where $N_D=3$ are three-phase distribution-connected PV systems and $N_H=7$ are
+single-phase residential or house-like PV systems.
+
+The distribution PV buses are
+\[
+\mathcal B_D = \{47,76,105\},
+\]
+and the residential PV sites are
+\[
+\mathcal B_H =
+\{20{\rm A},38{\rm B},41{\rm C},56{\rm B},70{\rm A},103{\rm C},113{\rm A}\}.
+\]
+The resulting residential phase count is three phase-A, two phase-B, and two
+phase-C systems.
+
+The placement deliberately avoids co-location with canonical regulator and
+capacitor locations. The intent is to avoid a trivial local pairing between each
+new DER and an existing voltage-control device, while distributing DER actuation
+across electrically distinct feeder regions.
+
+\subsection{PV penetration and nameplate sizing}
+The canonical IEEE-123 peak active demand used for experiment sizing is
+\[
+P_L^{\rm peak}=3490~{\rm kW}.
+\]
+Each distribution PV is assigned
+\[
+P_D^{\rm rated}=210~{\rm kW},\qquad
+S_D^{\rm rated}=231~{\rm kVA},
+\]
+and each residential PV is assigned
+\[
+P_H^{\rm rated}=10~{\rm kW},\qquad
+S_H^{\rm rated}=11~{\rm kVA}.
+\]
+Hence
+\[
+P_{\rm PV,tot}=3(210)+7(10)=700~{\rm kW},
+\]
+and the active-power penetration is
+\[
+\gamma_{\rm PV}
+=
+\frac{P_{\rm PV,tot}}{P_L^{\rm peak}}
+=
+\frac{700}{3490}
+\approx 0.200573
+\approx 20.06\%.
+\]
+A uniform inverter oversizing ratio is used:
+\[
+S^{\rm rated}=1.10P^{\rm rated}.
+\]
+
+\subsection{Reactive-power capability}
+PV active power is exogenous to P1 control:
+\[
+P_{p,t}^{\rm PV}=P_{p,t}^{\rm PV,av}.
+\]
+The controller chooses only reactive power, subject to
+\[
+\left(P_{p,t}^{\rm PV,av}\right)^2+
+\left(q_{p,t}^{\rm PV}\right)^2
+\le
+\left(S_p^{\rm rated}\right)^2.
+\]
+Therefore
+\[
+Q_{p,t}^{\max}
+=
+\sqrt{
+\left(S_p^{\rm rated}\right)^2-
+\left(P_{p,t}^{\rm PV,av}\right)^2
+}.
+\]
+At rated active power,
+\[
+Q_D^{\max}=\sqrt{231^2-210^2}\approx 96.23~{\rm kvar},
+\]
+and
+\[
+Q_H^{\max}=\sqrt{11^2-10^2}\approx 4.58~{\rm kvar}.
+\]
+
+\subsection{OpenDSS mapping}
+The three-phase PV systems use line-to-line nominal voltage
+\[
+V_D^{\rm rated}=4.16~{\rm kV},
+\]
+whereas the single-phase wye systems use phase-to-neutral voltage
+\[
+V_H^{\rm rated}=2.4~{\rm kV}.
+\]
+No native \texttt{InvControl} object is introduced. The initial static operating
+point uses zero reactive-power command. Later RBC, MPC, and RL controllers act
+through the same OpenDSSSim requested-action interface.
+
+\subsection{Fair-comparison consequence}
+All P1 controller paradigms act on the same physical resources:
+\[
+\mathcal A^{P1}
+=
+\mathcal A_R^{\rm native}
+\times
+\mathcal A_C^{\rm native}
+\times
+\mathcal A_P^{10PV}.
+\]
+The feeder, DER placement, inverter ratings, native regulator/capacitor
+equipment, disturbances, and physical bounds are therefore common across RBC,
+MPC, and RL.

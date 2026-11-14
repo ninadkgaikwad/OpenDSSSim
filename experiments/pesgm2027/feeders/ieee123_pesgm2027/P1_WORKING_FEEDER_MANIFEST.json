@@ -1,0 +1,53 @@
+﻿{
+    "schema":  "opendsssim.pesgm2027.p1.working_feeder_manifest.v1",
+    "patch_id":  "OpenDSSSim_PESGM2027_P1_IEEE123_PVAugmentation_v01R1_20261012",
+    "installed_utc":  "2026-10-13T23:12:40.9612479Z",
+    "changed_files":  [
+                          "IEEE123Master.dss",
+                          "PESGM2027_P1_PVSystems.dss"
+                      ],
+    "native_regulators_modified":  false,
+    "native_capacitors_modified":  false,
+    "files":  [
+                  {
+                      "file":  "IEEE123Loads.DSS",
+                      "bytes":  8289,
+                      "sha256":  "FD28F52836205506A1980B52C5A7E12CA585AA626C52A6249502C1C3B2FC2255"
+                  },
+                  {
+                      "file":  "IEEE123Master.dss",
+                      "bytes":  15656,
+                      "sha256":  "890F683614AC740D20564700CBF0EC99EA07A30C9602A9FC9D1C8E17AF50D020"
+                  },
+                  {
+                      "file":  "IEEE123Regulators.DSS",
+                      "bytes":  1861,
+                      "sha256":  "CD6AD77980DC018631CE39FAAB528AFCE40B0B9A50A6BC1C9AC8049FFB8207D7"
+                  },
+                  {
+                      "file":  "IEEELineCodes.DSS",
+                      "bytes":  11851,
+                      "sha256":  "4BC8E3A0B24AD7B1CB4321F1C3B6C8458B646DD3A83B3CD11CCCC02444624CB2"
+                  },
+                  {
+                      "file":  "OpenDSS_License.txt",
+                      "bytes":  1675,
+                      "sha256":  "72E6CB08D3397A969F7763D87AE46BEA03F2246A4A996524D0DF19285A422560"
+                  },
+                  {
+                      "file":  "PESGM2027_P1_PVSystems.dss",
+                      "bytes":  2535,
+                      "sha256":  "4BD7A771B53DCE46854954F62C1C95753F359DED197CA12786CE7B51B03633A5"
+                  },
+                  {
+                      "file":  "README_PESGM2027.md",
+                      "bytes":  385,
+                      "sha256":  "2A20C49C5E4B123FDB3D4153B26F5F4689F3883FD430A0C92A77859D1BC8CD97"
+                  },
+                  {
+                      "file":  "Run_IEEE123Bus.DSS",
+                      "bytes":  4764,
+                      "sha256":  "559CCD5D3173F9204A7A5A1A764C3F405A0F46941F5E4FD7713F1EBF7EBBC0EF"
+                  }
+              ]
+}

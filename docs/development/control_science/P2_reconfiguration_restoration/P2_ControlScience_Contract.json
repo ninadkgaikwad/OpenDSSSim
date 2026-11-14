@@ -1,0 +1,102 @@
+{
+  "schema": "opendsssim.pesgm2027.p2.control_science.freeze.v1",
+  "patch_id": "OpenDSSSim_PESGM2027_P2_ControlScience_Freeze_v01R1_20261027",
+  "status": "FROZEN_FOR_IMPLEMENTATION",
+  "blocks_frozen": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "problem": "post_fault_multi_fault_radial_distribution_service_restoration",
+  "common_action": {
+    "switch_vector": "z_req in {0,1}^N_sw",
+    "curtailment_vector": "alpha_req in [0,1]^N_curt for controller-declared curtailable loads"
+  },
+  "controllers": {
+    "reference": "graph search + controller-side current-state LinDistFlow evaluation + deterministic priority-aware curtailment",
+    "mpc": "multiperiod MILP + multiphase unbalanced LinDistFlow + conservative 8-sided thermal polygon",
+    "rl": "Stable-Baselines3 masked DQN topology selector + deterministic reference-controller curtailment decoder"
+  },
+  "objective_hierarchy": [
+    "operational_violation_or_slack",
+    "priority_weighted_unserved_service",
+    "switching_effort",
+    "optional_voltage_profile_tiebreak"
+  ],
+  "slack_policy": {
+    "allowed": [
+      "operational_voltage",
+      "operational_thermal"
+    ],
+    "forbidden": [
+      "fault_availability",
+      "switch_validity",
+      "source_connectivity",
+      "radiality",
+      "action_contract"
+    ]
+  },
+  "plant_boundary": {
+    "opendsssim_role": "authoritative plant state/health, action application, realized response/history",
+    "controller_side_roles": [
+      "read static OpenDSS circuit folder/files",
+      "topology compilation",
+      "source identification",
+      "curtailability declaration",
+      "operational limits",
+      "LinDistFlow compilation",
+      "current-state candidate evaluation",
+      "forecast provision",
+      "RL topology catalogue and mask"
+    ],
+    "mutation_boundary": "env.step(a_req)",
+    "environment_repairs_controller_action": false
+  },
+  "rl_protocol": {
+    "partitions": [
+      "TRAIN",
+      "TEST"
+    ],
+    "validation_partition": false,
+    "hpo": false,
+    "min_seeds": 1,
+    "backend": "stable-baselines3",
+    "algorithm": "masked DQN",
+    "training_variation_baseline": "fixed fault scenario, varying TRAIN load trajectories",
+    "test_exploration_epsilon": 0
+  },
+  "official_evaluation": {
+    "full_closed_loop_horizon": true,
+    "same_faults_across_controllers": true,
+    "same_load_trajectory_across_controllers": true,
+    "same_time_axis_across_controllers": true
+  },
+  "fallback": {
+    "controller_side": true,
+    "policy": "reuse last successful control computation",
+    "applies_to": [
+      "P1",
+      "P2"
+    ],
+    "record_fallback_event": true
+  },
+  "deferred_to_p2_experiment_freeze": [
+    "P2 IEEE-123 working-feeder copy/modifications",
+    "exact fault scenarios",
+    "priority assignments",
+    "curtailable load set",
+    "delta_t choice",
+    "MPC horizon H",
+    "numerical operating bounds if config-supplied",
+    "RL numeric hyperparameters/reward coefficients",
+    "RL seed count >= 1"
+  ]
+}

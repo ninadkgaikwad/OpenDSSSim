@@ -1,0 +1,5 @@
+feeder,route,selected,converged,nominal_restored_kw,switching_changes,vmin_pu,vmax_pu,out_of_band_bus_phases,zero_phase_count,thermal_ratings_qualified,load_priority_qualified,curtailment_exercised
+ieee123_p2_mf01_simple,MF01_RATIFIED_PARTIAL,True,True,2975.0,2,0.9799179338701387,1.0497913927337672,0,18,False,False,False
+ieee123_p2_mf02_exotic,MF02_ROUTE_A,True,True,3490.0,3,0.9724539400157381,1.0473759699308867,0,0,False,False,False
+ieee123_p2_mf02_exotic,MF02_ROUTE_B,False,True,3490.0,3,0.9723360574267349,1.0505815753029075,1,0,False,False,False
+ieee123_p2_mf02_exotic,MF02_ROUTE_C,False,True,3490.0,5,0.9723118170837268,1.0477089711472976,0,0,False,False,False

@@ -1,0 +1,211 @@
+{
+  "milestone": "RBC_S10D_P2_IndependentAudit_20261110",
+  "audit_status": "PASS_INDEPENDENT_BYTE_INTEGRITY_AND_NATIVE_VOLTAGE_PILOT_WITH_SCIENCE_LIMITS",
+  "source_scope": "Laptop reports 333-file successor and 56 unchanged P2; independently reproduced expected manifest and unchanged-source identity from prior collected source, not a fresh post-S10D tree",
+  "science_qualification": "P1 closed-loop functional PASS but voltage performance worse than native; P2 native voltage-only exploratory pilot PASS; full P2 electrical/thermal/priority/curtailment optimization NOT QUALIFIED",
+  "qualification_tests": {
+    "s10d_phase_graph": 5,
+    "s09_rule_math": 3,
+    "s09_native_contract": 3,
+    "b00_native": 8,
+    "full_regression_1": 241,
+    "full_regression_2": 241,
+    "full_regression_3": 241
+  },
+  "source": {
+    "s09a_predecessor_files": 331,
+    "s10d_successor_files": 333,
+    "modified_existing": [
+      "src/opendsssim/controllers/reference/p2_graph.py"
+    ],
+    "added": [
+      "docs/development/control_science/common/RBC_S10D_P2_BusLevelRadialityCorrection.md",
+      "tests/unit/controllers/test_s10d_phase_parallel_graph.py"
+    ],
+    "p2_files_preserved": 56,
+    "successor_manifest_sha256": "0C4887E12C8B81D7E243590DBE043B7BD8EC2E7156861B4024B1969840400797"
+  },
+  "p1": {
+    "control_steps": 24,
+    "samples": 25,
+    "all_converged": true,
+    "baseline_out_of_band": 0,
+    "rbc_out_of_band": 133,
+    "rbc_vmin_pu": 0.9416982177025808,
+    "rbc_vmax_pu": 1.026531976760499,
+    "fair_comparison_limit": "Sample-index comparison; control authority differs (native controls versus external regulator), timestamps differ in files; synthetic diagnostic not calibrated field data."
+  },
+  "p2_candidates": [
+    {
+      "feeder": "ieee123_p2_mf01_simple",
+      "route": "MF01_RATIFIED_PARTIAL",
+      "selected": true,
+      "converged": "True",
+      "nominal_restored_kw": 2975.0,
+      "switching_changes": 2,
+      "vmin_pu": 0.9799179338701387,
+      "vmax_pu": 1.0497913927337672,
+      "out_of_band_bus_phases": 0,
+      "zero_phase_count": 18,
+      "thermal_ratings_qualified": false,
+      "load_priority_qualified": false,
+      "curtailment_exercised": false
+    },
+    {
+      "feeder": "ieee123_p2_mf02_exotic",
+      "route": "MF02_ROUTE_A",
+      "selected": true,
+      "converged": "True",
+      "nominal_restored_kw": 3490.0,
+      "switching_changes": 3,
+      "vmin_pu": 0.9724539400157381,
+      "vmax_pu": 1.0473759699308867,
+      "out_of_band_bus_phases": 0,
+      "zero_phase_count": 0,
+      "thermal_ratings_qualified": false,
+      "load_priority_qualified": false,
+      "curtailment_exercised": false
+    },
+    {
+      "feeder": "ieee123_p2_mf02_exotic",
+      "route": "MF02_ROUTE_B",
+      "selected": false,
+      "converged": "True",
+      "nominal_restored_kw": 3490.0,
+      "switching_changes": 3,
+      "vmin_pu": 0.9723360574267349,
+      "vmax_pu": 1.0505815753029075,
+      "out_of_band_bus_phases": 1,
+      "zero_phase_count": 0,
+      "thermal_ratings_qualified": false,
+      "load_priority_qualified": false,
+      "curtailment_exercised": false
+    },
+    {
+      "feeder": "ieee123_p2_mf02_exotic",
+      "route": "MF02_ROUTE_C",
+      "selected": false,
+      "converged": "True",
+      "nominal_restored_kw": 3490.0,
+      "switching_changes": 5,
+      "vmin_pu": 0.9723118170837268,
+      "vmax_pu": 1.0477089711472976,
+      "out_of_band_bus_phases": 0,
+      "zero_phase_count": 0,
+      "thermal_ratings_qualified": false,
+      "load_priority_qualified": false,
+      "curtailment_exercised": false
+    }
+  ],
+  "p2_live": [
+    {
+      "feeder": "ieee123_p2_mf01_simple",
+      "selected_route": "MF01_RATIFIED_PARTIAL",
+      "step": 1,
+      "converged": "True",
+      "vmin_pu": 0.9799179338701387,
+      "vmax_pu": 1.0497913927337672,
+      "out_of_band_bus_phases": 0
+    },
+    {
+      "feeder": "ieee123_p2_mf01_simple",
+      "selected_route": "MF01_RATIFIED_PARTIAL",
+      "step": 2,
+      "converged": "True",
+      "vmin_pu": 0.9799206485393467,
+      "vmax_pu": 1.04979506608498,
+      "out_of_band_bus_phases": 0
+    },
+    {
+      "feeder": "ieee123_p2_mf02_exotic",
+      "selected_route": "MF02_ROUTE_A",
+      "step": 1,
+      "converged": "True",
+      "vmin_pu": 0.9724539400157381,
+      "vmax_pu": 1.0473759699308867,
+      "out_of_band_bus_phases": 0
+    },
+    {
+      "feeder": "ieee123_p2_mf02_exotic",
+      "selected_route": "MF02_ROUTE_A",
+      "step": 2,
+      "converged": "True",
+      "vmin_pu": 0.9724498902080172,
+      "vmax_pu": 1.0473744230422593,
+      "out_of_band_bus_phases": 0
+    }
+  ],
+  "limitations": [
+    "bus-level not phase-level structural radiality",
+    "native voltage-only screen; missing conductor/switch thermal ratings",
+    "equal-priority synthetic pilot; no customer priority data",
+    "no curtailable loads declared; load-service optimization not exercised",
+    "one snapshot candidate evaluation, two live commands (requested)"
+  ],
+  "known_reliability_issue": "R01 OPEN: Windows native exception 0xe0465043 repeated in test stderr despite pass exit/status; R02 OPEN_MITIGATION_QUALIFIED",
+  "full_science_accepted": false,
+  "checks_passed": 454,
+  "checks_failed": 0,
+  "evidence_files": {
+    "s10d_qual_receipt": {
+      "file": "RBC_S10D_Qualify_20261110T222533634405Z_Receipt.json",
+      "bytes": 2426,
+      "sha256": "0EC5F6E69983E5A4CC813B707E449659925E19FD21C67A620F4D5E498EABA4FD"
+    },
+    "s10d_qual_zip": {
+      "file": "RBC_S10D_Qualify_20261110T222533634405Z_Evidence.zip",
+      "bytes": 88285,
+      "sha256": "B2636A907731A8C128511CE0D392776C01DE74CB29BFAC69B60AB3C6F1531F39"
+    },
+    "s10d_pilot_receipt": {
+      "file": "RBC_S10D_Pilot_20261110T224005116782Z_Receipt.json",
+      "bytes": 1056,
+      "sha256": "621D9651380063819609BCD0586748EC5EE1507E0BF06C2A18264F18707F709B"
+    },
+    "s10d_pilot_log": {
+      "file": "RBC_S10D_Pilot_20261110T224005116782Z_Pilot.log",
+      "bytes": 745,
+      "sha256": "6A3AA7B2EC272C91BBDEABEEABF32CC326B7B9B4C1A04EE73C76BCA18227BD29"
+    },
+    "s10d_pilot_zip": {
+      "file": "RBC_S10D_Pilot_20261110T224005116782Z_Evidence.zip",
+      "bytes": 76691,
+      "sha256": "972436AF541E408923201A7856CA4F7A936720F87DA397F0188F085E056D096B"
+    },
+    "s10d_p2_receipt": {
+      "file": "RBC_S10D_P2_Receipt_20261110T224009892176Z.json",
+      "bytes": 7401,
+      "sha256": "E8C1DBAD48308BCA41FC35970B06D9D37ABC2662C8D9E389E2FDDB0734091CDC"
+    },
+    "s10d_p2_manifest": {
+      "file": "RBC_S10D_P2_Manifest_20261110T224009892176Z.json",
+      "bytes": 6955,
+      "sha256": "0E5B4DAC0F3CEFEDD5682A29419973D1505160D3A92F85DAAD07D0D6D9590BA8"
+    },
+    "s10d_p2_zip": {
+      "file": "RBC_S10D_P2_Results_20261110T224009892176Z.zip",
+      "bytes": 1236362,
+      "sha256": "E2B37D6D7EB18E378497B32606F34433BF23B99F7D20AF8FBE4929BF5A14C4F0"
+    },
+    "s10c_p1_receipt": {
+      "file": "RBC_S10C_Receipt_20261110T212402030029Z.json",
+      "bytes": 6863,
+      "sha256": "B0D58141C5674621D5A9313AA022FE460253901BB5E70F728740EBFE2CFE934C"
+    },
+    "s10c_p1_manifest": {
+      "file": "RBC_S10C_Manifest_20261110T212402030029Z.json",
+      "bytes": 5325,
+      "sha256": "D4FC32437BAAD8FA930AFC18245E5483BEABEACA9BCE4EA9D6BA815D2A3604C0"
+    },
+    "s10c_p1_zip": {
+      "file": "RBC_S10C_Results_20261110T212402030029Z.zip",
+      "bytes": 881831,
+      "sha256": "125BB06039DADCF809129F7FD941CD4B98641F3B8D20A67107768A372F1308A4"
+    },
+    "s10d_package": {
+      "file": "S10D.zip",
+      "bytes": 124719,
+      "sha256": "5234B26E5D0AB2971E483499F26CADAA61065079BDA4313B9E365066EBD155C1"
+    }
+  }
+}

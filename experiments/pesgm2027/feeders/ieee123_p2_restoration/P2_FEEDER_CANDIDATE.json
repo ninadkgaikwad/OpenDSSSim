@@ -1,0 +1,61 @@
+{
+  "schema": "opendsssim.pesgm2027.p2.feeder_candidate.v01",
+  "status": "ENGINEERING_CANDIDATE_NOT_SCIENCE_FROZEN_NOT_ALTDSS_QUALIFIED",
+  "parent_feeder": "experiments/pesgm2027/feeders/ieee123_base",
+  "source_evidence_archive_sha256": "71537D7A1C7ED7328F4F6183E40B06B6D8561FB24B40E7417D38F3A986891D99",
+  "policy": "P2-only independent copy, original ieee123_base and P1 ieee123_pesgm2027 remain byte-unchanged",
+  "source_baseline_hashes": {
+    "IEEE123Loads.DSS": "FD28F52836205506A1980B52C5A7E12CA585AA626C52A6249502C1C3B2FC2255",
+    "IEEE123Master.dss": "21BFAB1A3C956D347DC491436AE839281BF7DB4ECECC405E10DDEB04D3AB00EC",
+    "IEEE123Regulators.DSS": "CD6AD77980DC018631CE39FAAB528AFCE40B0B9A50A6BC1C9AC8049FFB8207D7",
+    "IEEELineCodes.DSS": "4BC8E3A0B24AD7B1CB4321F1C3B6C8458B646DD3A83B3CD11CCCC02444624CB2",
+    "OpenDSS_License.txt": "72E6CB08D3397A969F7763D87AE46BEA03F2246A4A996524D0DF19285A422560",
+    "Run_IEEE123Bus.DSS": "559CCD5D3173F9204A7A5A1A764C3F405A0F46941F5E4FD7713F1EBF7EBBC0EF"
+  },
+  "candidate_hashes": {
+    "IEEE123Loads.DSS": "FD28F52836205506A1980B52C5A7E12CA585AA626C52A6249502C1C3B2FC2255",
+    "IEEE123Master.dss": "1F14D24852C9E998C18D8423A74596A13DDECBCE3691E6951A7700582522AE0A",
+    "IEEE123Regulators.DSS": "CD6AD77980DC018631CE39FAAB528AFCE40B0B9A50A6BC1C9AC8049FFB8207D7",
+    "IEEELineCodes.DSS": "4BC8E3A0B24AD7B1CB4321F1C3B6C8458B646DD3A83B3CD11CCCC02444624CB2",
+    "OpenDSS_License.txt": "72E6CB08D3397A969F7763D87AE46BEA03F2246A4A996524D0DF19285A422560",
+    "Run_IEEE123Bus.DSS": "559CCD5D3173F9204A7A5A1A764C3F405A0F46941F5E4FD7713F1EBF7EBBC0EF"
+  },
+  "modifications": [
+    "Switch=Yes on Sw1..Sw8 BEFORE original impedance properties",
+    "Sw7 Bus2: 300_OPEN -> 300",
+    "Sw8 Bus2: 94_OPEN.1 -> 94.1",
+    "explicit initial positions: Sw1..Sw6 closed, Sw7/Sw8 open"
+  ],
+  "switches": {
+    "Sw1": {
+      "initial_closed": true
+    },
+    "Sw2": {
+      "initial_closed": true
+    },
+    "Sw3": {
+      "initial_closed": true
+    },
+    "Sw4": {
+      "initial_closed": true
+    },
+    "Sw5": {
+      "initial_closed": true
+    },
+    "Sw6": {
+      "initial_closed": true
+    },
+    "Sw7": {
+      "initial_closed": false
+    },
+    "Sw8": {
+      "initial_closed": false
+    }
+  },
+  "source_bus": "150",
+  "fault_semantics": "Scenario faulted fixed-line terminal OPEN is externally imposed post-isolation plant condition; not a controller-requested action",
+  "electrical_validation": "PENDING_REAL_ALTDSS",
+  "references": [
+    "docs/development/control_science/P2_reconfiguration_restoration/P2_ControlScience_Contract.json"
+  ]
+}

@@ -1,0 +1,9 @@
+scenario,health_down,variant,choice,closed_switch_actions,open_switch_actions,nominal_connected_kw,nominal_connected_loads,topological_radial
+MF01_PRE,"L45,L77,L93,Sw7",MF01,PRE,,,2715.0,76,True
+MF01_RESTORED,"L45,L77,L93,Sw7",MF01,RESTORED,"Sw8,Sw9",,2975.0,84,True
+MF02_PRE,"L45,L77,L93",MF02,PRE,,,2715.0,76,True
+MF02_SW7_SW8,"L45,L77,L93",MF02,SW8,"Sw7,Sw8",,3270.0,84,True
+MF02_A,"L45,L77,L93",MF02,A,"Sw7,Sw8,Sw9",,3490.0,91,True
+MF02_B,"L45,L77,L93",MF02,B,"Sw7,Sw8,Sw10",,3490.0,91,True
+MF02_C,"L45,L77,L93",MF02,C,"Sw7,Sw8,Sw9,Sw10",Sw11,3490.0,91,True
+MF02_INVALID,"L45,L77,L93",MF02,INVALID,"Sw7,Sw8,Sw9,Sw10",,3490.0,91,False

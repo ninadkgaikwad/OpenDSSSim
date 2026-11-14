@@ -1,0 +1,127 @@
+{
+  "MF01_PRE": {
+    "close": [],
+    "faults": [
+      "L45",
+      "L77",
+      "L93",
+      "Sw7"
+    ],
+    "open": [],
+    "static_connected_kw": 2715.0,
+    "static_loads": 76,
+    "variant": "MF01"
+  },
+  "MF01_RESTORED": {
+    "close": [
+      "Sw8",
+      "Sw9"
+    ],
+    "faults": [
+      "L45",
+      "L77",
+      "L93",
+      "Sw7"
+    ],
+    "open": [],
+    "static_connected_kw": 2975.0,
+    "static_loads": 84,
+    "variant": "MF01"
+  },
+  "MF02_A": {
+    "close": [
+      "Sw7",
+      "Sw8",
+      "Sw9"
+    ],
+    "faults": [
+      "L45",
+      "L77",
+      "L93"
+    ],
+    "open": [],
+    "static_connected_kw": 3490.0,
+    "static_loads": 91,
+    "variant": "MF02"
+  },
+  "MF02_B": {
+    "close": [
+      "Sw7",
+      "Sw8",
+      "Sw10"
+    ],
+    "faults": [
+      "L45",
+      "L77",
+      "L93"
+    ],
+    "open": [],
+    "static_connected_kw": 3490.0,
+    "static_loads": 91,
+    "variant": "MF02"
+  },
+  "MF02_C": {
+    "close": [
+      "Sw7",
+      "Sw8",
+      "Sw9",
+      "Sw10"
+    ],
+    "faults": [
+      "L45",
+      "L77",
+      "L93"
+    ],
+    "open": [
+      "Sw11"
+    ],
+    "static_connected_kw": 3490.0,
+    "static_loads": 91,
+    "variant": "MF02"
+  },
+  "MF02_INVALID": {
+    "close": [
+      "Sw7",
+      "Sw8",
+      "Sw9",
+      "Sw10"
+    ],
+    "expected_structurally_invalid": "cycle",
+    "faults": [
+      "L45",
+      "L77",
+      "L93"
+    ],
+    "open": [],
+    "static_connected_kw": 3490.0,
+    "static_loads": 91,
+    "variant": "MF02"
+  },
+  "MF02_PRE": {
+    "close": [],
+    "faults": [
+      "L45",
+      "L77",
+      "L93"
+    ],
+    "open": [],
+    "static_connected_kw": 2715.0,
+    "static_loads": 76,
+    "variant": "MF02"
+  },
+  "MF02_SW7_SW8": {
+    "close": [
+      "Sw7",
+      "Sw8"
+    ],
+    "faults": [
+      "L45",
+      "L77",
+      "L93"
+    ],
+    "open": [],
+    "static_connected_kw": 3270.0,
+    "static_loads": 84,
+    "variant": "MF02"
+  }
+}

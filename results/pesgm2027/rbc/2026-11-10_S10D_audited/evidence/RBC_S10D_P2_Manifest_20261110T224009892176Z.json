@@ -1,0 +1,172 @@
+[
+  {
+    "bytes": 637,
+    "path": "ieee123_p2_mf01_simple/candidate_screen.csv",
+    "sha256": "5B821B072FCEE080970BD213674A29EAA6B8446358AB8A9FED62EE920D73EBD5"
+  },
+  {
+    "bytes": 378256,
+    "path": "ieee123_p2_mf01_simple/candidates/MF01_RATIFIED_PARTIAL/inv/IEEE123Master__F2425D8D4A486E53A820B0B6.json",
+    "sha256": "4EDDCF8A022BA9138117939A7620EB9BA5AE403C8EF3093008323321F6D2D1D4"
+  },
+  {
+    "bytes": 1455,
+    "path": "ieee123_p2_mf01_simple/candidates/MF01_RATIFIED_PARTIAL/pf/problem_F07CF3C40EC02F87__B670355B8168D1E5D26F4CF0.json",
+    "sha256": "FAC35E603629D99AFCAE1EB3429B4B23F7B45DF31197A905F71643006DC31D43"
+  },
+  {
+    "bytes": 1800330,
+    "path": "ieee123_p2_mf01_simple/candidates/MF01_RATIFIED_PARTIAL/sem/IEEE123Master__B309E9CF9CCCE0384AE8CA8C.json",
+    "sha256": "B98904C985F547DE20DDEF21AF7C0644F571C1804F59FADBB513ED921B2C215E"
+  },
+  {
+    "bytes": 2385,
+    "path": "ieee123_p2_mf01_simple/candidates/MF01_RATIFIED_PARTIAL/shadow_action_audit.json",
+    "sha256": "9479E9D329E2A81DC824BED288CE99B678C5E046B2679BCC0DD674D88071E81F"
+  },
+  {
+    "bytes": 2385,
+    "path": "ieee123_p2_mf01_simple/live_action_audit_step1.json",
+    "sha256": "9479E9D329E2A81DC824BED288CE99B678C5E046B2679BCC0DD674D88071E81F"
+  },
+  {
+    "bytes": 2385,
+    "path": "ieee123_p2_mf01_simple/live_action_audit_step2.json",
+    "sha256": "9479E9D329E2A81DC824BED288CE99B678C5E046B2679BCC0DD674D88071E81F"
+  },
+  {
+    "bytes": 378256,
+    "path": "ieee123_p2_mf01_simple/live_inventory/IEEE123Master__F2425D8D4A486E53A820B0B6.json",
+    "sha256": "4EDDCF8A022BA9138117939A7620EB9BA5AE403C8EF3093008323321F6D2D1D4"
+  },
+  {
+    "bytes": 1455,
+    "path": "ieee123_p2_mf01_simple/live_preflight/problem_F07CF3C40EC02F87__B670355B8168D1E5D26F4CF0.json",
+    "sha256": "FAC35E603629D99AFCAE1EB3429B4B23F7B45DF31197A905F71643006DC31D43"
+  },
+  {
+    "bytes": 1800330,
+    "path": "ieee123_p2_mf01_simple/live_semantics/IEEE123Master__B309E9CF9CCCE0384AE8CA8C.json",
+    "sha256": "B98904C985F547DE20DDEF21AF7C0644F571C1804F59FADBB513ED921B2C215E"
+  },
+  {
+    "bytes": 820,
+    "path": "ieee123_p2_mf01_simple/live_timeseries.csv",
+    "sha256": "89CA83A052505E7493B2898276C8E27EC4E15CD8CA24A56E5954A92EFD9F6300"
+  },
+  {
+    "bytes": 2459,
+    "path": "ieee123_p2_mf01_simple/structural_preview.json",
+    "sha256": "C24AEF52ECABF7239A7D35D39C0A38D83FE4E7487ADC1B8669FD3761AC675115"
+  },
+  {
+    "bytes": 1294,
+    "path": "ieee123_p2_mf02_exotic/candidate_screen.csv",
+    "sha256": "41F9F897D8E16B230CF51079B7B2327A8C2A783F2B97E54658D370528A22D664"
+  },
+  {
+    "bytes": 381219,
+    "path": "ieee123_p2_mf02_exotic/candidates/MF02_ROUTE_A/inv/IEEE123Master__16B347A8B93191D875F1430F.json",
+    "sha256": "E068180672107491C33F92639EF163ABE915DCEC73A133470E4527510E6244D5"
+  },
+  {
+    "bytes": 1455,
+    "path": "ieee123_p2_mf02_exotic/candidates/MF02_ROUTE_A/pf/problem_C7F4266CE5240EF9__7B42CF2AAC2EEE3200A2C8BB.json",
+    "sha256": "B8F6DE4ABF22F9ABE8E19C0285D67D746433D3B1ACCB8431A1F58FE21F05FF0F"
+  },
+  {
+    "bytes": 1815850,
+    "path": "ieee123_p2_mf02_exotic/candidates/MF02_ROUTE_A/sem/IEEE123Master__4908356D00B8C82A944CD27C.json",
+    "sha256": "5F983F46A87D1AB0D7441A734452B9BB37B972E3A1756647A3E074ED197BA5D2"
+  },
+  {
+    "bytes": 2932,
+    "path": "ieee123_p2_mf02_exotic/candidates/MF02_ROUTE_A/shadow_action_audit.json",
+    "sha256": "39A2B1F7BA78E711BEFAF927950F1EB56A0B8CC390B74069638E555E31CC72C8"
+  },
+  {
+    "bytes": 381219,
+    "path": "ieee123_p2_mf02_exotic/candidates/MF02_ROUTE_B/inv/IEEE123Master__16B347A8B93191D875F1430F.json",
+    "sha256": "E068180672107491C33F92639EF163ABE915DCEC73A133470E4527510E6244D5"
+  },
+  {
+    "bytes": 1455,
+    "path": "ieee123_p2_mf02_exotic/candidates/MF02_ROUTE_B/pf/problem_C7F4266CE5240EF9__7B42CF2AAC2EEE3200A2C8BB.json",
+    "sha256": "B8F6DE4ABF22F9ABE8E19C0285D67D746433D3B1ACCB8431A1F58FE21F05FF0F"
+  },
+  {
+    "bytes": 1815850,
+    "path": "ieee123_p2_mf02_exotic/candidates/MF02_ROUTE_B/sem/IEEE123Master__4908356D00B8C82A944CD27C.json",
+    "sha256": "5F983F46A87D1AB0D7441A734452B9BB37B972E3A1756647A3E074ED197BA5D2"
+  },
+  {
+    "bytes": 2932,
+    "path": "ieee123_p2_mf02_exotic/candidates/MF02_ROUTE_B/shadow_action_audit.json",
+    "sha256": "73D8F58BBA115F6A3A233728F52DB6CBF2DEF261C62357E09F2AD8506722434C"
+  },
+  {
+    "bytes": 381219,
+    "path": "ieee123_p2_mf02_exotic/candidates/MF02_ROUTE_C/inv/IEEE123Master__16B347A8B93191D875F1430F.json",
+    "sha256": "E068180672107491C33F92639EF163ABE915DCEC73A133470E4527510E6244D5"
+  },
+  {
+    "bytes": 1455,
+    "path": "ieee123_p2_mf02_exotic/candidates/MF02_ROUTE_C/pf/problem_C7F4266CE5240EF9__7B42CF2AAC2EEE3200A2C8BB.json",
+    "sha256": "B8F6DE4ABF22F9ABE8E19C0285D67D746433D3B1ACCB8431A1F58FE21F05FF0F"
+  },
+  {
+    "bytes": 1815850,
+    "path": "ieee123_p2_mf02_exotic/candidates/MF02_ROUTE_C/sem/IEEE123Master__4908356D00B8C82A944CD27C.json",
+    "sha256": "5F983F46A87D1AB0D7441A734452B9BB37B972E3A1756647A3E074ED197BA5D2"
+  },
+  {
+    "bytes": 2932,
+    "path": "ieee123_p2_mf02_exotic/candidates/MF02_ROUTE_C/shadow_action_audit.json",
+    "sha256": "F01985332B1B5180EF8DD13F9DEB36239E76DAEE7428455905979C08778A23A7"
+  },
+  {
+    "bytes": 2932,
+    "path": "ieee123_p2_mf02_exotic/live_action_audit_step1.json",
+    "sha256": "39A2B1F7BA78E711BEFAF927950F1EB56A0B8CC390B74069638E555E31CC72C8"
+  },
+  {
+    "bytes": 2932,
+    "path": "ieee123_p2_mf02_exotic/live_action_audit_step2.json",
+    "sha256": "39A2B1F7BA78E711BEFAF927950F1EB56A0B8CC390B74069638E555E31CC72C8"
+  },
+  {
+    "bytes": 381219,
+    "path": "ieee123_p2_mf02_exotic/live_inventory/IEEE123Master__16B347A8B93191D875F1430F.json",
+    "sha256": "E068180672107491C33F92639EF163ABE915DCEC73A133470E4527510E6244D5"
+  },
+  {
+    "bytes": 1455,
+    "path": "ieee123_p2_mf02_exotic/live_preflight/problem_C7F4266CE5240EF9__7B42CF2AAC2EEE3200A2C8BB.json",
+    "sha256": "B8F6DE4ABF22F9ABE8E19C0285D67D746433D3B1ACCB8431A1F58FE21F05FF0F"
+  },
+  {
+    "bytes": 1815850,
+    "path": "ieee123_p2_mf02_exotic/live_semantics/IEEE123Master__4908356D00B8C82A944CD27C.json",
+    "sha256": "5F983F46A87D1AB0D7441A734452B9BB37B972E3A1756647A3E074ED197BA5D2"
+  },
+  {
+    "bytes": 804,
+    "path": "ieee123_p2_mf02_exotic/live_timeseries.csv",
+    "sha256": "204BC5CED5A901F349A12E2E797656D3E3CCED6FCFDB0678CFA111977F6DAF64"
+  },
+  {
+    "bytes": 2507,
+    "path": "ieee123_p2_mf02_exotic/structural_preview.json",
+    "sha256": "3BA91B43161CC1714EA872E3166E28F26A1FF76A4DD264AC08A48FD71DEF9574"
+  },
+  {
+    "bytes": 12545,
+    "path": "index.html",
+    "sha256": "50D29100A277CC2AB87BB5ABAE8F87CA583D43FDF7A9DEE4957864A15D603878"
+  },
+  {
+    "bytes": 6991,
+    "path": "receipt.json",
+    "sha256": "1B8F204FB9E0CE9369D757ED3024C3B60529D9076FB109216AF748382CA1E1E2"
+  }
+]

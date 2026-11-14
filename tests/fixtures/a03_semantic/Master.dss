@@ -1,0 +1,20 @@
+Clear
+New Circuit.A03Semantic BasekV=12.47 pu=1.0 Phases=3 Bus1=source
+
+New Line.Feeder Bus1=source.1.2.3 Bus2=loadbus.1.2.3 Phases=3 Length=1 Units=km R1=0.20 X1=0.40 R0=0.60 X0=1.20 C1=3.4 C0=1.6 NormAmps=400 EmergAmps=600 Switch=Yes
+
+New Transformer.RegX Phases=3 Windings=2 XHL=1 Buses=(loadbus.1.2.3 regbus.1.2.3) Conns=(wye wye) kVs=(12.47 12.47) kVAs=(1000 1000) MinTap=0.90 MaxTap=1.10 NumTaps=32
+
+New Load.Load1 Bus1=regbus.1.2.3 Phases=3 Conn=wye Model=1 kV=12.47 kW=250 kvar=80
+New Capacitor.Cap1 Bus1=regbus.1.2.3 Phases=3 kV=12.47 kvar=300
+New PVSystem.PV1 Bus1=regbus.1.2.3 Phases=3 Conn=wye kV=12.47 kVA=120 Pmpp=100 Irradiance=0.80 kvar=0 kvarMax=80 kvarMaxAbs=80
+New Storage.BESS1 Bus1=regbus.1.2.3 Phases=3 Conn=wye kV=12.47 kWRated=100 kWhRated=250 kVA=120 %Stored=50 kW=0 kvar=0
+New Generator.Gen1 Bus1=regbus.1.2.3 Phases=3 Conn=wye Model=1 kV=12.47 kW=50 kvar=10 kVA=70
+
+New RegControl.RC1 Transformer=RegX Winding=2 VReg=120 Band=3 PTRatio=60
+New CapControl.CC1 Element=Line.Feeder Terminal=2 Capacitor=Cap1 Type=Voltage OnSetting=118 OffSetting=122 PTRatio=60
+New SwtControl.SC1 SwitchedObj=Line.Feeder SwitchedTerm=1 Normal=Closed State=Closed
+
+Set VoltageBases=[12.47]
+CalcVoltageBases
+Solve

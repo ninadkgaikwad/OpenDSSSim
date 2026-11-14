@@ -1,0 +1,90 @@
+{
+  "schema": "OpenDSSSim.PESGM2027.Scalability8760.ExternalPQProfile.v02",
+  "description": "Synthetic reproducible hourly load multiplier: one normalized 24-hour daily curve repeated for 365 days with additive seeded Gaussian noise.",
+  "timestamps": {
+    "start_utc": "2026-01-01T00:00:00Z",
+    "dt_seconds": 3600,
+    "rows": 8760,
+    "calendar_days": 365
+  },
+  "daily_raw_24": [
+    0.78,
+    0.74,
+    0.72,
+    0.71,
+    0.73,
+    0.8,
+    0.9,
+    1.02,
+    1.08,
+    1.1,
+    1.08,
+    1.05,
+    1.03,
+    1.02,
+    1.0,
+    1.01,
+    1.05,
+    1.12,
+    1.18,
+    1.2,
+    1.16,
+    1.08,
+    0.96,
+    0.86
+  ],
+  "daily_normalized_24": [
+    0.8006843455945253,
+    0.7596236099230111,
+    0.739093242087254,
+    0.7288280581693756,
+    0.7493584260051326,
+    0.8212147134302824,
+    0.9238665526090677,
+    1.04704875962361,
+    1.1086398631308811,
+    1.1291702309666383,
+    1.1086398631308811,
+    1.0778443113772456,
+    1.0573139435414884,
+    1.04704875962361,
+    1.0265183917878529,
+    1.0367835757057315,
+    1.0778443113772456,
+    1.1497005988023954,
+    1.2112917023096663,
+    1.2318220701454234,
+    1.1907613344739092,
+    1.1086398631308811,
+    0.9854576561163387,
+    0.8828058169375534
+  ],
+  "daily_normalized_mean": 1.0,
+  "noise": {
+    "generator": "numpy.random.default_rng / PCG64",
+    "seed": 8760,
+    "distribution": "Gaussian",
+    "mean_pu": 0.0,
+    "sigma_pu": 0.02,
+    "application": "additive_to_hourly_daily_multiplier"
+  },
+  "clipping": {
+    "minimum_pu": 0.65,
+    "maximum_pu": 1.3
+  },
+  "realized_multiplier": {
+    "minimum": 0.6663860543498514,
+    "maximum": 1.291752284805742,
+    "mean": 0.9999280609261284,
+    "std": 0.15747424785666603
+  },
+  "physical_mapping": {
+    "OpenDSSSim_A05_mode": "multiplier",
+    "P_rule": "P_i,t = m_t * P_i,0",
+    "Q_rule": "Q_i,t = m_t * Q_i,0",
+    "constant_power_factor": "Each load retains its own native baseline power factor and kvar sign because P and Q are scaled by the identical positive multiplier.",
+    "same_temporal_multiplier_for_all_loads_and_all_three_feeders": true,
+    "weather_actuation": false
+  },
+  "csv_sha256": "2E4447CE612E1ECBFBC891F5A75F23F67AC7C11AF40E9FAAA75491CB5DC0BD2C"
+}

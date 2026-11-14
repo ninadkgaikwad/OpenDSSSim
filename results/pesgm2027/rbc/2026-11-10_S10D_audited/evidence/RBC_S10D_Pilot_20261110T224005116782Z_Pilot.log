@@ -1,0 +1,22 @@
+{
+  "status": "PASS_P2_NATIVE_VOLTAGE_PILOT_NOT_FULL_P2_SCIENCE",
+  "receipt": "C:\\Users\\ninad\\Downloads\\RBC_S10D_P2_Receipt_20261110T224009892176Z.json",
+  "evidence_zip": "C:\\Users\\ninad\\Downloads\\RBC_S10D_P2_Results_20261110T224009892176Z.zip",
+  "results": {
+    "ieee123_p2_mf01_simple": {
+      "status": "P2_NATIVE_VOLTAGE_SCREEN_WITH_CLOSED_LOOP_PILOT",
+      "native_evaluated_routes": 1,
+      "selected_route": "MF01_RATIFIED_PARTIAL",
+      "live_steps": 2
+    },
+    "ieee123_p2_mf02_exotic": {
+      "status": "P2_NATIVE_VOLTAGE_SCREEN_WITH_CLOSED_LOOP_PILOT",
+      "native_evaluated_routes": 3,
+      "selected_route": "MF02_ROUTE_A",
+      "live_steps": 2
+    }
+  },
+  "issues": []
+}
+
+---STDERR---

@@ -1,0 +1,14 @@
+﻿{
+    "project":  "OpenDSSSim",
+    "publication":  "PESGM2027",
+    "controller":  "RBC",
+    "experiment_date":  "2026-11-10",
+    "milestone":  "S10C_S10D",
+    "archive_sha256":  "C44936AEA5AEEB933161E5AB8E5BBA104CBA650DAE6FE41C04059DA6599CCEC8",
+    "installed_successor_sha256":  "0C4887E12C8B81D7E243590DBE043B7BD8EC2E7156861B4024B1969840400797",
+    "audited_content_files":  19,
+    "source_modified":  false,
+    "scope":  "NATIVE_PILOT_WITH_EXPLICIT_SCIENTIFIC_LIMITATIONS",
+    "reliability_R01":  "OPEN",
+    "reliability_R02":  "OPEN_MITIGATION_QUALIFIED"
+}

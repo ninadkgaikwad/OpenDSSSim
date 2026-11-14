@@ -1,0 +1,20 @@
+{
+  "plot": "voltage_envelopes.svg",
+  "rows": 175,
+  "schema": [
+    "problem",
+    "policy",
+    "variant",
+    "step",
+    "sample_kind",
+    "solver_status",
+    "plant_converged",
+    "min_pu",
+    "max_pu",
+    "out_of_band_phase_count",
+    "energized_phase_count",
+    "voltage_band",
+    "replay"
+  ],
+  "source": "QUALIFIED_ARCHIVED_V06_NOT_NEW_SIMULATION"
+}

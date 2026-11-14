@@ -1,0 +1,8107 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenDSSSim | P2 IEEE-123 Topology Lab</title>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:#1a3045;background:#f3f6fa;font-size:13px;--line:#dae3ec;--muted:#667a90;--strong:#18344e;--teal:#087e9a;--orange:#d98a20;--red:#c43b42;--green:#15956c}
+*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit;color:inherit}button{cursor:pointer;border:1px solid #bfcbd7;background:#fff;border-radius:8px;padding:8px 11px}button:hover{background:#f0f7fa;border-color:#4599b4}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #8abada;outline-offset:1px}button.primary{background:#0f6782;color:#fff;border-color:#0f6782}button.primary:hover{background:#09526c}button.secondary{background:#eef5f9}button.danger{color:#a32232;border-color:#ebb3ba}button.small{padding:5px 8px;font-size:12px}button:disabled{opacity:.4;cursor:not-allowed}
+select,input{padding:8px 9px;border:1px solid #bccbd9;background:#fff;border-radius:8px;min-width:0}input[type=checkbox]{accent-color:#087e9a;min-width:0}h1,h2,h3,p{margin-top:0}h1{font-size:22px;letter-spacing:-.04em;margin-bottom:4px}h2{font-size:15px;margin-bottom:10px}h3{font-size:12px;margin:17px 0 6px;color:#465f74;text-transform:uppercase;letter-spacing:.06em}a{color:#126889}header{background:#142a41;color:#fff;padding:17px 24px;display:flex;justify-content:space-between;gap:15px;align-items:center}header p{color:#bfd0db;margin:0}header .tag{border:1px solid #56788a;color:#cdeaf0;border-radius:30px;padding:5px 10px;white-space:nowrap;font-size:11px;font-weight:700}
+.layout{max-width:1920px;margin:auto;padding:15px;display:grid;gap:13px;grid-template-columns:324px minmax(550px,1fr) 303px;align-items:start}.panel{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 2px 9px #243d4b08}.pad{padding:14px}.scroll-panel{max-height:calc(100vh - 107px);overflow:auto;position:sticky;top:12px}.muted{color:var(--muted);font-size:12px}.eyebrow{font-size:10px;letter-spacing:.1em;color:#718497;text-transform:uppercase;font-weight:800}.field{display:grid;gap:5px;margin:12px 0}.field>label{font-size:12px;font-weight:700}.field input,.field select{width:100%}.subtle{padding:10px;border:1px solid var(--line);background:#f8fafc;border-radius:9px}.divider{border-top:1px solid var(--line);margin:13px -14px}.stack{display:grid;gap:8px}.hstack{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.chips{display:flex;flex-wrap:wrap;gap:6px;min-height:28px}.chip{display:flex;align-items:center;gap:7px;border:1px solid #ebadb4;border-radius:30px;padding:4px 6px 4px 9px;background:#fff2f2;color:#9c2534;font-weight:700;font-size:11px}.chip button{border:none;background:transparent;color:inherit;padding:0 3px;font-size:16px;line-height:1}.switchrow{display:flex;justify-content:space-between;align-items:center;padding:8px;border-bottom:1px solid #eef1f5;gap:5px}.switchrow strong{font-size:12px}.switchrow .switchdetails{font-size:11px;color:var(--muted)}.switchrow input{transform:scale(1.08)}.switchrow.faulted{opacity:.65;background:#fff6f6}.checkboxlabel{display:flex;gap:8px;align-items:center;font-weight:600;font-size:12px}.help{color:#647589;font-size:11px;line-height:1.5}
+.center{min-width:0}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-bottom:11px}.metric{padding:11px;border:1px solid var(--line);border-radius:11px;background:#fff}.metric span{display:block;font-size:10px;text-transform:uppercase;color:var(--muted);font-weight:800;letter-spacing:.04em;min-height:28px}.metric strong{display:block;font-size:23px;line-height:1.2;font-variant-numeric:tabular-nums;white-space:nowrap;margin:4px 0}.metric small{color:var(--muted);font-size:11px}.metric.bad strong{color:var(--red)}.metric.good strong{color:var(--green)}
+.canvasbar{padding:11px 14px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;justify-content:space-between;gap:7px;align-items:center}.canvasbar strong{font-size:14px}.mapwrap{height:min(70vh,780px);min-height:520px;background:linear-gradient(125deg,#fff,#f5f9fc);overflow:hidden;position:relative}#map{width:100%;height:100%;touch-action:none;cursor:grab}#map.dragging{cursor:grabbing}.link{stroke-linecap:round;stroke-linejoin:round}.clickline{stroke:transparent;stroke-width:20;cursor:pointer}.nodedot,.edgeBadge{cursor:pointer}.svglabel{font-family:Inter,system-ui,sans-serif;paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round;cursor:pointer}.keyline{height:3px;width:20px;background:#a5b4c1;display:inline-block;vertical-align:middle}.legend{display:flex;flex-wrap:wrap;gap:8px 14px;padding:11px 14px;font-size:11px;color:#60758a}.legend b{margin-right:4px}.footer{margin:11px 0;background:#fff9e8;border:1px solid #efdba9;color:#6b541d;padding:11px 13px;border-radius:11px;line-height:1.55;font-size:12px}
+.summary{padding:13px;border-bottom:1px solid var(--line);background:#fcfdff}.notice{border-radius:8px;padding:8px 10px;font-weight:700;font-size:12px}.notice.ok{color:#08744f;background:#e7f9f1}.notice.bad{color:#a02c34;background:#fff0f0}.list{display:grid;gap:7px}.candidate{border:1px solid #d9e3ed;border-radius:9px;padding:10px;cursor:pointer}.candidate:hover{background:#f2f8fb}.candidate h4{margin:0 0 5px;font-size:12px;display:flex;justify-content:space-between;gap:5px}.candidate p{font-size:11px;color:#567086;margin:0 0 6px}.candidate button{padding:5px 9px;font-size:11px}.empty{padding:12px;color:var(--muted);font-size:12px}.detailkv{display:grid;grid-template-columns:90px 1fr;gap:7px;font-size:12px}.detailkv dt{color:var(--muted)}.detailkv dd{margin:0;word-break:break-word}.tablehead{display:flex;gap:6px;justify-content:space-between;align-items:center}.pill{font-size:10px;font-weight:800;background:#eaf3f8;color:#126581;border-radius:12px;padding:3px 7px}.scenarioitem{width:100%;text-align:left;display:grid;gap:3px;padding:8px;border-color:#e2e8ef}.scenarioitem.active{background:#def1f5;border-color:#75b2c4}.scenarioitem span{font-size:11px;color:#5a7082}.hint{font-size:12px;color:#566c7f;margin-top:6px}
+@media(max-width:1330px){.layout{grid-template-columns:300px minmax(400px,1fr)}.right{grid-column:1/-1}.right .scroll-panel{position:static;max-height:none}.right-inner{display:grid;grid-template-columns:1fr 1fr;gap:12px}}@media(max-width:790px){.layout{display:flex;flex-direction:column;padding:9px}.left,.center,.right{width:100%}.scroll-panel{max-height:none;position:static}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.mapwrap{min-height:400px;height:490px}.right-inner{display:block}header{padding:14px}h1{font-size:19px}}
+</style></head>
+<body><header><div><h1>P2 / IEEE-123 · Topology lab</h1><p>Switching · arbitrary branch outages · radial restoration · proposed tie comparison</p></div><div class="tag">OFFLINE / STATIC ENGINEERING SCREEN</div></header>
+<main class="layout">
+<aside class="left"><div class="panel scroll-panel"><div class="pad">
+<div class="eyebrow">01 / Demonstrations</div><h2>Start with a case</h2><div id="scenarios" class="stack"></div>
+<div class="divider"></div><div class="eyebrow">02 / Fault isolation</div><h2>Choose any line or switch</h2><div class="field"><label for="faultFilter">Search 134 physical branches</label><input id="faultFilter" placeholder="L45, Sw3, bus 54, 94…" autocomplete="off"></div><div class="hstack"><select id="faultSelect" style="flex:1;min-width:140px" aria-label="Select edge to fault"></select><button id="addFault" class="danger" type="button">Add fault</button></div><p class="help">Fault = isolated/unavailable branch; no transient short-circuit model. Add several faults to test multi-fault recovery.</p><div id="faultChips" class="chips"></div><div class="hstack" style="margin-top:8px"><button class="small" id="clearFaults">Clear faults</button><button class="small" id="resetAll">Reset all</button></div>
+<div class="divider"></div><div class="eyebrow">03 / Actuator commands</div><h2>Operate Sw1–Sw8</h2><div id="switches"></div><button style="margin-top:9px" id="defaultSwitches" class="small">Restore default switch states</button>
+<div class="divider"></div><div class="eyebrow">04 / Optional equipment design</div><h2>Try one additional tie</h2><label class="checkboxlabel"><input id="virtualEnable" type="checkbox"> Compare a hypothetical switch</label><div id="virtualFields" style="display:none"><div class="field"><label for="virtualA">From bus</label><select id="virtualA"></select></div><div class="field"><label for="virtualB">To bus</label><select id="virtualB"></select></div><div class="field"><label for="virtualPhases">Phase set</label><select id="virtualPhases"></select></div><label class="checkboxlabel"><input id="virtualClosed" type="checkbox"> Command proposed switch closed</label><div id="virtualWarning" class="help"></div></div><p class="help">A virtual tie exists only in this browser. Compare its best restoration with the installed eight-switch feeder before proposing physical equipment.</p>
+<div class="divider"></div><div class="hstack"><button id="exportReport" class="primary">Export study JSON</button><button id="fitMap">Fit topology</button></div>
+</div></div></aside>
+<section class="center"><div class="metrics"><div class="metric"><span>Connected nominal load</span><strong id="mKW">—</strong><small id="mLost">—</small></div><div class="metric"><span>Connected load objects</span><strong id="mLoads">—</strong><small>of 91 catalogued</small></div><div class="metric"><span>Recovered vs isolated</span><strong id="mGain">—</strong><small>topological only</small></div><div class="metric" id="mTopoBox"><span>Bus-level radiality</span><strong id="mTopo">—</strong><small id="mCycles">—</small></div></div>
+<div class="panel"><div class="canvasbar"><div><strong id="canvasTitle">Circuit topology</strong><div class="muted" id="canvasSub">Select any branch or bus to inspect</div></div><div class="hstack"><button class="small" id="zoomPlus">+</button><button class="small" id="zoomMinus">−</button><button class="small" id="zoomFit">Fit</button></div></div><div class="mapwrap"><svg id="map" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Clickable topology of the installed IEEE 123 P2 feeder" viewBox="0 0 1600 1160"><g id="viewport"></g></svg></div><div class="legend"><span><i class="keyline" style="background:#98a9ba"></i> energized</span><span><i class="keyline" style="background:#d1d8e2"></i> de-energized</span><span><i class="keyline" style="background:#c43b42"></i> isolated fault</span><span><i class="keyline" style="background:#d98a20"></i> sectionalizer</span><span><i class="keyline" style="background:#087e9a"></i> open tie</span><span><i class="keyline" style="background:#15956c"></i> reconnected path</span><span><i class="keyline" style="background:#7c4db3"></i> virtual proposed tie</span></div></div>
+<div class="footer"><strong>Scope:</strong> phase-terminal source connectivity and bus-level radiality only. Voltage, thermal limits, source capacity, protection, fault currents, actual kW delivered, regulator behavior, and AltDSS convergence are <strong>not</strong> evaluated. Faulted equipment is treated as externally isolated. The schematic is not a geographic map. Ranked combinations are topology suggestions, not validated controller actions.</div></section>
+<aside class="right"><div class="right-inner"><div class="panel scroll-panel"><div class="pad"><div class="eyebrow">05 / Connectivity decision</div><h2>Current selection</h2><div id="stateStatus"></div><p class="hint" id="statusExplanation"></p><div id="comparison" class="subtle"></div><div class="divider"></div><div class="tablehead"><h2 style="margin:0">Best radial configurations</h2><span id="countFeasible" class="pill">—</span></div><p class="help">Exhaustively checks all 256 original switch-state combinations (512 with proposed tie). Ranks nominal connected kW, then fewer command changes. Re-energization estimates exclude electrical constraints.</p><div id="candidateList" class="list"></div><div class="divider"></div><h3>Disconnected loads</h3><div id="missingLoads" class="muted"></div></div></div><div class="panel" style="margin-top:12px"><div class="pad"><div class="eyebrow">06 / Component inspector</div><h2 id="inspectorTitle">Click an edge or bus</h2><div id="inspector" class="muted">Click any branch, Sw1–Sw8 marker, or bus dot. Search any of the 134 circuit branches using the fault selection panel.</div><div class="divider"></div><h3>Look up a component</h3><div class="hstack"><input id="lookupInput" list="components" placeholder="L45, SW7, 151…" style="flex:1;min-width:80px"><datalist id="components"></datalist><button id="lookupButton" class="small">Inspect</button></div></div></div></div></aside>
+</main>
+<script id="p2-data">const P2_DATA={
+  "source": "150",
+  "nodes": [
+    {
+      "id": "149",
+      "x": 483.5,
+      "y": 435.15,
+      "loads": []
+    },
+    {
+      "id": "1",
+      "x": 456.94,
+      "y": 435.15,
+      "loads": [
+        {
+          "id": "S1A",
+          "bus": "1",
+          "need": [
+            1
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "x": 642.61,
+      "y": 426.99,
+      "loads": [
+        {
+          "id": "S2B",
+          "bus": "2",
+          "need": [
+            2
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "x": 637.96,
+      "y": 403.08,
+      "loads": []
+    },
+    {
+      "id": "7",
+      "x": 433.16,
+      "y": 459.35,
+      "loads": [
+        {
+          "id": "S7A",
+          "bus": "7",
+          "need": [
+            1
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "x": 665.96,
+      "y": 404.89,
+      "loads": [
+        {
+          "id": "S4C",
+          "bus": "4",
+          "need": [
+            3
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "x": 659.84,
+      "y": 385.48,
+      "loads": [
+        {
+          "id": "S5C",
+          "bus": "5",
+          "need": [
+            3
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "x": 684.49,
+      "y": 375.55,
+      "loads": [
+        {
+          "id": "S6C",
+          "bus": "6",
+          "need": [
+            3
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "x": 407.3,
+      "y": 465.4,
+      "loads": []
+    },
+    {
+      "id": "12",
+      "x": 673.64,
+      "y": 353.67,
+      "loads": [
+        {
+          "id": "S12B",
+          "bus": "12",
+          "need": [
+            2
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "x": 651.5,
+      "y": 324.6,
+      "loads": [
+        {
+          "id": "S9A",
+          "bus": "9",
+          "need": [
+            1
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "13",
+      "x": 393.78,
+      "y": 505.88,
+      "loads": []
+    },
+    {
+      "id": "9r",
+      "x": 670.61,
+      "y": 306.19,
+      "loads": []
+    },
+    {
+      "id": "14",
+      "x": 689.76,
+      "y": 287.77,
+      "loads": []
+    },
+    {
+      "id": "34",
+      "x": 625.49,
+      "y": 271.76,
+      "loads": [
+        {
+          "id": "S34C",
+          "bus": "34",
+          "need": [
+            3
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "18",
+      "x": 423.9,
+      "y": 287.26,
+      "loads": []
+    },
+    {
+      "id": "11",
+      "x": 721.09,
+      "y": 283.01,
+      "loads": [
+        {
+          "id": "S11A",
+          "bus": "11",
+          "need": [
+            1
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "x": 695.7,
+      "y": 256.63,
+      "loads": [
+        {
+          "id": "S10A",
+          "bus": "10",
+          "need": [
+            1
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "15",
+      "x": 638.18,
+      "y": 248.44,
+      "loads": []
+    },
+    {
+      "id": "16",
+      "x": 666.59,
+      "y": 234.46,
+      "loads": [
+        {
+          "id": "S16C",
+          "bus": "16",
+          "need": [
+            3
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "17",
+      "x": 634.45,
+      "y": 216.97,
+      "loads": [
+        {
+          "id": "S17C",
+          "bus": "17",
+          "need": [
+            3
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "19",
+      "x": 592.94,
+      "y": 230.21,
+      "loads": [
+        {
+          "id": "S19A",
+          "bus": "19",
+          "need": [
+            1
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "21",
+      "x": 496.16,
+      "y": 226.49,
+      "loads": []
+    },
+    {
+      "id": "20",
+      "x": 599.99,
+      "y": 204.6,
+      "loads": [
+        {
+          "id": "S20A",
+          "bus": "20",
+          "need": [
+            1
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "22",
+      "x": 564.05,
+      "y": 197.63,
+      "loads": [
+        {
+          "id": "S22B",
+          "bus": "22",
+          "need": [
+            2
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "23",
+      "x": 473.28,
+      "y": 204.6,
+      "loads": []
+    },
+    {
+      "id": "24",
+      "x": 526.45,
+      "y": 169.66,
+      "loads": [
+        {
+          "id": "S24C",
+          "bus": "24",
+          "need": [
+            3
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "25",
+      "x": 446.83,
+      "y": 185.12,
+      "loads": []
+    },
+    {
+      "id": "25r",
+      "x": 459.19,
+      "y": 153.35,
+      "loads": []
+    },
+    {
+      "id": "26",
+      "x": 452.18,
+      "y": 127.75,
+      "loads": []
+    },
+    {
+      "id": "28",
+      "x": 397.03,
+      "y": 178.41,
+      "loads": [
+        {
+          "id": "S28A",
+          "bus": "28",
+          "need": [
+            1
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "27",
+      "x": 470.88,
+      "y": 96.09,
+      "loads": []
+    },
+    {
+      "id": "31",
+      "x": 419.89,
+      "y": 110.11,
+      "loads": [
+        {
+          "id": "S31C",
+          "bus": "31",
+          "need": [
+            3
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "33",
+      "x": 465.83,
+      "y": 70.0,
+      "loads": [
+        {
+          "id": "S33A",
+          "bus": "33",
+          "need": [
+            1
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "29",
+      "x": 384.34,
+      "y": 155.09,
+      "loads": [
+        {
+          "id": "S29A",
+          "bus": "29",
+          "need": [
+            1
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "30",
+      "x": 371.65,
+      "y": 131.73,
+      "loads": [
+        {
+          "id": "S30C",
+          "bus": "30",
+          "need": [
+            3
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "250",
+      "x": 358.96,
+      "y": 108.41,
+      "loads": []
+    },
+    {
+      "id": "32",
+      "x": 410.92,
+      "y": 85.09,
+      "loads": [
+        {
+          "id": "S32C",
+          "bus": "32",
+          "need": [
+            3
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "35",
+      "x": 322.36,
+      "y": 329.06,
+      "loads": [
+        {
+          "id": "S35A",
+          "bus": "35",
+          "need": [
+            1,
+            2
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "36",
+      "x": 359.88,
+      "y": 236.82,
+      "loads": []
+    },
+    {
+      "id": "40",
+      "x": 283.35,
+      "y": 355.0,
+      "loads": []
+    },
+    {
+      "id": "37",
+      "x": 359.48,
+      "y": 202.72,
+      "loads": [
+        {
+          "id": "S37A",
+          "bus": "37",
+          "need": [
+            1
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "38",
+      "x": 326.07,
+      "y": 232.5,
+      "loads": [
+        {
+          "id": "S38B",
+          "bus": "38",
+          "need": [
+            2
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "39",
+      "x": 306.93,
+      "y": 214.09,
+      "loads": [
+        {
+          "id": "S39B",
+          "bus": "39",
+          "need": [
+            2
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "41",
+      "x": 297.61,
+      "y": 267.0,
+      "loads": [
+        {
+          "id": "S41C",
+          "bus": "41",
+          "need": [
+            3
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "42",
+      "x": 252.09,
+      "y": 368.54,
+      "loads": [
+        {
+          "id": "S42A",
+          "bus": "42",
+          "need": [
+            1
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "43",
+      "x": 250.94,
+      "y": 293.68,
+      "loads": [
+        {
+          "id": "S43B",
+          "bus": "43",
+          "need": [
+            2
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "44",
+      "x": 221.57,
+      "y": 386.48,
+      "loads": []
+    },
+    {
+      "id": "45",
+      "x": 207.36,
+      "y": 330.94,
+      "loads": [
+        {
+          "id": "S45A",
+          "bus": "45",
+          "need": [
+            1
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "47",
+      "x": 192.28,
+      "y": 408.69,
+      "loads": [
+        {
+          "id": "S47",
+          "bus": "47",
+          "need": [
+            1,
+            2,
+            3
+          ],
+          "kw": 105.0
+        }
+      ]
+    },
+    {
+      "id": "46",
+      "x": 182.03,
+      "y": 322.94,
+      "loads": [
+        {
+          "id": "S46A",
+          "bus": "46",
+          "need": [
+            1
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "48",
+      "x": 169.06,
+      "y": 378.36,
+      "loads": [
+        {
+          "id": "S48",
+          "bus": "48",
+          "need": [
+            1,
+            2,
+            3
+          ],
+          "kw": 210.0
+        }
+      ]
+    },
+    {
+      "id": "49",
+      "x": 164.7,
+      "y": 435.15,
+      "loads": [
+        {
+          "id": "S49A",
+          "bus": "49",
+          "need": [
+            1
+          ],
+          "kw": 35.0
+        },
+        {
+          "id": "S49B",
+          "bus": "49",
+          "need": [
+            2
+          ],
+          "kw": 70.0
+        },
+        {
+          "id": "S49C",
+          "bus": "49",
+          "need": [
+            3
+          ],
+          "kw": 35.0
+        }
+      ]
+    },
+    {
+      "id": "50",
+      "x": 138.13,
+      "y": 435.15,
+      "loads": [
+        {
+          "id": "S50C",
+          "bus": "50",
+          "need": [
+            3
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "51",
+      "x": 111.57,
+      "y": 435.15,
+      "loads": [
+        {
+          "id": "S51A",
+          "bus": "51",
+          "need": [
+            1
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "151",
+      "x": 85.0,
+      "y": 435.15,
+      "loads": []
+    },
+    {
+      "id": "52",
+      "x": 544.79,
+      "y": 647.53,
+      "loads": [
+        {
+          "id": "S52A",
+          "bus": "52",
+          "need": [
+            1
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "53",
+      "x": 545.79,
+      "y": 674.07,
+      "loads": [
+        {
+          "id": "S53A",
+          "bus": "53",
+          "need": [
+            1
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "54",
+      "x": 546.82,
+      "y": 700.61,
+      "loads": []
+    },
+    {
+      "id": "55",
+      "x": 247.83,
+      "y": 479.76,
+      "loads": [
+        {
+          "id": "S55A",
+          "bus": "55",
+          "need": [
+            1
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "57",
+      "x": 570.14,
+      "y": 725.45,
+      "loads": []
+    },
+    {
+      "id": "56",
+      "x": 221.57,
+      "y": 483.81,
+      "loads": [
+        {
+          "id": "S56B",
+          "bus": "56",
+          "need": [
+            2
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "58",
+      "x": 232.69,
+      "y": 531.34,
+      "loads": [
+        {
+          "id": "S58B",
+          "bus": "58",
+          "need": [
+            2
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "60",
+      "x": 597.33,
+      "y": 748.11,
+      "loads": [
+        {
+          "id": "S60A",
+          "bus": "60",
+          "need": [
+            1
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "59",
+      "x": 207.36,
+      "y": 539.35,
+      "loads": [
+        {
+          "id": "S59B",
+          "bus": "59",
+          "need": [
+            2
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "61",
+      "x": 227.13,
+      "y": 588.38,
+      "loads": []
+    },
+    {
+      "id": "62",
+      "x": 254.15,
+      "y": 633.84,
+      "loads": [
+        {
+          "id": "S62C",
+          "bus": "62",
+          "need": [
+            3
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "63",
+      "x": 232.42,
+      "y": 649.12,
+      "loads": [
+        {
+          "id": "S63A",
+          "bus": "63",
+          "need": [
+            1
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "64",
+      "x": 210.69,
+      "y": 664.39,
+      "loads": [
+        {
+          "id": "S64B",
+          "bus": "64",
+          "need": [
+            2
+          ],
+          "kw": 75.0
+        }
+      ]
+    },
+    {
+      "id": "65",
+      "x": 188.96,
+      "y": 679.69,
+      "loads": [
+        {
+          "id": "S65A",
+          "bus": "65",
+          "need": [
+            1,
+            2
+          ],
+          "kw": 35.0
+        },
+        {
+          "id": "S65B",
+          "bus": "65",
+          "need": [
+            2,
+            3
+          ],
+          "kw": 35.0
+        },
+        {
+          "id": "S65C",
+          "bus": "65",
+          "need": [
+            3,
+            1
+          ],
+          "kw": 70.0
+        }
+      ]
+    },
+    {
+      "id": "66",
+      "x": 167.23,
+      "y": 694.98,
+      "loads": [
+        {
+          "id": "S66C",
+          "bus": "66",
+          "need": [
+            3
+          ],
+          "kw": 75.0
+        }
+      ]
+    },
+    {
+      "id": "67",
+      "x": 671.35,
+      "y": 810.19,
+      "loads": []
+    },
+    {
+      "id": "68",
+      "x": 230.37,
+      "y": 729.9,
+      "loads": [
+        {
+          "id": "S68A",
+          "bus": "68",
+          "need": [
+            1
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "72",
+      "x": 520.36,
+      "y": 859.9,
+      "loads": []
+    },
+    {
+      "id": "97",
+      "x": 917.57,
+      "y": 623.77,
+      "loads": []
+    },
+    {
+      "id": "69",
+      "x": 211.22,
+      "y": 748.32,
+      "loads": [
+        {
+          "id": "S69A",
+          "bus": "69",
+          "need": [
+            1
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "70",
+      "x": 192.08,
+      "y": 766.74,
+      "loads": [
+        {
+          "id": "S70A",
+          "bus": "70",
+          "need": [
+            1
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "71",
+      "x": 172.94,
+      "y": 785.17,
+      "loads": [
+        {
+          "id": "S71A",
+          "bus": "71",
+          "need": [
+            1
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "73",
+      "x": 262.84,
+      "y": 794.32,
+      "loads": [
+        {
+          "id": "S73C",
+          "bus": "73",
+          "need": [
+            3
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "76",
+      "x": 553.94,
+      "y": 886.44,
+      "loads": [
+        {
+          "id": "S76A",
+          "bus": "76",
+          "need": [
+            1,
+            2
+          ],
+          "kw": 105.0
+        },
+        {
+          "id": "S76B",
+          "bus": "76",
+          "need": [
+            2,
+            3
+          ],
+          "kw": 70.0
+        },
+        {
+          "id": "S76C",
+          "bus": "76",
+          "need": [
+            3,
+            1
+          ],
+          "kw": 70.0
+        }
+      ]
+    },
+    {
+      "id": "74",
+      "x": 246.74,
+      "y": 815.45,
+      "loads": [
+        {
+          "id": "S74C",
+          "bus": "74",
+          "need": [
+            3
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "75",
+      "x": 230.63,
+      "y": 836.58,
+      "loads": [
+        {
+          "id": "S75C",
+          "bus": "75",
+          "need": [
+            3
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "77",
+      "x": 375.0,
+      "y": 885.2,
+      "loads": [
+        {
+          "id": "S77B",
+          "bus": "77",
+          "need": [
+            2
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "86",
+      "x": 663.34,
+      "y": 896.25,
+      "loads": [
+        {
+          "id": "S86B",
+          "bus": "86",
+          "need": [
+            2
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "78",
+      "x": 366.01,
+      "y": 910.2,
+      "loads": []
+    },
+    {
+      "id": "79",
+      "x": 282.81,
+      "y": 901.93,
+      "loads": [
+        {
+          "id": "S79A",
+          "bus": "79",
+          "need": [
+            1
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "80",
+      "x": 395.84,
+      "y": 947.48,
+      "loads": [
+        {
+          "id": "S80B",
+          "bus": "80",
+          "need": [
+            2
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "81",
+      "x": 388.8,
+      "y": 973.1,
+      "loads": []
+    },
+    {
+      "id": "82",
+      "x": 339.08,
+      "y": 985.21,
+      "loads": [
+        {
+          "id": "S82A",
+          "bus": "82",
+          "need": [
+            1
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "84",
+      "x": 425.36,
+      "y": 1008.92,
+      "loads": [
+        {
+          "id": "S84C",
+          "bus": "84",
+          "need": [
+            3
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "83",
+      "x": 330.09,
+      "y": 1010.21,
+      "loads": [
+        {
+          "id": "S83C",
+          "bus": "83",
+          "need": [
+            3
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "85",
+      "x": 420.3,
+      "y": 1035.0,
+      "loads": [
+        {
+          "id": "S85C",
+          "bus": "85",
+          "need": [
+            3
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "87",
+      "x": 670.39,
+      "y": 921.87,
+      "loads": [
+        {
+          "id": "S87B",
+          "bus": "87",
+          "need": [
+            2
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "88",
+      "x": 516.27,
+      "y": 966.09,
+      "loads": [
+        {
+          "id": "S88A",
+          "bus": "88",
+          "need": [
+            1
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "89",
+      "x": 716.22,
+      "y": 935.2,
+      "loads": []
+    },
+    {
+      "id": "90",
+      "x": 600.62,
+      "y": 989.36,
+      "loads": [
+        {
+          "id": "S90B",
+          "bus": "90",
+          "need": [
+            2
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "91",
+      "x": 764.85,
+      "y": 944.23,
+      "loads": []
+    },
+    {
+      "id": "92",
+      "x": 691.5,
+      "y": 998.72,
+      "loads": [
+        {
+          "id": "S92C",
+          "bus": "92",
+          "need": [
+            3
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "93",
+      "x": 815.84,
+      "y": 948.6,
+      "loads": []
+    },
+    {
+      "id": "94",
+      "x": 786.58,
+      "y": 992.71,
+      "loads": [
+        {
+          "id": "S94A",
+          "bus": "94",
+          "need": [
+            1
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "95",
+      "x": 868.76,
+      "y": 948.02,
+      "loads": [
+        {
+          "id": "S95B",
+          "bus": "95",
+          "need": [
+            2
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "96",
+      "x": 883.22,
+      "y": 970.32,
+      "loads": [
+        {
+          "id": "S96B",
+          "bus": "96",
+          "need": [
+            2
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "98",
+      "x": 837.14,
+      "y": 772.31,
+      "loads": [
+        {
+          "id": "S98A",
+          "bus": "98",
+          "need": [
+            1
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "99",
+      "x": 854.81,
+      "y": 792.14,
+      "loads": [
+        {
+          "id": "S99B",
+          "bus": "99",
+          "need": [
+            2
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "100",
+      "x": 872.48,
+      "y": 811.98,
+      "loads": [
+        {
+          "id": "S100C",
+          "bus": "100",
+          "need": [
+            3
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "450",
+      "x": 890.16,
+      "y": 831.81,
+      "loads": []
+    },
+    {
+      "id": "197",
+      "x": 955.54,
+      "y": 603.95,
+      "loads": []
+    },
+    {
+      "id": "101",
+      "x": 980.15,
+      "y": 613.92,
+      "loads": []
+    },
+    {
+      "id": "102",
+      "x": 926.06,
+      "y": 756.3,
+      "loads": [
+        {
+          "id": "S102C",
+          "bus": "102",
+          "need": [
+            3
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "105",
+      "x": 1017.86,
+      "y": 587.42,
+      "loads": []
+    },
+    {
+      "id": "103",
+      "x": 946.54,
+      "y": 773.2,
+      "loads": [
+        {
+          "id": "S103C",
+          "bus": "103",
+          "need": [
+            3
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "104",
+      "x": 967.05,
+      "y": 790.1,
+      "loads": [
+        {
+          "id": "S104C",
+          "bus": "104",
+          "need": [
+            3
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "106",
+      "x": 993.36,
+      "y": 706.66,
+      "loads": [
+        {
+          "id": "S106B",
+          "bus": "106",
+          "need": [
+            2
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "108",
+      "x": 1053.99,
+      "y": 556.21,
+      "loads": []
+    },
+    {
+      "id": "107",
+      "x": 1016.2,
+      "y": 720.24,
+      "loads": [
+        {
+          "id": "S107B",
+          "bus": "107",
+          "need": [
+            2
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "109",
+      "x": 1068.52,
+      "y": 603.47,
+      "loads": [
+        {
+          "id": "S109A",
+          "bus": "109",
+          "need": [
+            1
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "300",
+      "x": 1092.91,
+      "y": 477.84,
+      "loads": []
+    },
+    {
+      "id": "110",
+      "x": 1093.87,
+      "y": 611.48,
+      "loads": []
+    },
+    {
+      "id": "111",
+      "x": 1103.36,
+      "y": 663.55,
+      "loads": [
+        {
+          "id": "S111A",
+          "bus": "111",
+          "need": [
+            1
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "112",
+      "x": 1131.58,
+      "y": 574.36,
+      "loads": [
+        {
+          "id": "S112A",
+          "bus": "112",
+          "need": [
+            1
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "113",
+      "x": 1157.45,
+      "y": 580.41,
+      "loads": [
+        {
+          "id": "S113A",
+          "bus": "113",
+          "need": [
+            1
+          ],
+          "kw": 40.0
+        }
+      ]
+    },
+    {
+      "id": "114",
+      "x": 1183.31,
+      "y": 586.46,
+      "loads": [
+        {
+          "id": "S114A",
+          "bus": "114",
+          "need": [
+            1
+          ],
+          "kw": 20.0
+        }
+      ]
+    },
+    {
+      "id": "135",
+      "x": 346.17,
+      "y": 340.83,
+      "loads": []
+    },
+    {
+      "id": "152",
+      "x": 543.76,
+      "y": 620.96,
+      "loads": []
+    },
+    {
+      "id": "160r",
+      "x": 662.35,
+      "y": 785.18,
+      "loads": []
+    },
+    {
+      "id": "150r",
+      "x": 510.07,
+      "y": 435.15,
+      "loads": []
+    },
+    {
+      "id": "160",
+      "x": 653.38,
+      "y": 760.18,
+      "loads": []
+    },
+    {
+      "id": "61s",
+      "x": 203.32,
+      "y": 600.19,
+      "loads": []
+    },
+    {
+      "id": "150",
+      "x": 536.64,
+      "y": 435.15,
+      "loads": []
+    },
+    {
+      "id": "610",
+      "x": 179.51,
+      "y": 611.96,
+      "loads": []
+    }
+  ],
+  "edges": [
+    {
+      "id": "L115",
+      "a": "149",
+      "b": "1",
+      "raw_a": "149",
+      "raw_b": "1",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L1",
+      "a": "1",
+      "b": "2",
+      "raw_a": "1.2",
+      "raw_b": "2.2",
+      "pa": [
+        2
+      ],
+      "pb": [
+        2
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L2",
+      "a": "1",
+      "b": "3",
+      "raw_a": "1.3",
+      "raw_b": "3.3",
+      "pa": [
+        3
+      ],
+      "pb": [
+        3
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L3",
+      "a": "1",
+      "b": "7",
+      "raw_a": "1.1.2.3",
+      "raw_b": "7.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L4",
+      "a": "3",
+      "b": "4",
+      "raw_a": "3.3",
+      "raw_b": "4.3",
+      "pa": [
+        3
+      ],
+      "pb": [
+        3
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L5",
+      "a": "3",
+      "b": "5",
+      "raw_a": "3.3",
+      "raw_b": "5.3",
+      "pa": [
+        3
+      ],
+      "pb": [
+        3
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L6",
+      "a": "5",
+      "b": "6",
+      "raw_a": "5.3",
+      "raw_b": "6.3",
+      "pa": [
+        3
+      ],
+      "pb": [
+        3
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L7",
+      "a": "7",
+      "b": "8",
+      "raw_a": "7.1.2.3",
+      "raw_b": "8.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L8",
+      "a": "8",
+      "b": "12",
+      "raw_a": "8.2",
+      "raw_b": "12.2",
+      "pa": [
+        2
+      ],
+      "pb": [
+        2
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L9",
+      "a": "8",
+      "b": "9",
+      "raw_a": "8.1",
+      "raw_b": "9.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L10",
+      "a": "8",
+      "b": "13",
+      "raw_a": "8.1.2.3",
+      "raw_b": "13.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L11",
+      "a": "9r",
+      "b": "14",
+      "raw_a": "9r.1",
+      "raw_b": "14.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L12",
+      "a": "13",
+      "b": "34",
+      "raw_a": "13.3",
+      "raw_b": "34.3",
+      "pa": [
+        3
+      ],
+      "pb": [
+        3
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L13",
+      "a": "13",
+      "b": "18",
+      "raw_a": "13.1.2.3",
+      "raw_b": "18.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L14",
+      "a": "14",
+      "b": "11",
+      "raw_a": "14.1",
+      "raw_b": "11.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L15",
+      "a": "14",
+      "b": "10",
+      "raw_a": "14.1",
+      "raw_b": "10.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L16",
+      "a": "15",
+      "b": "16",
+      "raw_a": "15.3",
+      "raw_b": "16.3",
+      "pa": [
+        3
+      ],
+      "pb": [
+        3
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L17",
+      "a": "15",
+      "b": "17",
+      "raw_a": "15.3",
+      "raw_b": "17.3",
+      "pa": [
+        3
+      ],
+      "pb": [
+        3
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L18",
+      "a": "18",
+      "b": "19",
+      "raw_a": "18.1",
+      "raw_b": "19.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L19",
+      "a": "18",
+      "b": "21",
+      "raw_a": "18.1.2.3",
+      "raw_b": "21.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L20",
+      "a": "19",
+      "b": "20",
+      "raw_a": "19.1",
+      "raw_b": "20.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L21",
+      "a": "21",
+      "b": "22",
+      "raw_a": "21.2",
+      "raw_b": "22.2",
+      "pa": [
+        2
+      ],
+      "pb": [
+        2
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L22",
+      "a": "21",
+      "b": "23",
+      "raw_a": "21.1.2.3",
+      "raw_b": "23.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L23",
+      "a": "23",
+      "b": "24",
+      "raw_a": "23.3",
+      "raw_b": "24.3",
+      "pa": [
+        3
+      ],
+      "pb": [
+        3
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L24",
+      "a": "23",
+      "b": "25",
+      "raw_a": "23.1.2.3",
+      "raw_b": "25.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L25",
+      "a": "25r",
+      "b": "26",
+      "raw_a": "25r.1.3",
+      "raw_b": "26.1.3",
+      "pa": [
+        1,
+        3
+      ],
+      "pb": [
+        1,
+        3
+      ],
+      "phases": 2,
+      "kind": "line"
+    },
+    {
+      "id": "L26",
+      "a": "25",
+      "b": "28",
+      "raw_a": "25.1.2.3",
+      "raw_b": "28.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L27",
+      "a": "26",
+      "b": "27",
+      "raw_a": "26.1.3",
+      "raw_b": "27.1.3",
+      "pa": [
+        1,
+        3
+      ],
+      "pb": [
+        1,
+        3
+      ],
+      "phases": 2,
+      "kind": "line"
+    },
+    {
+      "id": "L28",
+      "a": "26",
+      "b": "31",
+      "raw_a": "26.3",
+      "raw_b": "31.3",
+      "pa": [
+        3
+      ],
+      "pb": [
+        3
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L29",
+      "a": "27",
+      "b": "33",
+      "raw_a": "27.1",
+      "raw_b": "33.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L30",
+      "a": "28",
+      "b": "29",
+      "raw_a": "28.1.2.3",
+      "raw_b": "29.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L31",
+      "a": "29",
+      "b": "30",
+      "raw_a": "29.1.2.3",
+      "raw_b": "30.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L32",
+      "a": "30",
+      "b": "250",
+      "raw_a": "30.1.2.3",
+      "raw_b": "250.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L33",
+      "a": "31",
+      "b": "32",
+      "raw_a": "31.3",
+      "raw_b": "32.3",
+      "pa": [
+        3
+      ],
+      "pb": [
+        3
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L34",
+      "a": "34",
+      "b": "15",
+      "raw_a": "34.3",
+      "raw_b": "15.3",
+      "pa": [
+        3
+      ],
+      "pb": [
+        3
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L35",
+      "a": "35",
+      "b": "36",
+      "raw_a": "35.1.2",
+      "raw_b": "36.1.2",
+      "pa": [
+        1,
+        2
+      ],
+      "pb": [
+        1,
+        2
+      ],
+      "phases": 2,
+      "kind": "line"
+    },
+    {
+      "id": "L36",
+      "a": "35",
+      "b": "40",
+      "raw_a": "35.1.2.3",
+      "raw_b": "40.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L37",
+      "a": "36",
+      "b": "37",
+      "raw_a": "36.1",
+      "raw_b": "37.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L38",
+      "a": "36",
+      "b": "38",
+      "raw_a": "36.2",
+      "raw_b": "38.2",
+      "pa": [
+        2
+      ],
+      "pb": [
+        2
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L39",
+      "a": "38",
+      "b": "39",
+      "raw_a": "38.2",
+      "raw_b": "39.2",
+      "pa": [
+        2
+      ],
+      "pb": [
+        2
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L40",
+      "a": "40",
+      "b": "41",
+      "raw_a": "40.3",
+      "raw_b": "41.3",
+      "pa": [
+        3
+      ],
+      "pb": [
+        3
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L41",
+      "a": "40",
+      "b": "42",
+      "raw_a": "40.1.2.3",
+      "raw_b": "42.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L42",
+      "a": "42",
+      "b": "43",
+      "raw_a": "42.2",
+      "raw_b": "43.2",
+      "pa": [
+        2
+      ],
+      "pb": [
+        2
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L43",
+      "a": "42",
+      "b": "44",
+      "raw_a": "42.1.2.3",
+      "raw_b": "44.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L44",
+      "a": "44",
+      "b": "45",
+      "raw_a": "44.1",
+      "raw_b": "45.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L45",
+      "a": "44",
+      "b": "47",
+      "raw_a": "44.1.2.3",
+      "raw_b": "47.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L46",
+      "a": "45",
+      "b": "46",
+      "raw_a": "45.1",
+      "raw_b": "46.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L47",
+      "a": "47",
+      "b": "48",
+      "raw_a": "47.1.2.3",
+      "raw_b": "48.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L48",
+      "a": "47",
+      "b": "49",
+      "raw_a": "47.1.2.3",
+      "raw_b": "49.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L49",
+      "a": "49",
+      "b": "50",
+      "raw_a": "49.1.2.3",
+      "raw_b": "50.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L50",
+      "a": "50",
+      "b": "51",
+      "raw_a": "50.1.2.3",
+      "raw_b": "51.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L51",
+      "a": "51",
+      "b": "151",
+      "raw_a": "51.1.2.3",
+      "raw_b": "151.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L52",
+      "a": "52",
+      "b": "53",
+      "raw_a": "52.1.2.3",
+      "raw_b": "53.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L53",
+      "a": "53",
+      "b": "54",
+      "raw_a": "53.1.2.3",
+      "raw_b": "54.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L54",
+      "a": "54",
+      "b": "55",
+      "raw_a": "54.1.2.3",
+      "raw_b": "55.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L55",
+      "a": "54",
+      "b": "57",
+      "raw_a": "54.1.2.3",
+      "raw_b": "57.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L56",
+      "a": "55",
+      "b": "56",
+      "raw_a": "55.1.2.3",
+      "raw_b": "56.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L57",
+      "a": "57",
+      "b": "58",
+      "raw_a": "57.2",
+      "raw_b": "58.2",
+      "pa": [
+        2
+      ],
+      "pb": [
+        2
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L58",
+      "a": "57",
+      "b": "60",
+      "raw_a": "57.1.2.3",
+      "raw_b": "60.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L59",
+      "a": "58",
+      "b": "59",
+      "raw_a": "58.2",
+      "raw_b": "59.2",
+      "pa": [
+        2
+      ],
+      "pb": [
+        2
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L60",
+      "a": "60",
+      "b": "61",
+      "raw_a": "60.1.2.3",
+      "raw_b": "61.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L61",
+      "a": "60",
+      "b": "62",
+      "raw_a": "60.1.2.3",
+      "raw_b": "62.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L62",
+      "a": "62",
+      "b": "63",
+      "raw_a": "62.1.2.3",
+      "raw_b": "63.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L63",
+      "a": "63",
+      "b": "64",
+      "raw_a": "63.1.2.3",
+      "raw_b": "64.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L64",
+      "a": "64",
+      "b": "65",
+      "raw_a": "64.1.2.3",
+      "raw_b": "65.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L65",
+      "a": "65",
+      "b": "66",
+      "raw_a": "65.1.2.3",
+      "raw_b": "66.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L66",
+      "a": "67",
+      "b": "68",
+      "raw_a": "67.1",
+      "raw_b": "68.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L67",
+      "a": "67",
+      "b": "72",
+      "raw_a": "67.1.2.3",
+      "raw_b": "72.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L68",
+      "a": "67",
+      "b": "97",
+      "raw_a": "67.1.2.3",
+      "raw_b": "97.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L69",
+      "a": "68",
+      "b": "69",
+      "raw_a": "68.1",
+      "raw_b": "69.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L70",
+      "a": "69",
+      "b": "70",
+      "raw_a": "69.1",
+      "raw_b": "70.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L71",
+      "a": "70",
+      "b": "71",
+      "raw_a": "70.1",
+      "raw_b": "71.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L72",
+      "a": "72",
+      "b": "73",
+      "raw_a": "72.3",
+      "raw_b": "73.3",
+      "pa": [
+        3
+      ],
+      "pb": [
+        3
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L73",
+      "a": "72",
+      "b": "76",
+      "raw_a": "72.1.2.3",
+      "raw_b": "76.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L74",
+      "a": "73",
+      "b": "74",
+      "raw_a": "73.3",
+      "raw_b": "74.3",
+      "pa": [
+        3
+      ],
+      "pb": [
+        3
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L75",
+      "a": "74",
+      "b": "75",
+      "raw_a": "74.3",
+      "raw_b": "75.3",
+      "pa": [
+        3
+      ],
+      "pb": [
+        3
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L76",
+      "a": "76",
+      "b": "77",
+      "raw_a": "76.1.2.3",
+      "raw_b": "77.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L77",
+      "a": "76",
+      "b": "86",
+      "raw_a": "76.1.2.3",
+      "raw_b": "86.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L78",
+      "a": "77",
+      "b": "78",
+      "raw_a": "77.1.2.3",
+      "raw_b": "78.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L79",
+      "a": "78",
+      "b": "79",
+      "raw_a": "78.1.2.3",
+      "raw_b": "79.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L80",
+      "a": "78",
+      "b": "80",
+      "raw_a": "78.1.2.3",
+      "raw_b": "80.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L81",
+      "a": "80",
+      "b": "81",
+      "raw_a": "80.1.2.3",
+      "raw_b": "81.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L82",
+      "a": "81",
+      "b": "82",
+      "raw_a": "81.1.2.3",
+      "raw_b": "82.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L83",
+      "a": "81",
+      "b": "84",
+      "raw_a": "81.3",
+      "raw_b": "84.3",
+      "pa": [
+        3
+      ],
+      "pb": [
+        3
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L84",
+      "a": "82",
+      "b": "83",
+      "raw_a": "82.1.2.3",
+      "raw_b": "83.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L85",
+      "a": "84",
+      "b": "85",
+      "raw_a": "84.3",
+      "raw_b": "85.3",
+      "pa": [
+        3
+      ],
+      "pb": [
+        3
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L86",
+      "a": "86",
+      "b": "87",
+      "raw_a": "86.1.2.3",
+      "raw_b": "87.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L87",
+      "a": "87",
+      "b": "88",
+      "raw_a": "87.1",
+      "raw_b": "88.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L88",
+      "a": "87",
+      "b": "89",
+      "raw_a": "87.1.2.3",
+      "raw_b": "89.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L89",
+      "a": "89",
+      "b": "90",
+      "raw_a": "89.2",
+      "raw_b": "90.2",
+      "pa": [
+        2
+      ],
+      "pb": [
+        2
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L90",
+      "a": "89",
+      "b": "91",
+      "raw_a": "89.1.2.3",
+      "raw_b": "91.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L91",
+      "a": "91",
+      "b": "92",
+      "raw_a": "91.3",
+      "raw_b": "92.3",
+      "pa": [
+        3
+      ],
+      "pb": [
+        3
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L92",
+      "a": "91",
+      "b": "93",
+      "raw_a": "91.1.2.3",
+      "raw_b": "93.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L93",
+      "a": "93",
+      "b": "94",
+      "raw_a": "93.1",
+      "raw_b": "94.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L94",
+      "a": "93",
+      "b": "95",
+      "raw_a": "93.1.2.3",
+      "raw_b": "95.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L95",
+      "a": "95",
+      "b": "96",
+      "raw_a": "95.2",
+      "raw_b": "96.2",
+      "pa": [
+        2
+      ],
+      "pb": [
+        2
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L96",
+      "a": "97",
+      "b": "98",
+      "raw_a": "97.1.2.3",
+      "raw_b": "98.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L97",
+      "a": "98",
+      "b": "99",
+      "raw_a": "98.1.2.3",
+      "raw_b": "99.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L98",
+      "a": "99",
+      "b": "100",
+      "raw_a": "99.1.2.3",
+      "raw_b": "100.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L99",
+      "a": "100",
+      "b": "450",
+      "raw_a": "100.1.2.3",
+      "raw_b": "450.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L118",
+      "a": "197",
+      "b": "101",
+      "raw_a": "197.1.2.3",
+      "raw_b": "101.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L100",
+      "a": "101",
+      "b": "102",
+      "raw_a": "101.3",
+      "raw_b": "102.3",
+      "pa": [
+        3
+      ],
+      "pb": [
+        3
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L101",
+      "a": "101",
+      "b": "105",
+      "raw_a": "101.1.2.3",
+      "raw_b": "105.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L102",
+      "a": "102",
+      "b": "103",
+      "raw_a": "102.3",
+      "raw_b": "103.3",
+      "pa": [
+        3
+      ],
+      "pb": [
+        3
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L103",
+      "a": "103",
+      "b": "104",
+      "raw_a": "103.3",
+      "raw_b": "104.3",
+      "pa": [
+        3
+      ],
+      "pb": [
+        3
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L104",
+      "a": "105",
+      "b": "106",
+      "raw_a": "105.2",
+      "raw_b": "106.2",
+      "pa": [
+        2
+      ],
+      "pb": [
+        2
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L105",
+      "a": "105",
+      "b": "108",
+      "raw_a": "105.1.2.3",
+      "raw_b": "108.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L106",
+      "a": "106",
+      "b": "107",
+      "raw_a": "106.2",
+      "raw_b": "107.2",
+      "pa": [
+        2
+      ],
+      "pb": [
+        2
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L107",
+      "a": "108",
+      "b": "109",
+      "raw_a": "108.1",
+      "raw_b": "109.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L108",
+      "a": "108",
+      "b": "300",
+      "raw_a": "108.1.2.3",
+      "raw_b": "300.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L109",
+      "a": "109",
+      "b": "110",
+      "raw_a": "109.1",
+      "raw_b": "110.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L110",
+      "a": "110",
+      "b": "111",
+      "raw_a": "110.1",
+      "raw_b": "111.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L111",
+      "a": "110",
+      "b": "112",
+      "raw_a": "110.1",
+      "raw_b": "112.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L112",
+      "a": "112",
+      "b": "113",
+      "raw_a": "112.1",
+      "raw_b": "113.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L113",
+      "a": "113",
+      "b": "114",
+      "raw_a": "113.1",
+      "raw_b": "114.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "line"
+    },
+    {
+      "id": "L114",
+      "a": "135",
+      "b": "35",
+      "raw_a": "135.1.2.3",
+      "raw_b": "35.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L116",
+      "a": "152",
+      "b": "52",
+      "raw_a": "152.1.2.3",
+      "raw_b": "52.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "L117",
+      "a": "160r",
+      "b": "67",
+      "raw_a": "160r.1.2.3",
+      "raw_b": "67.1.2.3",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "line"
+    },
+    {
+      "id": "SW1",
+      "a": "150r",
+      "b": "149",
+      "raw_a": "150r",
+      "raw_b": "149",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "switch"
+    },
+    {
+      "id": "SW2",
+      "a": "13",
+      "b": "152",
+      "raw_a": "13",
+      "raw_b": "152",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "switch"
+    },
+    {
+      "id": "SW3",
+      "a": "18",
+      "b": "135",
+      "raw_a": "18",
+      "raw_b": "135",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "switch"
+    },
+    {
+      "id": "SW4",
+      "a": "60",
+      "b": "160",
+      "raw_a": "60",
+      "raw_b": "160",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "switch"
+    },
+    {
+      "id": "SW5",
+      "a": "97",
+      "b": "197",
+      "raw_a": "97",
+      "raw_b": "197",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "switch"
+    },
+    {
+      "id": "SW6",
+      "a": "61",
+      "b": "61s",
+      "raw_a": "61",
+      "raw_b": "61s",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "switch"
+    },
+    {
+      "id": "SW7",
+      "a": "151",
+      "b": "300",
+      "raw_a": "151",
+      "raw_b": "300",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "switch"
+    },
+    {
+      "id": "SW8",
+      "a": "54",
+      "b": "94",
+      "raw_a": "54.1",
+      "raw_b": "94.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "switch"
+    },
+    {
+      "id": "REG1A",
+      "a": "150",
+      "b": "150r",
+      "raw_a": "150",
+      "raw_b": "150r",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "transformer"
+    },
+    {
+      "id": "XFM1",
+      "a": "61s",
+      "b": "610",
+      "raw_a": "61s",
+      "raw_b": "610",
+      "pa": [
+        1,
+        2,
+        3
+      ],
+      "pb": [
+        1,
+        2,
+        3
+      ],
+      "phases": 3,
+      "kind": "transformer"
+    },
+    {
+      "id": "REG2A",
+      "a": "9",
+      "b": "9r",
+      "raw_a": "9.1",
+      "raw_b": "9r.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "transformer"
+    },
+    {
+      "id": "REG3A",
+      "a": "25",
+      "b": "25r",
+      "raw_a": "25.1",
+      "raw_b": "25r.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "transformer"
+    },
+    {
+      "id": "REG4A",
+      "a": "160",
+      "b": "160r",
+      "raw_a": "160.1",
+      "raw_b": "160r.1",
+      "pa": [
+        1
+      ],
+      "pb": [
+        1
+      ],
+      "phases": 1,
+      "kind": "transformer"
+    },
+    {
+      "id": "REG3C",
+      "a": "25",
+      "b": "25r",
+      "raw_a": "25.3",
+      "raw_b": "25r.3",
+      "pa": [
+        3
+      ],
+      "pb": [
+        3
+      ],
+      "phases": 1,
+      "kind": "transformer"
+    },
+    {
+      "id": "REG4B",
+      "a": "160",
+      "b": "160r",
+      "raw_a": "160.2",
+      "raw_b": "160r.2",
+      "pa": [
+        2
+      ],
+      "pb": [
+        2
+      ],
+      "phases": 1,
+      "kind": "transformer"
+    },
+    {
+      "id": "REG4C",
+      "a": "160",
+      "b": "160r",
+      "raw_a": "160.3",
+      "raw_b": "160r.3",
+      "pa": [
+        3
+      ],
+      "pb": [
+        3
+      ],
+      "phases": 1,
+      "kind": "transformer"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "S00",
+      "name": "Intact radial reference",
+      "faults": [],
+      "close": [],
+      "pre": {
+        "connected": 91,
+        "kw": 3490.0,
+        "unconnected": 0,
+        "lost_kw": 0,
+        "cycles": 0
+      },
+      "post": {
+        "connected": 91,
+        "kw": 3490.0,
+        "unconnected": 0,
+        "lost_kw": 0,
+        "cycles": 0
+      },
+      "gain_kw": 0.0,
+      "gain_loads": 0,
+      "post_missing_loads": [],
+      "admissible": true,
+      "pre_reach": [
+        "1:1",
+        "1:2",
+        "1:3",
+        "10:1",
+        "100:1",
+        "100:2",
+        "100:3",
+        "101:1",
+        "101:2",
+        "101:3",
+        "102:3",
+        "103:3",
+        "104:3",
+        "105:1",
+        "105:2",
+        "105:3",
+        "106:2",
+        "107:2",
+        "108:1",
+        "108:2",
+        "108:3",
+        "109:1",
+        "11:1",
+        "110:1",
+        "111:1",
+        "112:1",
+        "113:1",
+        "114:1",
+        "12:2",
+        "13:1",
+        "13:2",
+        "13:3",
+        "135:1",
+        "135:2",
+        "135:3",
+        "14:1",
+        "149:1",
+        "149:2",
+        "149:3",
+        "15:3",
+        "150:1",
+        "150:2",
+        "150:3",
+        "150r:1",
+        "150r:2",
+        "150r:3",
+        "151:1",
+        "151:2",
+        "151:3",
+        "152:1",
+        "152:2",
+        "152:3",
+        "16:3",
+        "160:1",
+        "160:2",
+        "160:3",
+        "160r:1",
+        "160r:2",
+        "160r:3",
+        "17:3",
+        "18:1",
+        "18:2",
+        "18:3",
+        "19:1",
+        "197:1",
+        "197:2",
+        "197:3",
+        "2:2",
+        "20:1",
+        "21:1",
+        "21:2",
+        "21:3",
+        "22:2",
+        "23:1",
+        "23:2",
+        "23:3",
+        "24:3",
+        "25:1",
+        "25:2",
+        "25:3",
+        "250:1",
+        "250:2",
+        "250:3",
+        "25r:1",
+        "25r:3",
+        "26:1",
+        "26:3",
+        "27:1",
+        "27:3",
+        "28:1",
+        "28:2",
+        "28:3",
+        "29:1",
+        "29:2",
+        "29:3",
+        "3:3",
+        "30:1",
+        "30:2",
+        "30:3",
+        "300:1",
+        "300:2",
+        "300:3",
+        "31:3",
+        "32:3",
+        "33:1",
+        "34:3",
+        "35:1",
+        "35:2",
+        "35:3",
+        "36:1",
+        "36:2",
+        "37:1",
+        "38:2",
+        "39:2",
+        "4:3",
+        "40:1",
+        "40:2",
+        "40:3",
+        "41:3",
+        "42:1",
+        "42:2",
+        "42:3",
+        "43:2",
+        "44:1",
+        "44:2",
+        "44:3",
+        "45:1",
+        "450:1",
+        "450:2",
+        "450:3",
+        "46:1",
+        "47:1",
+        "47:2",
+        "47:3",
+        "48:1",
+        "48:2",
+        "48:3",
+        "49:1",
+        "49:2",
+        "49:3",
+        "5:3",
+        "50:1",
+        "50:2",
+        "50:3",
+        "51:1",
+        "51:2",
+        "51:3",
+        "52:1",
+        "52:2",
+        "52:3",
+        "53:1",
+        "53:2",
+        "53:3",
+        "54:1",
+        "54:2",
+        "54:3",
+        "55:1",
+        "55:2",
+        "55:3",
+        "56:1",
+        "56:2",
+        "56:3",
+        "57:1",
+        "57:2",
+        "57:3",
+        "58:2",
+        "59:2",
+        "6:3",
+        "60:1",
+        "60:2",
+        "60:3",
+        "61:1",
+        "61:2",
+        "61:3",
+        "610:1",
+        "610:2",
+        "610:3",
+        "61s:1",
+        "61s:2",
+        "61s:3",
+        "62:1",
+        "62:2",
+        "62:3",
+        "63:1",
+        "63:2",
+        "63:3",
+        "64:1",
+        "64:2",
+        "64:3",
+        "65:1",
+        "65:2",
+        "65:3",
+        "66:1",
+        "66:2",
+        "66:3",
+        "67:1",
+        "67:2",
+        "67:3",
+        "68:1",
+        "69:1",
+        "7:1",
+        "7:2",
+        "7:3",
+        "70:1",
+        "71:1",
+        "72:1",
+        "72:2",
+        "72:3",
+        "73:3",
+        "74:3",
+        "75:3",
+        "76:1",
+        "76:2",
+        "76:3",
+        "77:1",
+        "77:2",
+        "77:3",
+        "78:1",
+        "78:2",
+        "78:3",
+        "79:1",
+        "79:2",
+        "79:3",
+        "8:1",
+        "8:2",
+        "8:3",
+        "80:1",
+        "80:2",
+        "80:3",
+        "81:1",
+        "81:2",
+        "81:3",
+        "82:1",
+        "82:2",
+        "82:3",
+        "83:1",
+        "83:2",
+        "83:3",
+        "84:3",
+        "85:3",
+        "86:1",
+        "86:2",
+        "86:3",
+        "87:1",
+        "87:2",
+        "87:3",
+        "88:1",
+        "89:1",
+        "89:2",
+        "89:3",
+        "9:1",
+        "90:2",
+        "91:1",
+        "91:2",
+        "91:3",
+        "92:3",
+        "93:1",
+        "93:2",
+        "93:3",
+        "94:1",
+        "95:1",
+        "95:2",
+        "95:3",
+        "96:2",
+        "97:1",
+        "97:2",
+        "97:3",
+        "98:1",
+        "98:2",
+        "98:3",
+        "99:1",
+        "99:2",
+        "99:3",
+        "9r:1"
+      ],
+      "post_reach": [
+        "1:1",
+        "1:2",
+        "1:3",
+        "10:1",
+        "100:1",
+        "100:2",
+        "100:3",
+        "101:1",
+        "101:2",
+        "101:3",
+        "102:3",
+        "103:3",
+        "104:3",
+        "105:1",
+        "105:2",
+        "105:3",
+        "106:2",
+        "107:2",
+        "108:1",
+        "108:2",
+        "108:3",
+        "109:1",
+        "11:1",
+        "110:1",
+        "111:1",
+        "112:1",
+        "113:1",
+        "114:1",
+        "12:2",
+        "13:1",
+        "13:2",
+        "13:3",
+        "135:1",
+        "135:2",
+        "135:3",
+        "14:1",
+        "149:1",
+        "149:2",
+        "149:3",
+        "15:3",
+        "150:1",
+        "150:2",
+        "150:3",
+        "150r:1",
+        "150r:2",
+        "150r:3",
+        "151:1",
+        "151:2",
+        "151:3",
+        "152:1",
+        "152:2",
+        "152:3",
+        "16:3",
+        "160:1",
+        "160:2",
+        "160:3",
+        "160r:1",
+        "160r:2",
+        "160r:3",
+        "17:3",
+        "18:1",
+        "18:2",
+        "18:3",
+        "19:1",
+        "197:1",
+        "197:2",
+        "197:3",
+        "2:2",
+        "20:1",
+        "21:1",
+        "21:2",
+        "21:3",
+        "22:2",
+        "23:1",
+        "23:2",
+        "23:3",
+        "24:3",
+        "25:1",
+        "25:2",
+        "25:3",
+        "250:1",
+        "250:2",
+        "250:3",
+        "25r:1",
+        "25r:3",
+        "26:1",
+        "26:3",
+        "27:1",
+        "27:3",
+        "28:1",
+        "28:2",
+        "28:3",
+        "29:1",
+        "29:2",
+        "29:3",
+        "3:3",
+        "30:1",
+        "30:2",
+        "30:3",
+        "300:1",
+        "300:2",
+        "300:3",
+        "31:3",
+        "32:3",
+        "33:1",
+        "34:3",
+        "35:1",
+        "35:2",
+        "35:3",
+        "36:1",
+        "36:2",
+        "37:1",
+        "38:2",
+        "39:2",
+        "4:3",
+        "40:1",
+        "40:2",
+        "40:3",
+        "41:3",
+        "42:1",
+        "42:2",
+        "42:3",
+        "43:2",
+        "44:1",
+        "44:2",
+        "44:3",
+        "45:1",
+        "450:1",
+        "450:2",
+        "450:3",
+        "46:1",
+        "47:1",
+        "47:2",
+        "47:3",
+        "48:1",
+        "48:2",
+        "48:3",
+        "49:1",
+        "49:2",
+        "49:3",
+        "5:3",
+        "50:1",
+        "50:2",
+        "50:3",
+        "51:1",
+        "51:2",
+        "51:3",
+        "52:1",
+        "52:2",
+        "52:3",
+        "53:1",
+        "53:2",
+        "53:3",
+        "54:1",
+        "54:2",
+        "54:3",
+        "55:1",
+        "55:2",
+        "55:3",
+        "56:1",
+        "56:2",
+        "56:3",
+        "57:1",
+        "57:2",
+        "57:3",
+        "58:2",
+        "59:2",
+        "6:3",
+        "60:1",
+        "60:2",
+        "60:3",
+        "61:1",
+        "61:2",
+        "61:3",
+        "610:1",
+        "610:2",
+        "610:3",
+        "61s:1",
+        "61s:2",
+        "61s:3",
+        "62:1",
+        "62:2",
+        "62:3",
+        "63:1",
+        "63:2",
+        "63:3",
+        "64:1",
+        "64:2",
+        "64:3",
+        "65:1",
+        "65:2",
+        "65:3",
+        "66:1",
+        "66:2",
+        "66:3",
+        "67:1",
+        "67:2",
+        "67:3",
+        "68:1",
+        "69:1",
+        "7:1",
+        "7:2",
+        "7:3",
+        "70:1",
+        "71:1",
+        "72:1",
+        "72:2",
+        "72:3",
+        "73:3",
+        "74:3",
+        "75:3",
+        "76:1",
+        "76:2",
+        "76:3",
+        "77:1",
+        "77:2",
+        "77:3",
+        "78:1",
+        "78:2",
+        "78:3",
+        "79:1",
+        "79:2",
+        "79:3",
+        "8:1",
+        "8:2",
+        "8:3",
+        "80:1",
+        "80:2",
+        "80:3",
+        "81:1",
+        "81:2",
+        "81:3",
+        "82:1",
+        "82:2",
+        "82:3",
+        "83:1",
+        "83:2",
+        "83:3",
+        "84:3",
+        "85:3",
+        "86:1",
+        "86:2",
+        "86:3",
+        "87:1",
+        "87:2",
+        "87:3",
+        "88:1",
+        "89:1",
+        "89:2",
+        "89:3",
+        "9:1",
+        "90:2",
+        "91:1",
+        "91:2",
+        "91:3",
+        "92:3",
+        "93:1",
+        "93:2",
+        "93:3",
+        "94:1",
+        "95:1",
+        "95:2",
+        "95:3",
+        "96:2",
+        "97:1",
+        "97:2",
+        "97:3",
+        "98:1",
+        "98:2",
+        "98:3",
+        "99:1",
+        "99:2",
+        "99:3",
+        "9r:1"
+      ]
+    },
+    {
+      "id": "S01",
+      "name": "Single fault main lateral",
+      "faults": [
+        "L45"
+      ],
+      "close": [
+        "SW7"
+      ],
+      "pre": {
+        "connected": 84,
+        "kw": 2975.0,
+        "unconnected": 7,
+        "lost_kw": 515.0,
+        "cycles": 0
+      },
+      "post": {
+        "connected": 91,
+        "kw": 3490.0,
+        "unconnected": 0,
+        "lost_kw": 0,
+        "cycles": 0
+      },
+      "gain_kw": 515.0,
+      "gain_loads": 7,
+      "post_missing_loads": [],
+      "admissible": true,
+      "pre_reach": [
+        "1:1",
+        "1:2",
+        "1:3",
+        "10:1",
+        "100:1",
+        "100:2",
+        "100:3",
+        "101:1",
+        "101:2",
+        "101:3",
+        "102:3",
+        "103:3",
+        "104:3",
+        "105:1",
+        "105:2",
+        "105:3",
+        "106:2",
+        "107:2",
+        "108:1",
+        "108:2",
+        "108:3",
+        "109:1",
+        "11:1",
+        "110:1",
+        "111:1",
+        "112:1",
+        "113:1",
+        "114:1",
+        "12:2",
+        "13:1",
+        "13:2",
+        "13:3",
+        "135:1",
+        "135:2",
+        "135:3",
+        "14:1",
+        "149:1",
+        "149:2",
+        "149:3",
+        "15:3",
+        "150:1",
+        "150:2",
+        "150:3",
+        "150r:1",
+        "150r:2",
+        "150r:3",
+        "152:1",
+        "152:2",
+        "152:3",
+        "16:3",
+        "160:1",
+        "160:2",
+        "160:3",
+        "160r:1",
+        "160r:2",
+        "160r:3",
+        "17:3",
+        "18:1",
+        "18:2",
+        "18:3",
+        "19:1",
+        "197:1",
+        "197:2",
+        "197:3",
+        "2:2",
+        "20:1",
+        "21:1",
+        "21:2",
+        "21:3",
+        "22:2",
+        "23:1",
+        "23:2",
+        "23:3",
+        "24:3",
+        "25:1",
+        "25:2",
+        "25:3",
+        "250:1",
+        "250:2",
+        "250:3",
+        "25r:1",
+        "25r:3",
+        "26:1",
+        "26:3",
+        "27:1",
+        "27:3",
+        "28:1",
+        "28:2",
+        "28:3",
+        "29:1",
+        "29:2",
+        "29:3",
+        "3:3",
+        "30:1",
+        "30:2",
+        "30:3",
+        "300:1",
+        "300:2",
+        "300:3",
+        "31:3",
+        "32:3",
+        "33:1",
+        "34:3",
+        "35:1",
+        "35:2",
+        "35:3",
+        "36:1",
+        "36:2",
+        "37:1",
+        "38:2",
+        "39:2",
+        "4:3",
+        "40:1",
+        "40:2",
+        "40:3",
+        "41:3",
+        "42:1",
+        "42:2",
+        "42:3",
+        "43:2",
+        "44:1",
+        "44:2",
+        "44:3",
+        "45:1",
+        "450:1",
+        "450:2",
+        "450:3",
+        "46:1",
+        "5:3",
+        "52:1",
+        "52:2",
+        "52:3",
+        "53:1",
+        "53:2",
+        "53:3",
+        "54:1",
+        "54:2",
+        "54:3",
+        "55:1",
+        "55:2",
+        "55:3",
+        "56:1",
+        "56:2",
+        "56:3",
+        "57:1",
+        "57:2",
+        "57:3",
+        "58:2",
+        "59:2",
+        "6:3",
+        "60:1",
+        "60:2",
+        "60:3",
+        "61:1",
+        "61:2",
+        "61:3",
+        "610:1",
+        "610:2",
+        "610:3",
+        "61s:1",
+        "61s:2",
+        "61s:3",
+        "62:1",
+        "62:2",
+        "62:3",
+        "63:1",
+        "63:2",
+        "63:3",
+        "64:1",
+        "64:2",
+        "64:3",
+        "65:1",
+        "65:2",
+        "65:3",
+        "66:1",
+        "66:2",
+        "66:3",
+        "67:1",
+        "67:2",
+        "67:3",
+        "68:1",
+        "69:1",
+        "7:1",
+        "7:2",
+        "7:3",
+        "70:1",
+        "71:1",
+        "72:1",
+        "72:2",
+        "72:3",
+        "73:3",
+        "74:3",
+        "75:3",
+        "76:1",
+        "76:2",
+        "76:3",
+        "77:1",
+        "77:2",
+        "77:3",
+        "78:1",
+        "78:2",
+        "78:3",
+        "79:1",
+        "79:2",
+        "79:3",
+        "8:1",
+        "8:2",
+        "8:3",
+        "80:1",
+        "80:2",
+        "80:3",
+        "81:1",
+        "81:2",
+        "81:3",
+        "82:1",
+        "82:2",
+        "82:3",
+        "83:1",
+        "83:2",
+        "83:3",
+        "84:3",
+        "85:3",
+        "86:1",
+        "86:2",
+        "86:3",
+        "87:1",
+        "87:2",
+        "87:3",
+        "88:1",
+        "89:1",
+        "89:2",
+        "89:3",
+        "9:1",
+        "90:2",
+        "91:1",
+        "91:2",
+        "91:3",
+        "92:3",
+        "93:1",
+        "93:2",
+        "93:3",
+        "94:1",
+        "95:1",
+        "95:2",
+        "95:3",
+        "96:2",
+        "97:1",
+        "97:2",
+        "97:3",
+        "98:1",
+        "98:2",
+        "98:3",
+        "99:1",
+        "99:2",
+        "99:3",
+        "9r:1"
+      ],
+      "post_reach": [
+        "1:1",
+        "1:2",
+        "1:3",
+        "10:1",
+        "100:1",
+        "100:2",
+        "100:3",
+        "101:1",
+        "101:2",
+        "101:3",
+        "102:3",
+        "103:3",
+        "104:3",
+        "105:1",
+        "105:2",
+        "105:3",
+        "106:2",
+        "107:2",
+        "108:1",
+        "108:2",
+        "108:3",
+        "109:1",
+        "11:1",
+        "110:1",
+        "111:1",
+        "112:1",
+        "113:1",
+        "114:1",
+        "12:2",
+        "13:1",
+        "13:2",
+        "13:3",
+        "135:1",
+        "135:2",
+        "135:3",
+        "14:1",
+        "149:1",
+        "149:2",
+        "149:3",
+        "15:3",
+        "150:1",
+        "150:2",
+        "150:3",
+        "150r:1",
+        "150r:2",
+        "150r:3",
+        "151:1",
+        "151:2",
+        "151:3",
+        "152:1",
+        "152:2",
+        "152:3",
+        "16:3",
+        "160:1",
+        "160:2",
+        "160:3",
+        "160r:1",
+        "160r:2",
+        "160r:3",
+        "17:3",
+        "18:1",
+        "18:2",
+        "18:3",
+        "19:1",
+        "197:1",
+        "197:2",
+        "197:3",
+        "2:2",
+        "20:1",
+        "21:1",
+        "21:2",
+        "21:3",
+        "22:2",
+        "23:1",
+        "23:2",
+        "23:3",
+        "24:3",
+        "25:1",
+        "25:2",
+        "25:3",
+        "250:1",
+        "250:2",
+        "250:3",
+        "25r:1",
+        "25r:3",
+        "26:1",
+        "26:3",
+        "27:1",
+        "27:3",
+        "28:1",
+        "28:2",
+        "28:3",
+        "29:1",
+        "29:2",
+        "29:3",
+        "3:3",
+        "30:1",
+        "30:2",
+        "30:3",
+        "300:1",
+        "300:2",
+        "300:3",
+        "31:3",
+        "32:3",
+        "33:1",
+        "34:3",
+        "35:1",
+        "35:2",
+        "35:3",
+        "36:1",
+        "36:2",
+        "37:1",
+        "38:2",
+        "39:2",
+        "4:3",
+        "40:1",
+        "40:2",
+        "40:3",
+        "41:3",
+        "42:1",
+        "42:2",
+        "42:3",
+        "43:2",
+        "44:1",
+        "44:2",
+        "44:3",
+        "45:1",
+        "450:1",
+        "450:2",
+        "450:3",
+        "46:1",
+        "47:1",
+        "47:2",
+        "47:3",
+        "48:1",
+        "48:2",
+        "48:3",
+        "49:1",
+        "49:2",
+        "49:3",
+        "5:3",
+        "50:1",
+        "50:2",
+        "50:3",
+        "51:1",
+        "51:2",
+        "51:3",
+        "52:1",
+        "52:2",
+        "52:3",
+        "53:1",
+        "53:2",
+        "53:3",
+        "54:1",
+        "54:2",
+        "54:3",
+        "55:1",
+        "55:2",
+        "55:3",
+        "56:1",
+        "56:2",
+        "56:3",
+        "57:1",
+        "57:2",
+        "57:3",
+        "58:2",
+        "59:2",
+        "6:3",
+        "60:1",
+        "60:2",
+        "60:3",
+        "61:1",
+        "61:2",
+        "61:3",
+        "610:1",
+        "610:2",
+        "610:3",
+        "61s:1",
+        "61s:2",
+        "61s:3",
+        "62:1",
+        "62:2",
+        "62:3",
+        "63:1",
+        "63:2",
+        "63:3",
+        "64:1",
+        "64:2",
+        "64:3",
+        "65:1",
+        "65:2",
+        "65:3",
+        "66:1",
+        "66:2",
+        "66:3",
+        "67:1",
+        "67:2",
+        "67:3",
+        "68:1",
+        "69:1",
+        "7:1",
+        "7:2",
+        "7:3",
+        "70:1",
+        "71:1",
+        "72:1",
+        "72:2",
+        "72:3",
+        "73:3",
+        "74:3",
+        "75:3",
+        "76:1",
+        "76:2",
+        "76:3",
+        "77:1",
+        "77:2",
+        "77:3",
+        "78:1",
+        "78:2",
+        "78:3",
+        "79:1",
+        "79:2",
+        "79:3",
+        "8:1",
+        "8:2",
+        "8:3",
+        "80:1",
+        "80:2",
+        "80:3",
+        "81:1",
+        "81:2",
+        "81:3",
+        "82:1",
+        "82:2",
+        "82:3",
+        "83:1",
+        "83:2",
+        "83:3",
+        "84:3",
+        "85:3",
+        "86:1",
+        "86:2",
+        "86:3",
+        "87:1",
+        "87:2",
+        "87:3",
+        "88:1",
+        "89:1",
+        "89:2",
+        "89:3",
+        "9:1",
+        "90:2",
+        "91:1",
+        "91:2",
+        "91:3",
+        "92:3",
+        "93:1",
+        "93:2",
+        "93:3",
+        "94:1",
+        "95:1",
+        "95:2",
+        "95:3",
+        "96:2",
+        "97:1",
+        "97:2",
+        "97:3",
+        "98:1",
+        "98:2",
+        "98:3",
+        "99:1",
+        "99:2",
+        "99:3",
+        "9r:1"
+      ]
+    },
+    {
+      "id": "S02",
+      "name": "Single fault phase-A leaf",
+      "faults": [
+        "L93"
+      ],
+      "close": [
+        "SW8"
+      ],
+      "pre": {
+        "connected": 90,
+        "kw": 3450.0,
+        "unconnected": 1,
+        "lost_kw": 40.0,
+        "cycles": 0
+      },
+      "post": {
+        "connected": 91,
+        "kw": 3490.0,
+        "unconnected": 0,
+        "lost_kw": 0,
+        "cycles": 0
+      },
+      "gain_kw": 40.0,
+      "gain_loads": 1,
+      "post_missing_loads": [],
+      "admissible": true,
+      "pre_reach": [
+        "1:1",
+        "1:2",
+        "1:3",
+        "10:1",
+        "100:1",
+        "100:2",
+        "100:3",
+        "101:1",
+        "101:2",
+        "101:3",
+        "102:3",
+        "103:3",
+        "104:3",
+        "105:1",
+        "105:2",
+        "105:3",
+        "106:2",
+        "107:2",
+        "108:1",
+        "108:2",
+        "108:3",
+        "109:1",
+        "11:1",
+        "110:1",
+        "111:1",
+        "112:1",
+        "113:1",
+        "114:1",
+        "12:2",
+        "13:1",
+        "13:2",
+        "13:3",
+        "135:1",
+        "135:2",
+        "135:3",
+        "14:1",
+        "149:1",
+        "149:2",
+        "149:3",
+        "15:3",
+        "150:1",
+        "150:2",
+        "150:3",
+        "150r:1",
+        "150r:2",
+        "150r:3",
+        "151:1",
+        "151:2",
+        "151:3",
+        "152:1",
+        "152:2",
+        "152:3",
+        "16:3",
+        "160:1",
+        "160:2",
+        "160:3",
+        "160r:1",
+        "160r:2",
+        "160r:3",
+        "17:3",
+        "18:1",
+        "18:2",
+        "18:3",
+        "19:1",
+        "197:1",
+        "197:2",
+        "197:3",
+        "2:2",
+        "20:1",
+        "21:1",
+        "21:2",
+        "21:3",
+        "22:2",
+        "23:1",
+        "23:2",
+        "23:3",
+        "24:3",
+        "25:1",
+        "25:2",
+        "25:3",
+        "250:1",
+        "250:2",
+        "250:3",
+        "25r:1",
+        "25r:3",
+        "26:1",
+        "26:3",
+        "27:1",
+        "27:3",
+        "28:1",
+        "28:2",
+        "28:3",
+        "29:1",
+        "29:2",
+        "29:3",
+        "3:3",
+        "30:1",
+        "30:2",
+        "30:3",
+        "300:1",
+        "300:2",
+        "300:3",
+        "31:3",
+        "32:3",
+        "33:1",
+        "34:3",
+        "35:1",
+        "35:2",
+        "35:3",
+        "36:1",
+        "36:2",
+        "37:1",
+        "38:2",
+        "39:2",
+        "4:3",
+        "40:1",
+        "40:2",
+        "40:3",
+        "41:3",
+        "42:1",
+        "42:2",
+        "42:3",
+        "43:2",
+        "44:1",
+        "44:2",
+        "44:3",
+        "45:1",
+        "450:1",
+        "450:2",
+        "450:3",
+        "46:1",
+        "47:1",
+        "47:2",
+        "47:3",
+        "48:1",
+        "48:2",
+        "48:3",
+        "49:1",
+        "49:2",
+        "49:3",
+        "5:3",
+        "50:1",
+        "50:2",
+        "50:3",
+        "51:1",
+        "51:2",
+        "51:3",
+        "52:1",
+        "52:2",
+        "52:3",
+        "53:1",
+        "53:2",
+        "53:3",
+        "54:1",
+        "54:2",
+        "54:3",
+        "55:1",
+        "55:2",
+        "55:3",
+        "56:1",
+        "56:2",
+        "56:3",
+        "57:1",
+        "57:2",
+        "57:3",
+        "58:2",
+        "59:2",
+        "6:3",
+        "60:1",
+        "60:2",
+        "60:3",
+        "61:1",
+        "61:2",
+        "61:3",
+        "610:1",
+        "610:2",
+        "610:3",
+        "61s:1",
+        "61s:2",
+        "61s:3",
+        "62:1",
+        "62:2",
+        "62:3",
+        "63:1",
+        "63:2",
+        "63:3",
+        "64:1",
+        "64:2",
+        "64:3",
+        "65:1",
+        "65:2",
+        "65:3",
+        "66:1",
+        "66:2",
+        "66:3",
+        "67:1",
+        "67:2",
+        "67:3",
+        "68:1",
+        "69:1",
+        "7:1",
+        "7:2",
+        "7:3",
+        "70:1",
+        "71:1",
+        "72:1",
+        "72:2",
+        "72:3",
+        "73:3",
+        "74:3",
+        "75:3",
+        "76:1",
+        "76:2",
+        "76:3",
+        "77:1",
+        "77:2",
+        "77:3",
+        "78:1",
+        "78:2",
+        "78:3",
+        "79:1",
+        "79:2",
+        "79:3",
+        "8:1",
+        "8:2",
+        "8:3",
+        "80:1",
+        "80:2",
+        "80:3",
+        "81:1",
+        "81:2",
+        "81:3",
+        "82:1",
+        "82:2",
+        "82:3",
+        "83:1",
+        "83:2",
+        "83:3",
+        "84:3",
+        "85:3",
+        "86:1",
+        "86:2",
+        "86:3",
+        "87:1",
+        "87:2",
+        "87:3",
+        "88:1",
+        "89:1",
+        "89:2",
+        "89:3",
+        "9:1",
+        "90:2",
+        "91:1",
+        "91:2",
+        "91:3",
+        "92:3",
+        "93:1",
+        "93:2",
+        "93:3",
+        "95:1",
+        "95:2",
+        "95:3",
+        "96:2",
+        "97:1",
+        "97:2",
+        "97:3",
+        "98:1",
+        "98:2",
+        "98:3",
+        "99:1",
+        "99:2",
+        "99:3",
+        "9r:1"
+      ],
+      "post_reach": [
+        "1:1",
+        "1:2",
+        "1:3",
+        "10:1",
+        "100:1",
+        "100:2",
+        "100:3",
+        "101:1",
+        "101:2",
+        "101:3",
+        "102:3",
+        "103:3",
+        "104:3",
+        "105:1",
+        "105:2",
+        "105:3",
+        "106:2",
+        "107:2",
+        "108:1",
+        "108:2",
+        "108:3",
+        "109:1",
+        "11:1",
+        "110:1",
+        "111:1",
+        "112:1",
+        "113:1",
+        "114:1",
+        "12:2",
+        "13:1",
+        "13:2",
+        "13:3",
+        "135:1",
+        "135:2",
+        "135:3",
+        "14:1",
+        "149:1",
+        "149:2",
+        "149:3",
+        "15:3",
+        "150:1",
+        "150:2",
+        "150:3",
+        "150r:1",
+        "150r:2",
+        "150r:3",
+        "151:1",
+        "151:2",
+        "151:3",
+        "152:1",
+        "152:2",
+        "152:3",
+        "16:3",
+        "160:1",
+        "160:2",
+        "160:3",
+        "160r:1",
+        "160r:2",
+        "160r:3",
+        "17:3",
+        "18:1",
+        "18:2",
+        "18:3",
+        "19:1",
+        "197:1",
+        "197:2",
+        "197:3",
+        "2:2",
+        "20:1",
+        "21:1",
+        "21:2",
+        "21:3",
+        "22:2",
+        "23:1",
+        "23:2",
+        "23:3",
+        "24:3",
+        "25:1",
+        "25:2",
+        "25:3",
+        "250:1",
+        "250:2",
+        "250:3",
+        "25r:1",
+        "25r:3",
+        "26:1",
+        "26:3",
+        "27:1",
+        "27:3",
+        "28:1",
+        "28:2",
+        "28:3",
+        "29:1",
+        "29:2",
+        "29:3",
+        "3:3",
+        "30:1",
+        "30:2",
+        "30:3",
+        "300:1",
+        "300:2",
+        "300:3",
+        "31:3",
+        "32:3",
+        "33:1",
+        "34:3",
+        "35:1",
+        "35:2",
+        "35:3",
+        "36:1",
+        "36:2",
+        "37:1",
+        "38:2",
+        "39:2",
+        "4:3",
+        "40:1",
+        "40:2",
+        "40:3",
+        "41:3",
+        "42:1",
+        "42:2",
+        "42:3",
+        "43:2",
+        "44:1",
+        "44:2",
+        "44:3",
+        "45:1",
+        "450:1",
+        "450:2",
+        "450:3",
+        "46:1",
+        "47:1",
+        "47:2",
+        "47:3",
+        "48:1",
+        "48:2",
+        "48:3",
+        "49:1",
+        "49:2",
+        "49:3",
+        "5:3",
+        "50:1",
+        "50:2",
+        "50:3",
+        "51:1",
+        "51:2",
+        "51:3",
+        "52:1",
+        "52:2",
+        "52:3",
+        "53:1",
+        "53:2",
+        "53:3",
+        "54:1",
+        "54:2",
+        "54:3",
+        "55:1",
+        "55:2",
+        "55:3",
+        "56:1",
+        "56:2",
+        "56:3",
+        "57:1",
+        "57:2",
+        "57:3",
+        "58:2",
+        "59:2",
+        "6:3",
+        "60:1",
+        "60:2",
+        "60:3",
+        "61:1",
+        "61:2",
+        "61:3",
+        "610:1",
+        "610:2",
+        "610:3",
+        "61s:1",
+        "61s:2",
+        "61s:3",
+        "62:1",
+        "62:2",
+        "62:3",
+        "63:1",
+        "63:2",
+        "63:3",
+        "64:1",
+        "64:2",
+        "64:3",
+        "65:1",
+        "65:2",
+        "65:3",
+        "66:1",
+        "66:2",
+        "66:3",
+        "67:1",
+        "67:2",
+        "67:3",
+        "68:1",
+        "69:1",
+        "7:1",
+        "7:2",
+        "7:3",
+        "70:1",
+        "71:1",
+        "72:1",
+        "72:2",
+        "72:3",
+        "73:3",
+        "74:3",
+        "75:3",
+        "76:1",
+        "76:2",
+        "76:3",
+        "77:1",
+        "77:2",
+        "77:3",
+        "78:1",
+        "78:2",
+        "78:3",
+        "79:1",
+        "79:2",
+        "79:3",
+        "8:1",
+        "8:2",
+        "8:3",
+        "80:1",
+        "80:2",
+        "80:3",
+        "81:1",
+        "81:2",
+        "81:3",
+        "82:1",
+        "82:2",
+        "82:3",
+        "83:1",
+        "83:2",
+        "83:3",
+        "84:3",
+        "85:3",
+        "86:1",
+        "86:2",
+        "86:3",
+        "87:1",
+        "87:2",
+        "87:3",
+        "88:1",
+        "89:1",
+        "89:2",
+        "89:3",
+        "9:1",
+        "90:2",
+        "91:1",
+        "91:2",
+        "91:3",
+        "92:3",
+        "93:1",
+        "93:2",
+        "93:3",
+        "94:1",
+        "95:1",
+        "95:2",
+        "95:3",
+        "96:2",
+        "97:1",
+        "97:2",
+        "97:3",
+        "98:1",
+        "98:2",
+        "98:3",
+        "99:1",
+        "99:2",
+        "99:3",
+        "9r:1"
+      ]
+    },
+    {
+      "id": "S03",
+      "name": "Two faults, two ties",
+      "faults": [
+        "L45",
+        "L93"
+      ],
+      "close": [
+        "SW7",
+        "SW8"
+      ],
+      "pre": {
+        "connected": 83,
+        "kw": 2935.0,
+        "unconnected": 8,
+        "lost_kw": 555.0,
+        "cycles": 0
+      },
+      "post": {
+        "connected": 91,
+        "kw": 3490.0,
+        "unconnected": 0,
+        "lost_kw": 0,
+        "cycles": 0
+      },
+      "gain_kw": 555.0,
+      "gain_loads": 8,
+      "post_missing_loads": [],
+      "admissible": true,
+      "pre_reach": [
+        "1:1",
+        "1:2",
+        "1:3",
+        "10:1",
+        "100:1",
+        "100:2",
+        "100:3",
+        "101:1",
+        "101:2",
+        "101:3",
+        "102:3",
+        "103:3",
+        "104:3",
+        "105:1",
+        "105:2",
+        "105:3",
+        "106:2",
+        "107:2",
+        "108:1",
+        "108:2",
+        "108:3",
+        "109:1",
+        "11:1",
+        "110:1",
+        "111:1",
+        "112:1",
+        "113:1",
+        "114:1",
+        "12:2",
+        "13:1",
+        "13:2",
+        "13:3",
+        "135:1",
+        "135:2",
+        "135:3",
+        "14:1",
+        "149:1",
+        "149:2",
+        "149:3",
+        "15:3",
+        "150:1",
+        "150:2",
+        "150:3",
+        "150r:1",
+        "150r:2",
+        "150r:3",
+        "152:1",
+        "152:2",
+        "152:3",
+        "16:3",
+        "160:1",
+        "160:2",
+        "160:3",
+        "160r:1",
+        "160r:2",
+        "160r:3",
+        "17:3",
+        "18:1",
+        "18:2",
+        "18:3",
+        "19:1",
+        "197:1",
+        "197:2",
+        "197:3",
+        "2:2",
+        "20:1",
+        "21:1",
+        "21:2",
+        "21:3",
+        "22:2",
+        "23:1",
+        "23:2",
+        "23:3",
+        "24:3",
+        "25:1",
+        "25:2",
+        "25:3",
+        "250:1",
+        "250:2",
+        "250:3",
+        "25r:1",
+        "25r:3",
+        "26:1",
+        "26:3",
+        "27:1",
+        "27:3",
+        "28:1",
+        "28:2",
+        "28:3",
+        "29:1",
+        "29:2",
+        "29:3",
+        "3:3",
+        "30:1",
+        "30:2",
+        "30:3",
+        "300:1",
+        "300:2",
+        "300:3",
+        "31:3",
+        "32:3",
+        "33:1",
+        "34:3",
+        "35:1",
+        "35:2",
+        "35:3",
+        "36:1",
+        "36:2",
+        "37:1",
+        "38:2",
+        "39:2",
+        "4:3",
+        "40:1",
+        "40:2",
+        "40:3",
+        "41:3",
+        "42:1",
+        "42:2",
+        "42:3",
+        "43:2",
+        "44:1",
+        "44:2",
+        "44:3",
+        "45:1",
+        "450:1",
+        "450:2",
+        "450:3",
+        "46:1",
+        "5:3",
+        "52:1",
+        "52:2",
+        "52:3",
+        "53:1",
+        "53:2",
+        "53:3",
+        "54:1",
+        "54:2",
+        "54:3",
+        "55:1",
+        "55:2",
+        "55:3",
+        "56:1",
+        "56:2",
+        "56:3",
+        "57:1",
+        "57:2",
+        "57:3",
+        "58:2",
+        "59:2",
+        "6:3",
+        "60:1",
+        "60:2",
+        "60:3",
+        "61:1",
+        "61:2",
+        "61:3",
+        "610:1",
+        "610:2",
+        "610:3",
+        "61s:1",
+        "61s:2",
+        "61s:3",
+        "62:1",
+        "62:2",
+        "62:3",
+        "63:1",
+        "63:2",
+        "63:3",
+        "64:1",
+        "64:2",
+        "64:3",
+        "65:1",
+        "65:2",
+        "65:3",
+        "66:1",
+        "66:2",
+        "66:3",
+        "67:1",
+        "67:2",
+        "67:3",
+        "68:1",
+        "69:1",
+        "7:1",
+        "7:2",
+        "7:3",
+        "70:1",
+        "71:1",
+        "72:1",
+        "72:2",
+        "72:3",
+        "73:3",
+        "74:3",
+        "75:3",
+        "76:1",
+        "76:2",
+        "76:3",
+        "77:1",
+        "77:2",
+        "77:3",
+        "78:1",
+        "78:2",
+        "78:3",
+        "79:1",
+        "79:2",
+        "79:3",
+        "8:1",
+        "8:2",
+        "8:3",
+        "80:1",
+        "80:2",
+        "80:3",
+        "81:1",
+        "81:2",
+        "81:3",
+        "82:1",
+        "82:2",
+        "82:3",
+        "83:1",
+        "83:2",
+        "83:3",
+        "84:3",
+        "85:3",
+        "86:1",
+        "86:2",
+        "86:3",
+        "87:1",
+        "87:2",
+        "87:3",
+        "88:1",
+        "89:1",
+        "89:2",
+        "89:3",
+        "9:1",
+        "90:2",
+        "91:1",
+        "91:2",
+        "91:3",
+        "92:3",
+        "93:1",
+        "93:2",
+        "93:3",
+        "95:1",
+        "95:2",
+        "95:3",
+        "96:2",
+        "97:1",
+        "97:2",
+        "97:3",
+        "98:1",
+        "98:2",
+        "98:3",
+        "99:1",
+        "99:2",
+        "99:3",
+        "9r:1"
+      ],
+      "post_reach": [
+        "1:1",
+        "1:2",
+        "1:3",
+        "10:1",
+        "100:1",
+        "100:2",
+        "100:3",
+        "101:1",
+        "101:2",
+        "101:3",
+        "102:3",
+        "103:3",
+        "104:3",
+        "105:1",
+        "105:2",
+        "105:3",
+        "106:2",
+        "107:2",
+        "108:1",
+        "108:2",
+        "108:3",
+        "109:1",
+        "11:1",
+        "110:1",
+        "111:1",
+        "112:1",
+        "113:1",
+        "114:1",
+        "12:2",
+        "13:1",
+        "13:2",
+        "13:3",
+        "135:1",
+        "135:2",
+        "135:3",
+        "14:1",
+        "149:1",
+        "149:2",
+        "149:3",
+        "15:3",
+        "150:1",
+        "150:2",
+        "150:3",
+        "150r:1",
+        "150r:2",
+        "150r:3",
+        "151:1",
+        "151:2",
+        "151:3",
+        "152:1",
+        "152:2",
+        "152:3",
+        "16:3",
+        "160:1",
+        "160:2",
+        "160:3",
+        "160r:1",
+        "160r:2",
+        "160r:3",
+        "17:3",
+        "18:1",
+        "18:2",
+        "18:3",
+        "19:1",
+        "197:1",
+        "197:2",
+        "197:3",
+        "2:2",
+        "20:1",
+        "21:1",
+        "21:2",
+        "21:3",
+        "22:2",
+        "23:1",
+        "23:2",
+        "23:3",
+        "24:3",
+        "25:1",
+        "25:2",
+        "25:3",
+        "250:1",
+        "250:2",
+        "250:3",
+        "25r:1",
+        "25r:3",
+        "26:1",
+        "26:3",
+        "27:1",
+        "27:3",
+        "28:1",
+        "28:2",
+        "28:3",
+        "29:1",
+        "29:2",
+        "29:3",
+        "3:3",
+        "30:1",
+        "30:2",
+        "30:3",
+        "300:1",
+        "300:2",
+        "300:3",
+        "31:3",
+        "32:3",
+        "33:1",
+        "34:3",
+        "35:1",
+        "35:2",
+        "35:3",
+        "36:1",
+        "36:2",
+        "37:1",
+        "38:2",
+        "39:2",
+        "4:3",
+        "40:1",
+        "40:2",
+        "40:3",
+        "41:3",
+        "42:1",
+        "42:2",
+        "42:3",
+        "43:2",
+        "44:1",
+        "44:2",
+        "44:3",
+        "45:1",
+        "450:1",
+        "450:2",
+        "450:3",
+        "46:1",
+        "47:1",
+        "47:2",
+        "47:3",
+        "48:1",
+        "48:2",
+        "48:3",
+        "49:1",
+        "49:2",
+        "49:3",
+        "5:3",
+        "50:1",
+        "50:2",
+        "50:3",
+        "51:1",
+        "51:2",
+        "51:3",
+        "52:1",
+        "52:2",
+        "52:3",
+        "53:1",
+        "53:2",
+        "53:3",
+        "54:1",
+        "54:2",
+        "54:3",
+        "55:1",
+        "55:2",
+        "55:3",
+        "56:1",
+        "56:2",
+        "56:3",
+        "57:1",
+        "57:2",
+        "57:3",
+        "58:2",
+        "59:2",
+        "6:3",
+        "60:1",
+        "60:2",
+        "60:3",
+        "61:1",
+        "61:2",
+        "61:3",
+        "610:1",
+        "610:2",
+        "610:3",
+        "61s:1",
+        "61s:2",
+        "61s:3",
+        "62:1",
+        "62:2",
+        "62:3",
+        "63:1",
+        "63:2",
+        "63:3",
+        "64:1",
+        "64:2",
+        "64:3",
+        "65:1",
+        "65:2",
+        "65:3",
+        "66:1",
+        "66:2",
+        "66:3",
+        "67:1",
+        "67:2",
+        "67:3",
+        "68:1",
+        "69:1",
+        "7:1",
+        "7:2",
+        "7:3",
+        "70:1",
+        "71:1",
+        "72:1",
+        "72:2",
+        "72:3",
+        "73:3",
+        "74:3",
+        "75:3",
+        "76:1",
+        "76:2",
+        "76:3",
+        "77:1",
+        "77:2",
+        "77:3",
+        "78:1",
+        "78:2",
+        "78:3",
+        "79:1",
+        "79:2",
+        "79:3",
+        "8:1",
+        "8:2",
+        "8:3",
+        "80:1",
+        "80:2",
+        "80:3",
+        "81:1",
+        "81:2",
+        "81:3",
+        "82:1",
+        "82:2",
+        "82:3",
+        "83:1",
+        "83:2",
+        "83:3",
+        "84:3",
+        "85:3",
+        "86:1",
+        "86:2",
+        "86:3",
+        "87:1",
+        "87:2",
+        "87:3",
+        "88:1",
+        "89:1",
+        "89:2",
+        "89:3",
+        "9:1",
+        "90:2",
+        "91:1",
+        "91:2",
+        "91:3",
+        "92:3",
+        "93:1",
+        "93:2",
+        "93:3",
+        "94:1",
+        "95:1",
+        "95:2",
+        "95:3",
+        "96:2",
+        "97:1",
+        "97:2",
+        "97:3",
+        "98:1",
+        "98:2",
+        "98:3",
+        "99:1",
+        "99:2",
+        "99:3",
+        "9r:1"
+      ]
+    },
+    {
+      "id": "S04",
+      "name": "Two faults with phase limitation",
+      "faults": [
+        "L45",
+        "L77"
+      ],
+      "close": [
+        "SW7",
+        "SW8"
+      ],
+      "pre": {
+        "connected": 76,
+        "kw": 2715.0,
+        "unconnected": 15,
+        "lost_kw": 775.0,
+        "cycles": 0
+      },
+      "post": {
+        "connected": 85,
+        "kw": 3310.0,
+        "unconnected": 6,
+        "lost_kw": 180.0,
+        "cycles": 0
+      },
+      "gain_kw": 595.0,
+      "gain_loads": 9,
+      "post_missing_loads": [
+        "S86B",
+        "S87B",
+        "S90B",
+        "S92C",
+        "S95B",
+        "S96B"
+      ],
+      "admissible": true,
+      "pre_reach": [
+        "1:1",
+        "1:2",
+        "1:3",
+        "10:1",
+        "100:1",
+        "100:2",
+        "100:3",
+        "101:1",
+        "101:2",
+        "101:3",
+        "102:3",
+        "103:3",
+        "104:3",
+        "105:1",
+        "105:2",
+        "105:3",
+        "106:2",
+        "107:2",
+        "108:1",
+        "108:2",
+        "108:3",
+        "109:1",
+        "11:1",
+        "110:1",
+        "111:1",
+        "112:1",
+        "113:1",
+        "114:1",
+        "12:2",
+        "13:1",
+        "13:2",
+        "13:3",
+        "135:1",
+        "135:2",
+        "135:3",
+        "14:1",
+        "149:1",
+        "149:2",
+        "149:3",
+        "15:3",
+        "150:1",
+        "150:2",
+        "150:3",
+        "150r:1",
+        "150r:2",
+        "150r:3",
+        "152:1",
+        "152:2",
+        "152:3",
+        "16:3",
+        "160:1",
+        "160:2",
+        "160:3",
+        "160r:1",
+        "160r:2",
+        "160r:3",
+        "17:3",
+        "18:1",
+        "18:2",
+        "18:3",
+        "19:1",
+        "197:1",
+        "197:2",
+        "197:3",
+        "2:2",
+        "20:1",
+        "21:1",
+        "21:2",
+        "21:3",
+        "22:2",
+        "23:1",
+        "23:2",
+        "23:3",
+        "24:3",
+        "25:1",
+        "25:2",
+        "25:3",
+        "250:1",
+        "250:2",
+        "250:3",
+        "25r:1",
+        "25r:3",
+        "26:1",
+        "26:3",
+        "27:1",
+        "27:3",
+        "28:1",
+        "28:2",
+        "28:3",
+        "29:1",
+        "29:2",
+        "29:3",
+        "3:3",
+        "30:1",
+        "30:2",
+        "30:3",
+        "300:1",
+        "300:2",
+        "300:3",
+        "31:3",
+        "32:3",
+        "33:1",
+        "34:3",
+        "35:1",
+        "35:2",
+        "35:3",
+        "36:1",
+        "36:2",
+        "37:1",
+        "38:2",
+        "39:2",
+        "4:3",
+        "40:1",
+        "40:2",
+        "40:3",
+        "41:3",
+        "42:1",
+        "42:2",
+        "42:3",
+        "43:2",
+        "44:1",
+        "44:2",
+        "44:3",
+        "45:1",
+        "450:1",
+        "450:2",
+        "450:3",
+        "46:1",
+        "5:3",
+        "52:1",
+        "52:2",
+        "52:3",
+        "53:1",
+        "53:2",
+        "53:3",
+        "54:1",
+        "54:2",
+        "54:3",
+        "55:1",
+        "55:2",
+        "55:3",
+        "56:1",
+        "56:2",
+        "56:3",
+        "57:1",
+        "57:2",
+        "57:3",
+        "58:2",
+        "59:2",
+        "6:3",
+        "60:1",
+        "60:2",
+        "60:3",
+        "61:1",
+        "61:2",
+        "61:3",
+        "610:1",
+        "610:2",
+        "610:3",
+        "61s:1",
+        "61s:2",
+        "61s:3",
+        "62:1",
+        "62:2",
+        "62:3",
+        "63:1",
+        "63:2",
+        "63:3",
+        "64:1",
+        "64:2",
+        "64:3",
+        "65:1",
+        "65:2",
+        "65:3",
+        "66:1",
+        "66:2",
+        "66:3",
+        "67:1",
+        "67:2",
+        "67:3",
+        "68:1",
+        "69:1",
+        "7:1",
+        "7:2",
+        "7:3",
+        "70:1",
+        "71:1",
+        "72:1",
+        "72:2",
+        "72:3",
+        "73:3",
+        "74:3",
+        "75:3",
+        "76:1",
+        "76:2",
+        "76:3",
+        "77:1",
+        "77:2",
+        "77:3",
+        "78:1",
+        "78:2",
+        "78:3",
+        "79:1",
+        "79:2",
+        "79:3",
+        "8:1",
+        "8:2",
+        "8:3",
+        "80:1",
+        "80:2",
+        "80:3",
+        "81:1",
+        "81:2",
+        "81:3",
+        "82:1",
+        "82:2",
+        "82:3",
+        "83:1",
+        "83:2",
+        "83:3",
+        "84:3",
+        "85:3",
+        "9:1",
+        "97:1",
+        "97:2",
+        "97:3",
+        "98:1",
+        "98:2",
+        "98:3",
+        "99:1",
+        "99:2",
+        "99:3",
+        "9r:1"
+      ],
+      "post_reach": [
+        "1:1",
+        "1:2",
+        "1:3",
+        "10:1",
+        "100:1",
+        "100:2",
+        "100:3",
+        "101:1",
+        "101:2",
+        "101:3",
+        "102:3",
+        "103:3",
+        "104:3",
+        "105:1",
+        "105:2",
+        "105:3",
+        "106:2",
+        "107:2",
+        "108:1",
+        "108:2",
+        "108:3",
+        "109:1",
+        "11:1",
+        "110:1",
+        "111:1",
+        "112:1",
+        "113:1",
+        "114:1",
+        "12:2",
+        "13:1",
+        "13:2",
+        "13:3",
+        "135:1",
+        "135:2",
+        "135:3",
+        "14:1",
+        "149:1",
+        "149:2",
+        "149:3",
+        "15:3",
+        "150:1",
+        "150:2",
+        "150:3",
+        "150r:1",
+        "150r:2",
+        "150r:3",
+        "151:1",
+        "151:2",
+        "151:3",
+        "152:1",
+        "152:2",
+        "152:3",
+        "16:3",
+        "160:1",
+        "160:2",
+        "160:3",
+        "160r:1",
+        "160r:2",
+        "160r:3",
+        "17:3",
+        "18:1",
+        "18:2",
+        "18:3",
+        "19:1",
+        "197:1",
+        "197:2",
+        "197:3",
+        "2:2",
+        "20:1",
+        "21:1",
+        "21:2",
+        "21:3",
+        "22:2",
+        "23:1",
+        "23:2",
+        "23:3",
+        "24:3",
+        "25:1",
+        "25:2",
+        "25:3",
+        "250:1",
+        "250:2",
+        "250:3",
+        "25r:1",
+        "25r:3",
+        "26:1",
+        "26:3",
+        "27:1",
+        "27:3",
+        "28:1",
+        "28:2",
+        "28:3",
+        "29:1",
+        "29:2",
+        "29:3",
+        "3:3",
+        "30:1",
+        "30:2",
+        "30:3",
+        "300:1",
+        "300:2",
+        "300:3",
+        "31:3",
+        "32:3",
+        "33:1",
+        "34:3",
+        "35:1",
+        "35:2",
+        "35:3",
+        "36:1",
+        "36:2",
+        "37:1",
+        "38:2",
+        "39:2",
+        "4:3",
+        "40:1",
+        "40:2",
+        "40:3",
+        "41:3",
+        "42:1",
+        "42:2",
+        "42:3",
+        "43:2",
+        "44:1",
+        "44:2",
+        "44:3",
+        "45:1",
+        "450:1",
+        "450:2",
+        "450:3",
+        "46:1",
+        "47:1",
+        "47:2",
+        "47:3",
+        "48:1",
+        "48:2",
+        "48:3",
+        "49:1",
+        "49:2",
+        "49:3",
+        "5:3",
+        "50:1",
+        "50:2",
+        "50:3",
+        "51:1",
+        "51:2",
+        "51:3",
+        "52:1",
+        "52:2",
+        "52:3",
+        "53:1",
+        "53:2",
+        "53:3",
+        "54:1",
+        "54:2",
+        "54:3",
+        "55:1",
+        "55:2",
+        "55:3",
+        "56:1",
+        "56:2",
+        "56:3",
+        "57:1",
+        "57:2",
+        "57:3",
+        "58:2",
+        "59:2",
+        "6:3",
+        "60:1",
+        "60:2",
+        "60:3",
+        "61:1",
+        "61:2",
+        "61:3",
+        "610:1",
+        "610:2",
+        "610:3",
+        "61s:1",
+        "61s:2",
+        "61s:3",
+        "62:1",
+        "62:2",
+        "62:3",
+        "63:1",
+        "63:2",
+        "63:3",
+        "64:1",
+        "64:2",
+        "64:3",
+        "65:1",
+        "65:2",
+        "65:3",
+        "66:1",
+        "66:2",
+        "66:3",
+        "67:1",
+        "67:2",
+        "67:3",
+        "68:1",
+        "69:1",
+        "7:1",
+        "7:2",
+        "7:3",
+        "70:1",
+        "71:1",
+        "72:1",
+        "72:2",
+        "72:3",
+        "73:3",
+        "74:3",
+        "75:3",
+        "76:1",
+        "76:2",
+        "76:3",
+        "77:1",
+        "77:2",
+        "77:3",
+        "78:1",
+        "78:2",
+        "78:3",
+        "79:1",
+        "79:2",
+        "79:3",
+        "8:1",
+        "8:2",
+        "8:3",
+        "80:1",
+        "80:2",
+        "80:3",
+        "81:1",
+        "81:2",
+        "81:3",
+        "82:1",
+        "82:2",
+        "82:3",
+        "83:1",
+        "83:2",
+        "83:3",
+        "84:3",
+        "85:3",
+        "86:1",
+        "87:1",
+        "88:1",
+        "89:1",
+        "9:1",
+        "91:1",
+        "93:1",
+        "94:1",
+        "95:1",
+        "97:1",
+        "97:2",
+        "97:3",
+        "98:1",
+        "98:2",
+        "98:3",
+        "99:1",
+        "99:2",
+        "99:3",
+        "9r:1"
+      ]
+    },
+    {
+      "id": "S05",
+      "name": "Two faults that ties cannot fully serve",
+      "faults": [
+        "L45",
+        "L48"
+      ],
+      "close": [
+        "SW7",
+        "SW8"
+      ],
+      "pre": {
+        "connected": 84,
+        "kw": 2975.0,
+        "unconnected": 7,
+        "lost_kw": 515.0,
+        "cycles": 0
+      },
+      "post": {
+        "connected": 89,
+        "kw": 3175.0,
+        "unconnected": 2,
+        "lost_kw": 315.0,
+        "cycles": 1
+      },
+      "gain_kw": 200.0,
+      "gain_loads": 5,
+      "post_missing_loads": [
+        "S47",
+        "S48"
+      ],
+      "admissible": false,
+      "pre_reach": [
+        "1:1",
+        "1:2",
+        "1:3",
+        "10:1",
+        "100:1",
+        "100:2",
+        "100:3",
+        "101:1",
+        "101:2",
+        "101:3",
+        "102:3",
+        "103:3",
+        "104:3",
+        "105:1",
+        "105:2",
+        "105:3",
+        "106:2",
+        "107:2",
+        "108:1",
+        "108:2",
+        "108:3",
+        "109:1",
+        "11:1",
+        "110:1",
+        "111:1",
+        "112:1",
+        "113:1",
+        "114:1",
+        "12:2",
+        "13:1",
+        "13:2",
+        "13:3",
+        "135:1",
+        "135:2",
+        "135:3",
+        "14:1",
+        "149:1",
+        "149:2",
+        "149:3",
+        "15:3",
+        "150:1",
+        "150:2",
+        "150:3",
+        "150r:1",
+        "150r:2",
+        "150r:3",
+        "152:1",
+        "152:2",
+        "152:3",
+        "16:3",
+        "160:1",
+        "160:2",
+        "160:3",
+        "160r:1",
+        "160r:2",
+        "160r:3",
+        "17:3",
+        "18:1",
+        "18:2",
+        "18:3",
+        "19:1",
+        "197:1",
+        "197:2",
+        "197:3",
+        "2:2",
+        "20:1",
+        "21:1",
+        "21:2",
+        "21:3",
+        "22:2",
+        "23:1",
+        "23:2",
+        "23:3",
+        "24:3",
+        "25:1",
+        "25:2",
+        "25:3",
+        "250:1",
+        "250:2",
+        "250:3",
+        "25r:1",
+        "25r:3",
+        "26:1",
+        "26:3",
+        "27:1",
+        "27:3",
+        "28:1",
+        "28:2",
+        "28:3",
+        "29:1",
+        "29:2",
+        "29:3",
+        "3:3",
+        "30:1",
+        "30:2",
+        "30:3",
+        "300:1",
+        "300:2",
+        "300:3",
+        "31:3",
+        "32:3",
+        "33:1",
+        "34:3",
+        "35:1",
+        "35:2",
+        "35:3",
+        "36:1",
+        "36:2",
+        "37:1",
+        "38:2",
+        "39:2",
+        "4:3",
+        "40:1",
+        "40:2",
+        "40:3",
+        "41:3",
+        "42:1",
+        "42:2",
+        "42:3",
+        "43:2",
+        "44:1",
+        "44:2",
+        "44:3",
+        "45:1",
+        "450:1",
+        "450:2",
+        "450:3",
+        "46:1",
+        "5:3",
+        "52:1",
+        "52:2",
+        "52:3",
+        "53:1",
+        "53:2",
+        "53:3",
+        "54:1",
+        "54:2",
+        "54:3",
+        "55:1",
+        "55:2",
+        "55:3",
+        "56:1",
+        "56:2",
+        "56:3",
+        "57:1",
+        "57:2",
+        "57:3",
+        "58:2",
+        "59:2",
+        "6:3",
+        "60:1",
+        "60:2",
+        "60:3",
+        "61:1",
+        "61:2",
+        "61:3",
+        "610:1",
+        "610:2",
+        "610:3",
+        "61s:1",
+        "61s:2",
+        "61s:3",
+        "62:1",
+        "62:2",
+        "62:3",
+        "63:1",
+        "63:2",
+        "63:3",
+        "64:1",
+        "64:2",
+        "64:3",
+        "65:1",
+        "65:2",
+        "65:3",
+        "66:1",
+        "66:2",
+        "66:3",
+        "67:1",
+        "67:2",
+        "67:3",
+        "68:1",
+        "69:1",
+        "7:1",
+        "7:2",
+        "7:3",
+        "70:1",
+        "71:1",
+        "72:1",
+        "72:2",
+        "72:3",
+        "73:3",
+        "74:3",
+        "75:3",
+        "76:1",
+        "76:2",
+        "76:3",
+        "77:1",
+        "77:2",
+        "77:3",
+        "78:1",
+        "78:2",
+        "78:3",
+        "79:1",
+        "79:2",
+        "79:3",
+        "8:1",
+        "8:2",
+        "8:3",
+        "80:1",
+        "80:2",
+        "80:3",
+        "81:1",
+        "81:2",
+        "81:3",
+        "82:1",
+        "82:2",
+        "82:3",
+        "83:1",
+        "83:2",
+        "83:3",
+        "84:3",
+        "85:3",
+        "86:1",
+        "86:2",
+        "86:3",
+        "87:1",
+        "87:2",
+        "87:3",
+        "88:1",
+        "89:1",
+        "89:2",
+        "89:3",
+        "9:1",
+        "90:2",
+        "91:1",
+        "91:2",
+        "91:3",
+        "92:3",
+        "93:1",
+        "93:2",
+        "93:3",
+        "94:1",
+        "95:1",
+        "95:2",
+        "95:3",
+        "96:2",
+        "97:1",
+        "97:2",
+        "97:3",
+        "98:1",
+        "98:2",
+        "98:3",
+        "99:1",
+        "99:2",
+        "99:3",
+        "9r:1"
+      ],
+      "post_reach": [
+        "1:1",
+        "1:2",
+        "1:3",
+        "10:1",
+        "100:1",
+        "100:2",
+        "100:3",
+        "101:1",
+        "101:2",
+        "101:3",
+        "102:3",
+        "103:3",
+        "104:3",
+        "105:1",
+        "105:2",
+        "105:3",
+        "106:2",
+        "107:2",
+        "108:1",
+        "108:2",
+        "108:3",
+        "109:1",
+        "11:1",
+        "110:1",
+        "111:1",
+        "112:1",
+        "113:1",
+        "114:1",
+        "12:2",
+        "13:1",
+        "13:2",
+        "13:3",
+        "135:1",
+        "135:2",
+        "135:3",
+        "14:1",
+        "149:1",
+        "149:2",
+        "149:3",
+        "15:3",
+        "150:1",
+        "150:2",
+        "150:3",
+        "150r:1",
+        "150r:2",
+        "150r:3",
+        "151:1",
+        "151:2",
+        "151:3",
+        "152:1",
+        "152:2",
+        "152:3",
+        "16:3",
+        "160:1",
+        "160:2",
+        "160:3",
+        "160r:1",
+        "160r:2",
+        "160r:3",
+        "17:3",
+        "18:1",
+        "18:2",
+        "18:3",
+        "19:1",
+        "197:1",
+        "197:2",
+        "197:3",
+        "2:2",
+        "20:1",
+        "21:1",
+        "21:2",
+        "21:3",
+        "22:2",
+        "23:1",
+        "23:2",
+        "23:3",
+        "24:3",
+        "25:1",
+        "25:2",
+        "25:3",
+        "250:1",
+        "250:2",
+        "250:3",
+        "25r:1",
+        "25r:3",
+        "26:1",
+        "26:3",
+        "27:1",
+        "27:3",
+        "28:1",
+        "28:2",
+        "28:3",
+        "29:1",
+        "29:2",
+        "29:3",
+        "3:3",
+        "30:1",
+        "30:2",
+        "30:3",
+        "300:1",
+        "300:2",
+        "300:3",
+        "31:3",
+        "32:3",
+        "33:1",
+        "34:3",
+        "35:1",
+        "35:2",
+        "35:3",
+        "36:1",
+        "36:2",
+        "37:1",
+        "38:2",
+        "39:2",
+        "4:3",
+        "40:1",
+        "40:2",
+        "40:3",
+        "41:3",
+        "42:1",
+        "42:2",
+        "42:3",
+        "43:2",
+        "44:1",
+        "44:2",
+        "44:3",
+        "45:1",
+        "450:1",
+        "450:2",
+        "450:3",
+        "46:1",
+        "49:1",
+        "49:2",
+        "49:3",
+        "5:3",
+        "50:1",
+        "50:2",
+        "50:3",
+        "51:1",
+        "51:2",
+        "51:3",
+        "52:1",
+        "52:2",
+        "52:3",
+        "53:1",
+        "53:2",
+        "53:3",
+        "54:1",
+        "54:2",
+        "54:3",
+        "55:1",
+        "55:2",
+        "55:3",
+        "56:1",
+        "56:2",
+        "56:3",
+        "57:1",
+        "57:2",
+        "57:3",
+        "58:2",
+        "59:2",
+        "6:3",
+        "60:1",
+        "60:2",
+        "60:3",
+        "61:1",
+        "61:2",
+        "61:3",
+        "610:1",
+        "610:2",
+        "610:3",
+        "61s:1",
+        "61s:2",
+        "61s:3",
+        "62:1",
+        "62:2",
+        "62:3",
+        "63:1",
+        "63:2",
+        "63:3",
+        "64:1",
+        "64:2",
+        "64:3",
+        "65:1",
+        "65:2",
+        "65:3",
+        "66:1",
+        "66:2",
+        "66:3",
+        "67:1",
+        "67:2",
+        "67:3",
+        "68:1",
+        "69:1",
+        "7:1",
+        "7:2",
+        "7:3",
+        "70:1",
+        "71:1",
+        "72:1",
+        "72:2",
+        "72:3",
+        "73:3",
+        "74:3",
+        "75:3",
+        "76:1",
+        "76:2",
+        "76:3",
+        "77:1",
+        "77:2",
+        "77:3",
+        "78:1",
+        "78:2",
+        "78:3",
+        "79:1",
+        "79:2",
+        "79:3",
+        "8:1",
+        "8:2",
+        "8:3",
+        "80:1",
+        "80:2",
+        "80:3",
+        "81:1",
+        "81:2",
+        "81:3",
+        "82:1",
+        "82:2",
+        "82:3",
+        "83:1",
+        "83:2",
+        "83:3",
+        "84:3",
+        "85:3",
+        "86:1",
+        "86:2",
+        "86:3",
+        "87:1",
+        "87:2",
+        "87:3",
+        "88:1",
+        "89:1",
+        "89:2",
+        "89:3",
+        "9:1",
+        "90:2",
+        "91:1",
+        "91:2",
+        "91:3",
+        "92:3",
+        "93:1",
+        "93:2",
+        "93:3",
+        "94:1",
+        "95:1",
+        "95:2",
+        "95:3",
+        "96:2",
+        "97:1",
+        "97:2",
+        "97:3",
+        "98:1",
+        "98:2",
+        "98:3",
+        "99:1",
+        "99:2",
+        "99:3",
+        "9r:1"
+      ]
+    },
+    {
+      "id": "S06",
+      "name": "Sw3 faulted/unavailable",
+      "faults": [
+        "SW3"
+      ],
+      "close": [
+        "SW7"
+      ],
+      "pre": {
+        "connected": 75,
+        "kw": 2735.0,
+        "unconnected": 16,
+        "lost_kw": 755.0,
+        "cycles": 0
+      },
+      "post": {
+        "connected": 91,
+        "kw": 3490.0,
+        "unconnected": 0,
+        "lost_kw": 0,
+        "cycles": 0
+      },
+      "gain_kw": 755.0,
+      "gain_loads": 16,
+      "post_missing_loads": [],
+      "admissible": true,
+      "pre_reach": [
+        "1:1",
+        "1:2",
+        "1:3",
+        "10:1",
+        "100:1",
+        "100:2",
+        "100:3",
+        "101:1",
+        "101:2",
+        "101:3",
+        "102:3",
+        "103:3",
+        "104:3",
+        "105:1",
+        "105:2",
+        "105:3",
+        "106:2",
+        "107:2",
+        "108:1",
+        "108:2",
+        "108:3",
+        "109:1",
+        "11:1",
+        "110:1",
+        "111:1",
+        "112:1",
+        "113:1",
+        "114:1",
+        "12:2",
+        "13:1",
+        "13:2",
+        "13:3",
+        "14:1",
+        "149:1",
+        "149:2",
+        "149:3",
+        "15:3",
+        "150:1",
+        "150:2",
+        "150:3",
+        "150r:1",
+        "150r:2",
+        "150r:3",
+        "152:1",
+        "152:2",
+        "152:3",
+        "16:3",
+        "160:1",
+        "160:2",
+        "160:3",
+        "160r:1",
+        "160r:2",
+        "160r:3",
+        "17:3",
+        "18:1",
+        "18:2",
+        "18:3",
+        "19:1",
+        "197:1",
+        "197:2",
+        "197:3",
+        "2:2",
+        "20:1",
+        "21:1",
+        "21:2",
+        "21:3",
+        "22:2",
+        "23:1",
+        "23:2",
+        "23:3",
+        "24:3",
+        "25:1",
+        "25:2",
+        "25:3",
+        "250:1",
+        "250:2",
+        "250:3",
+        "25r:1",
+        "25r:3",
+        "26:1",
+        "26:3",
+        "27:1",
+        "27:3",
+        "28:1",
+        "28:2",
+        "28:3",
+        "29:1",
+        "29:2",
+        "29:3",
+        "3:3",
+        "30:1",
+        "30:2",
+        "30:3",
+        "300:1",
+        "300:2",
+        "300:3",
+        "31:3",
+        "32:3",
+        "33:1",
+        "34:3",
+        "4:3",
+        "450:1",
+        "450:2",
+        "450:3",
+        "5:3",
+        "52:1",
+        "52:2",
+        "52:3",
+        "53:1",
+        "53:2",
+        "53:3",
+        "54:1",
+        "54:2",
+        "54:3",
+        "55:1",
+        "55:2",
+        "55:3",
+        "56:1",
+        "56:2",
+        "56:3",
+        "57:1",
+        "57:2",
+        "57:3",
+        "58:2",
+        "59:2",
+        "6:3",
+        "60:1",
+        "60:2",
+        "60:3",
+        "61:1",
+        "61:2",
+        "61:3",
+        "610:1",
+        "610:2",
+        "610:3",
+        "61s:1",
+        "61s:2",
+        "61s:3",
+        "62:1",
+        "62:2",
+        "62:3",
+        "63:1",
+        "63:2",
+        "63:3",
+        "64:1",
+        "64:2",
+        "64:3",
+        "65:1",
+        "65:2",
+        "65:3",
+        "66:1",
+        "66:2",
+        "66:3",
+        "67:1",
+        "67:2",
+        "67:3",
+        "68:1",
+        "69:1",
+        "7:1",
+        "7:2",
+        "7:3",
+        "70:1",
+        "71:1",
+        "72:1",
+        "72:2",
+        "72:3",
+        "73:3",
+        "74:3",
+        "75:3",
+        "76:1",
+        "76:2",
+        "76:3",
+        "77:1",
+        "77:2",
+        "77:3",
+        "78:1",
+        "78:2",
+        "78:3",
+        "79:1",
+        "79:2",
+        "79:3",
+        "8:1",
+        "8:2",
+        "8:3",
+        "80:1",
+        "80:2",
+        "80:3",
+        "81:1",
+        "81:2",
+        "81:3",
+        "82:1",
+        "82:2",
+        "82:3",
+        "83:1",
+        "83:2",
+        "83:3",
+        "84:3",
+        "85:3",
+        "86:1",
+        "86:2",
+        "86:3",
+        "87:1",
+        "87:2",
+        "87:3",
+        "88:1",
+        "89:1",
+        "89:2",
+        "89:3",
+        "9:1",
+        "90:2",
+        "91:1",
+        "91:2",
+        "91:3",
+        "92:3",
+        "93:1",
+        "93:2",
+        "93:3",
+        "94:1",
+        "95:1",
+        "95:2",
+        "95:3",
+        "96:2",
+        "97:1",
+        "97:2",
+        "97:3",
+        "98:1",
+        "98:2",
+        "98:3",
+        "99:1",
+        "99:2",
+        "99:3",
+        "9r:1"
+      ],
+      "post_reach": [
+        "1:1",
+        "1:2",
+        "1:3",
+        "10:1",
+        "100:1",
+        "100:2",
+        "100:3",
+        "101:1",
+        "101:2",
+        "101:3",
+        "102:3",
+        "103:3",
+        "104:3",
+        "105:1",
+        "105:2",
+        "105:3",
+        "106:2",
+        "107:2",
+        "108:1",
+        "108:2",
+        "108:3",
+        "109:1",
+        "11:1",
+        "110:1",
+        "111:1",
+        "112:1",
+        "113:1",
+        "114:1",
+        "12:2",
+        "13:1",
+        "13:2",
+        "13:3",
+        "135:1",
+        "135:2",
+        "135:3",
+        "14:1",
+        "149:1",
+        "149:2",
+        "149:3",
+        "15:3",
+        "150:1",
+        "150:2",
+        "150:3",
+        "150r:1",
+        "150r:2",
+        "150r:3",
+        "151:1",
+        "151:2",
+        "151:3",
+        "152:1",
+        "152:2",
+        "152:3",
+        "16:3",
+        "160:1",
+        "160:2",
+        "160:3",
+        "160r:1",
+        "160r:2",
+        "160r:3",
+        "17:3",
+        "18:1",
+        "18:2",
+        "18:3",
+        "19:1",
+        "197:1",
+        "197:2",
+        "197:3",
+        "2:2",
+        "20:1",
+        "21:1",
+        "21:2",
+        "21:3",
+        "22:2",
+        "23:1",
+        "23:2",
+        "23:3",
+        "24:3",
+        "25:1",
+        "25:2",
+        "25:3",
+        "250:1",
+        "250:2",
+        "250:3",
+        "25r:1",
+        "25r:3",
+        "26:1",
+        "26:3",
+        "27:1",
+        "27:3",
+        "28:1",
+        "28:2",
+        "28:3",
+        "29:1",
+        "29:2",
+        "29:3",
+        "3:3",
+        "30:1",
+        "30:2",
+        "30:3",
+        "300:1",
+        "300:2",
+        "300:3",
+        "31:3",
+        "32:3",
+        "33:1",
+        "34:3",
+        "35:1",
+        "35:2",
+        "35:3",
+        "36:1",
+        "36:2",
+        "37:1",
+        "38:2",
+        "39:2",
+        "4:3",
+        "40:1",
+        "40:2",
+        "40:3",
+        "41:3",
+        "42:1",
+        "42:2",
+        "42:3",
+        "43:2",
+        "44:1",
+        "44:2",
+        "44:3",
+        "45:1",
+        "450:1",
+        "450:2",
+        "450:3",
+        "46:1",
+        "47:1",
+        "47:2",
+        "47:3",
+        "48:1",
+        "48:2",
+        "48:3",
+        "49:1",
+        "49:2",
+        "49:3",
+        "5:3",
+        "50:1",
+        "50:2",
+        "50:3",
+        "51:1",
+        "51:2",
+        "51:3",
+        "52:1",
+        "52:2",
+        "52:3",
+        "53:1",
+        "53:2",
+        "53:3",
+        "54:1",
+        "54:2",
+        "54:3",
+        "55:1",
+        "55:2",
+        "55:3",
+        "56:1",
+        "56:2",
+        "56:3",
+        "57:1",
+        "57:2",
+        "57:3",
+        "58:2",
+        "59:2",
+        "6:3",
+        "60:1",
+        "60:2",
+        "60:3",
+        "61:1",
+        "61:2",
+        "61:3",
+        "610:1",
+        "610:2",
+        "610:3",
+        "61s:1",
+        "61s:2",
+        "61s:3",
+        "62:1",
+        "62:2",
+        "62:3",
+        "63:1",
+        "63:2",
+        "63:3",
+        "64:1",
+        "64:2",
+        "64:3",
+        "65:1",
+        "65:2",
+        "65:3",
+        "66:1",
+        "66:2",
+        "66:3",
+        "67:1",
+        "67:2",
+        "67:3",
+        "68:1",
+        "69:1",
+        "7:1",
+        "7:2",
+        "7:3",
+        "70:1",
+        "71:1",
+        "72:1",
+        "72:2",
+        "72:3",
+        "73:3",
+        "74:3",
+        "75:3",
+        "76:1",
+        "76:2",
+        "76:3",
+        "77:1",
+        "77:2",
+        "77:3",
+        "78:1",
+        "78:2",
+        "78:3",
+        "79:1",
+        "79:2",
+        "79:3",
+        "8:1",
+        "8:2",
+        "8:3",
+        "80:1",
+        "80:2",
+        "80:3",
+        "81:1",
+        "81:2",
+        "81:3",
+        "82:1",
+        "82:2",
+        "82:3",
+        "83:1",
+        "83:2",
+        "83:3",
+        "84:3",
+        "85:3",
+        "86:1",
+        "86:2",
+        "86:3",
+        "87:1",
+        "87:2",
+        "87:3",
+        "88:1",
+        "89:1",
+        "89:2",
+        "89:3",
+        "9:1",
+        "90:2",
+        "91:1",
+        "91:2",
+        "91:3",
+        "92:3",
+        "93:1",
+        "93:2",
+        "93:3",
+        "94:1",
+        "95:1",
+        "95:2",
+        "95:3",
+        "96:2",
+        "97:1",
+        "97:2",
+        "97:3",
+        "98:1",
+        "98:2",
+        "98:3",
+        "99:1",
+        "99:2",
+        "99:3",
+        "9r:1"
+      ]
+    }
+  ],
+  "cases_info": [
+    {
+      "id": "S00",
+      "name": "Intact radial reference",
+      "faults": [],
+      "close": [],
+      "expected": "all-connected reference"
+    },
+    {
+      "id": "S01",
+      "name": "Single fault main lateral",
+      "faults": [
+        "L45"
+      ],
+      "close": [
+        "SW7"
+      ],
+      "expected": "three-phase alternate Sw7 path"
+    },
+    {
+      "id": "S02",
+      "name": "Single fault phase-A leaf",
+      "faults": [
+        "L93"
+      ],
+      "close": [
+        "SW8"
+      ],
+      "expected": "single-phase Sw8 path"
+    },
+    {
+      "id": "S03",
+      "name": "Two faults, two ties",
+      "faults": [
+        "L45",
+        "L93"
+      ],
+      "close": [
+        "SW7",
+        "SW8"
+      ],
+      "expected": "two distinct loop restorations"
+    },
+    {
+      "id": "S04",
+      "name": "Two faults with phase limitation",
+      "faults": [
+        "L45",
+        "L77"
+      ],
+      "close": [
+        "SW7",
+        "SW8"
+      ],
+      "expected": "phase-aware restoration may remain partial"
+    },
+    {
+      "id": "S05",
+      "name": "Two faults that ties cannot fully serve",
+      "faults": [
+        "L45",
+        "L48"
+      ],
+      "close": [
+        "SW7",
+        "SW8"
+      ],
+      "expected": "intentional insufficient/misaligned switching"
+    },
+    {
+      "id": "S06",
+      "name": "Sw3 faulted/unavailable",
+      "faults": [
+        "SW3"
+      ],
+      "close": [
+        "SW7"
+      ],
+      "expected": "faulted switch unavailable even with requested close"
+    }
+  ],
+  "caveats": [
+    "STATIC graph and phase-terminal connectivity, not AC power flow",
+    "Coordinates are automatically calculated schematic layout, not physical distances",
+    "Faults are externally isolated preconditions, not generated short-circuit events",
+    "Sw7 and Sw8 are P2-specific working-feeder tie connections"
+  ]
+};</script>
+<script id="p2-engine">/* P2 IEEE-123 static phase-terminal topology engine. NO AC POWER FLOW, no controller. */
+(function(root){
+'use strict';
+const SWITCHES=['SW1','SW2','SW3','SW4','SW5','SW6','SW7','SW8'];
+const DEFAULT_CLOSED=new Set(SWITCHES.slice(0,6));
+const phaseKey=(bus,p)=>bus+':'+p;
+function normalized(extra){
+ if(!extra || !extra.enabled)return null;
+ const pa=Array.from(new Set(extra.phases || [])).sort();
+ return {id:'VIRTUAL_TIE',a:String(extra.a),b:String(extra.b),raw_a:String(extra.a)+'.'+pa.join('.'),raw_b:String(extra.b)+'.'+pa.join('.'),pa, pb:pa.slice(),phases:pa.length,kind:'virtual',virtual:true};
+}
+function calculate(data,faultsLike,closedLike,extra=null){
+ const faults=new Set(faultsLike||[]),closed=new Set(closedLike||[]),virtual=normalized(extra);
+ const edges=virtual?data.edges.concat([virtual]):data.edges;
+ const graph=new Map(), parent=new Map(), topoEdges=new Set();
+ const add=(a,b)=>{if(!graph.has(a))graph.set(a,[]);if(!graph.has(b))graph.set(b,[]);graph.get(a).push(b);graph.get(b).push(a);};
+ const rootOf=x=>{if(!parent.has(x))parent.set(x,x);if(parent.get(x)!==x)parent.set(x,rootOf(parent.get(x)));return parent.get(x)};
+ const active=[],busPairs=[],offline=[];let cycles=0;
+ for(const e of edges){
+   const isSwitch=e.kind==='switch'||e.kind==='virtual';
+   const isClosed=e.kind==='virtual'?closed.has('VIRTUAL_TIE'):closed.has(e.id);
+   if(faults.has(e.id)||(isSwitch&&!isClosed)){offline.push(e.id);continue;}
+   active.push(e.id);
+   for(let i=0;i<e.pa.length;i++)add(phaseKey(e.a,e.pa[i]),phaseKey(e.b,e.pb[i]));
+   const pair=[e.a,e.b].sort().join('::');
+   // Radiality is checked on distinct bus-level electrical connections; regulator phase parallels collapse.
+   if(!topoEdges.has(pair)){
+     topoEdges.add(pair);busPairs.push(pair);
+     const ra=rootOf(e.a),rb=rootOf(e.b);
+     if(ra===rb)cycles++; else parent.set(ra,rb);
+   }
+ }
+ let visited=new Set(),queue=[];
+ for(let p=1;p<=3;p++){
+   const s=phaseKey(data.source,p);
+   if(graph.has(s)){visited.add(s);queue.push(s)}
+ }
+ for(let i=0;i<queue.length;i++)for(const n of graph.get(queue[i])||[]){if(!visited.has(n)){visited.add(n);queue.push(n)}}
+ const served=[],missing=[],totalLoads=data.nodes.reduce((a,n)=>a+n.loads.length,0);
+ for(const n of data.nodes)for(const load of n.loads){
+   const target=load.need.every(p=>visited.has(phaseKey(load.bus,p)));
+   (target?served:missing).push(load);
+ }
+ const kw=served.reduce((sum,l)=>sum+l.kw,0);
+ const totalKW=served.concat(missing).reduce((sum,l)=>sum+l.kw,0);
+ const rounded=x=>Math.round((x+Number.EPSILON)*100)/100;
+ return {served:served.length,missing:missing.length,totalLoads,kw:rounded(kw),totalKW:rounded(totalKW),disconnectedKW:rounded(totalKW-kw),cycles,radial:cycles===0,
+   servedLoads:served.map(x=>x.id), missingLoads:missing.map(x=>x.id),
+   reached:Array.from(visited), active,offline};
+}
+function switchAssignments(data,faults,extra){
+ const ids=SWITCHES.concat(extra?.enabled?['VIRTUAL_TIE']:[]);
+ const all=[];for(let m=0;m<1<<ids.length;m++){
+  const closed=[];
+  for(let i=0;i<ids.length;i++)if(m&(1<<i))closed.push(ids[i]);
+  if(closed.some(id=>new Set(faults).has(id)))continue;
+  const result=calculate(data,faults,closed,extra);
+  if(result.radial){all.push({closed,result});}
+ }
+ return all;
+}
+function rank(data,faults,currentlyClosed,extra=null,limit=12){
+ const current=new Set(currentlyClosed||[]),faultSet=new Set(faults||[]);
+ const all=switchAssignments(data,faults,extra);
+ const enriched=all.map(({closed,result})=>{
+   const s=new Set(closed),moves=SWITCHES.concat(extra?.enabled?['VIRTUAL_TIE']:[]).filter(id=>!faultSet.has(id)&&current.has(id)!==s.has(id)).length;
+   return {closed,result,moves};
+ });
+ enriched.sort((a,b)=>b.result.kw-a.result.kw || a.moves-b.moves || b.result.served-a.result.served || a.closed.join(',').localeCompare(b.closed.join(',')));
+ return {feasible:all.length, candidates:enriched.slice(0,limit), best:enriched.length?enriched[0]:null};
+}
+function busPhaseInventory(data){
+ const map=new Map();
+ for(const n of data.nodes)map.set(n.id,new Set());
+ for(const e of data.edges){for(const p of e.pa)map.get(e.a).add(p);for(const p of e.pb)map.get(e.b).add(p)}
+ return map;
+}
+const API={SWITCHES,DEFAULT_CLOSED:Array.from(DEFAULT_CLOSED),calculate,rank,busPhaseInventory};
+if(typeof module!=='undefined'&&module.exports)module.exports=API;
+root.P2Engine=API;
+})(typeof globalThis!=='undefined'?globalThis:this);
+</script>
+<script id="p2-app">(function(){'use strict';
+const D=P2_DATA,E=P2Engine,S=E.SWITCHES,byId=new Map(D.edges.map(e=>[e.id,e])),byBus=new Map(D.nodes.map(n=>[n.id,n])),busPhases=E.busPhaseInventory(D),$=id=>document.getElementById(id),ns='http://www.w3.org/2000/svg';
+const state={faults:new Set(),closed:new Set(E.DEFAULT_CLOSED),virtualOn:false,virtual:{a:'151',b:'300',phases:[1,2,3]},selected:null,scale:1,tx:0,ty:0};
+const sortedBus=D.nodes.map(n=>n.id).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+function htmlSafe(x){return String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function num(n){return Number(n).toLocaleString(undefined,{maximumFractionDigits:1})}
+function option(sel,v,label){const o=document.createElement('option');o.value=v;o.textContent=label;sel.appendChild(o)}
+function infoVirtual(){return state.virtualOn&&state.virtual.phases.length>0&&state.virtual.a!==state.virtual.b?{enabled:true,...state.virtual}:null}
+function currentResult(){return E.calculate(D,state.faults,state.closed,infoVirtual())}
+function originResult(){return E.calculate(D,state.faults,E.DEFAULT_CLOSED,null)}
+function validCurrent(){return !Array.from(state.faults).some(id=>state.closed.has(id))}
+function scriptScenario(id){let s=D.scenarios.find(x=>x.id===id);if(!s)return;state.faults=new Set(s.faults);state.closed=new Set(E.DEFAULT_CLOSED.concat(s.close));state.virtualOn=false;state.selected=null;refresh();document.querySelectorAll('.scenarioitem').forEach(b=>b.classList.toggle('active',b.dataset.id===id));}
+function markCustom(){document.querySelectorAll('.scenarioitem').forEach(b=>b.classList.remove('active'))}
+function refreshFaultSelect(){let q=$('faultFilter').value.toLowerCase().trim(),f=$('faultSelect');let old=f.value;f.replaceChildren();D.edges.filter(e=>e.id.toLowerCase().includes(q)||e.a.toLowerCase().includes(q)||e.b.toLowerCase().includes(q)||e.raw_a.toLowerCase().includes(q)||e.raw_b.toLowerCase().includes(q)).sort((a,b)=>a.id.localeCompare(b.id,undefined,{numeric:true})).forEach(e=>option(f,e.id,`${e.id} · ${e.raw_a} ↔ ${e.raw_b}`));if(Array.from(f.options).some(o=>o.value===old))f.value=old;}
+function addFault(id){if(!byId.has(id))return;state.faults.add(id);state.closed.delete(id);state.selected={id,kind:'edge'};markCustom();refresh()}
+function clearFault(id){state.faults.delete(id);markCustom();refresh()}
+function setSwitch(id,isClosed){if(state.faults.has(id)){state.closed.delete(id);return}isClosed?state.closed.add(id):state.closed.delete(id);markCustom();refresh()}
+function updateVirtualSelectors(){const a=state.virtual.a,b=state.virtual.b;
+ const shared=Array.from(busPhases.get(a)||[]).filter(p=>(busPhases.get(b)||new Set()).has(p));
+ const pSel=$('virtualPhases');pSel.replaceChildren();
+ const nonempty=[];for(let mask=1;mask<8;mask++){
+   let combo=[1,2,3].filter((p,i)=>mask&(1<<i));if(combo.every(p=>shared.includes(p)))nonempty.push(combo);
+ }
+ for(let v of nonempty)option(pSel,v.join(','),v.map(p=>['','A','B','C'][p]).join(''));
+ let desired=state.virtual.phases.join(',');if(nonempty.some(v=>v.join(',')===desired))pSel.value=desired;else if(nonempty.length){let biggest=nonempty.slice().sort((x,y)=>y.length-x.length)[0];pSel.value=biggest.join(',');state.virtual.phases=biggest}else state.virtual.phases=[];
+ let valid=a!==b&&shared.length>0;
+ $('virtualWarning').textContent=!valid?'Invalid connection: choose two different buses that share at least one phase.':`Shared phase terminals: ${shared.map(p=>['','A','B','C'][p]).join(', ')}. Electrical feasibility not checked.`;
+ $('virtualClosed').disabled=!valid;$('virtualEnable').disabled=!valid;if(!valid){state.closed.delete('VIRTUAL_TIE');state.virtualOn=false;$('virtualEnable').checked=false}
+}
+function renderControls(){let chips=$('faultChips');chips.replaceChildren();for(const id of [...state.faults].sort()){let div=document.createElement('div');div.className='chip';let txt=document.createElement('span');txt.textContent=id;let close=document.createElement('button');close.textContent='×';close.title='Remove '+id;close.onclick=()=>clearFault(id);div.append(txt,close);chips.appendChild(div)}if(!state.faults.size)chips.innerHTML='<span class="muted">No faulted elements</span>';
+ let switches=$('switches');switches.replaceChildren();for(let id of S){let e=byId.get(id),label=document.createElement('label');label.className='switchrow'+(state.faults.has(id)?' faulted':'');let left=document.createElement('div');left.innerHTML=`<strong>${id.replace('SW','Sw')}</strong><div class="switchdetails">${htmlSafe(e.a)} ↔ ${htmlSafe(e.b)} · ${e.pa.map(p=>['','A','B','C'][p]).join('')}</div>`;let right=document.createElement('div');right.className='hstack';let status=document.createElement('span');status.className='pill';status.textContent=state.faults.has(id)?'FAULT':state.closed.has(id)?'CLOSED':'OPEN';let check=document.createElement('input');check.type='checkbox';check.checked=state.closed.has(id);check.disabled=state.faults.has(id);check.setAttribute('aria-label','Command '+id+' closed');check.onchange=()=>setSwitch(id,check.checked);right.append(status,check);label.append(left,right);switches.appendChild(label)}
+ $('virtualEnable').checked=state.virtualOn;$('virtualFields').style.display=state.virtualOn?'block':'none';$('virtualClosed').checked=state.closed.has('VIRTUAL_TIE');$('virtualA').value=state.virtual.a;$('virtualB').value=state.virtual.b;updateVirtualSelectors();}
+function renderMetrics(r,original){$('mKW').textContent=num(r.kw)+' kW';$('mLost').textContent=num(r.disconnectedKW)+' kW not source-connected';$('mLoads').textContent=r.served+' / '+r.totalLoads;$('mGain').textContent=(r.kw-original.kw>=0?'+':'')+num(r.kw-original.kw)+' kW';$('mTopo').textContent=r.radial?'Radial':'NONRADIAL';$('mCycles').textContent=r.cycles+' independent bus-level cycle(s)';$('mTopoBox').classList.toggle('bad',!r.radial);$('mTopoBox').classList.toggle('good',r.radial);
+ const valid=validCurrent();$('stateStatus').innerHTML=r.radial&&valid?'<div class="notice ok">STATICALLY ADMISSIBLE (topology only)</div>':'<div class="notice bad">REJECT: '+(!valid?'faulted switch commanded closed':'nonradial switching')+'</div>';
+ $('statusExplanation').textContent=`${r.served} load objects have every required phase source-connected. ${num(r.disconnectedKW)} nominal kW disconnected. ${state.faults.size} branch(es) isolated; ${[...state.closed].filter(x=>!state.faults.has(x)).length} switches commanded closed.`;
+ const missing=$('missingLoads');missing.textContent=r.missingLoads.length?r.missingLoads.join(', '):'None (all 91 loads have phase-terminal paths to the source).';
+}
+function renderCandidates(baseRank,virtualRank,original,r){$('countFeasible').textContent=virtualRank.feasible+' radial';let el=$('candidateList');el.replaceChildren();
+ for(let [i,c] of virtualRank.candidates.entries()){
+  let d=document.createElement('div');d.className='candidate';let h=document.createElement('h4');h.innerHTML=`<span>#${i+1} · ${num(c.result.kw)} kW</span><span>${c.moves} changes</span>`;let p=document.createElement('p');p.textContent=`${c.result.served}/91 connected · ${c.closed.filter(id=>id==='SW7'||id==='SW8'||id==='VIRTUAL_TIE').join(' + ')||'no ties closed'} · ${c.closed.length} switches closed`;let b=document.createElement('button');b.textContent='Apply this switching state';b.className='secondary';b.onclick=()=>{state.closed=new Set(c.closed);markCustom();refresh()};d.append(h,p,b);el.appendChild(d);
+ }
+ if(!virtualRank.candidates.length)el.textContent='No radial switching state exists for this fault set.';
+ const best=baseRank.best,proposal=virtualRank.best,virtual=infoVirtual();
+ let s=`Current: ${num(r.kw)} kW; isolated default: ${num(original.kw)} kW. Best with existing eight switches: ${best?num(best.result.kw)+' kW':'no feasible topology'}.`;
+ if(virtual){const delta=best&&proposal?proposal.result.kw-best.result.kw:0;s+=` Proposed extra tie: ${proposal?num(proposal.result.kw)+' kW':'no radial solution'} (${delta>=0?'+':''}${num(delta)} kW vs existing).`;
+ if(delta<=0)s+=' No demonstrated connectivity gain from this proposed tie in this fault scenario.';}
+ $('comparison').textContent=s;
+}
+function svgEl(tag,attrs={},text){const el=document.createElementNS(ns,tag);for(let [k,v] of Object.entries(attrs))el.setAttribute(k,String(v));if(text!==undefined)el.textContent=text;return el}
+const pt=n=>[n.x,n.y];function virtualEdge(){let v=infoVirtual();return v?{id:'VIRTUAL_TIE',kind:'virtual',a:v.a,b:v.b,pa:v.phases,pb:v.phases,raw_a:v.a,raw_b:v.b}:null}
+function viewTransform(){const g=$('viewport');g.setAttribute('transform',`translate(${state.tx} ${state.ty}) scale(${state.scale})`)}
+function focus(id){let e=byId.get(id);if(id==='VIRTUAL_TIE')e=virtualEdge();let n=byBus.get(id);
+ if(e){const a=byBus.get(e.a),b=byBus.get(e.b);if(!a||!b)return;state.scale=2.3;state.tx=800-(a.x+b.x)*state.scale/2;state.ty=580-(a.y+b.y)*state.scale/2}
+ else if(n){state.scale=3;state.tx=800-n.x*state.scale;state.ty=580-n.y*state.scale}
+ viewTransform();}
+function setSelection(id,kind,locate=false){state.selected={id,kind};renderInspector();if(locate)focus(id)}
+function renderInspector(){const t=$('inspectorTitle'),c=$('inspector');c.replaceChildren();if(!state.selected){t.textContent='Click an edge or bus';c.textContent='Pick an equipment element in the topology or type its ID above.';return}
+ let {id,kind}=state.selected,e=kind==='edge'?(byId.get(id)||(id==='VIRTUAL_TIE'?virtualEdge():null)):null,n=kind==='bus'?byBus.get(id):null;
+ if(e){t.textContent=e.id+' · '+(e.kind==='switch'?'Controllable switch':e.kind==='virtual'?'Hypothetical tie':e.kind==='transformer'?'Transformer':'Line');
+  const rows=[['From',e.raw_a],['To',e.raw_b],['Phase mapping',e.pa.map((p,i)=>'ABC'[p-1]+'→'+'ABC'[e.pb[i]-1]).join(', ')],['State',state.faults.has(id)?'FAULTED':e.kind==='switch'||e.kind==='virtual'?state.closed.has(id)?'CLOSED':'OPEN':'Normally connected']];
+  const dl=document.createElement('dl');dl.className='detailkv';for(let [k,v] of rows){let dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=k;dd.textContent=v;dl.append(dt,dd)}c.appendChild(dl);
+  let buttons=document.createElement('div');buttons.className='hstack';buttons.style.marginTop='13px';let b=document.createElement('button');b.className='small';b.textContent=state.faults.has(id)?'Remove outage':'Isolate / fault';b.disabled=id==='VIRTUAL_TIE';b.onclick=()=>state.faults.has(id)?clearFault(id):addFault(id);buttons.appendChild(b);
+  if(e.kind==='switch'||e.kind==='virtual'){let a=document.createElement('button');a.className='small';a.textContent=state.closed.has(id)?'Command open':'Command closed';a.disabled=state.faults.has(id);a.onclick=()=>setSwitch(id,!state.closed.has(id));buttons.appendChild(a)}c.appendChild(buttons);
+ }else if(n){t.textContent='Bus '+id;let connected=state._lastReaches||new Set();const phase=[1,2,3].filter(p=>connected.has(id+':'+p)).map(p=>'ABC'[p-1]);let p=document.createElement('p');p.textContent=`Connected source phases: ${phase.join(', ')||'none'}. ${n.loads.length} load objects attached.`;c.appendChild(p);let loads=document.createElement('p');loads.textContent=n.loads.length?n.loads.map(l=>l.id+' ('+l.kw+' kW)').join('; '):'No directly attached loads';c.appendChild(loads)}else{t.textContent=id;c.textContent='Element not found in candidate topology.'}
+}
+function renderMap(r,original){const reach=new Set(r.reached),pre=new Set(original.reached),liveEdge=e=>e.pa.some((p,i)=>reach.has(e.a+':'+p)&&reach.has(e.b+':'+e.pb[i]));const origEdge=e=>e.pa.some((p,i)=>pre.has(e.a+':'+p)&&pre.has(e.b+':'+e.pb[i]));
+ const g=$('viewport');g.replaceChildren();const edges=D.edges.slice();if(virtualEdge())edges.push(virtualEdge());
+ const layers=[svgEl('g'),svgEl('g'),svgEl('g')];g.append(...layers);
+ for(const e of edges){let a=byBus.get(e.a),b=byBus.get(e.b);if(!a||!b)continue;const fault=state.faults.has(e.id),sw=e.kind==='switch'||e.kind==='virtual',closed=state.closed.has(e.id),active=!fault&&(!sw||closed),now=active&&liveEdge(e),before=origEdge(e);
+  let stroke='#98a9ba',width=1.9,dash='';if(!now){stroke='#d5dbe2';width=2}if(now&&!before){stroke='#15956c';width=3.3}if(sw){stroke=e.kind==='virtual'?'#7c4db3':e.id==='SW7'||e.id==='SW8'?'#087e9a':'#d98a20';width=3.3;dash=!closed?'9 8':''}if(fault){stroke='#c43b42';width=4.5;dash='6 6'}
+  const line=svgEl('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke,'stroke-width':width,'stroke-dasharray':dash,class:'link'});
+  layers[0].append(line);const hit=svgEl('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,class:'clickline'});hit.append(svgEl('title',{},e.id+' '+e.raw_a+' ↔ '+e.raw_b));hit.addEventListener('click',()=>setSelection(e.id,'edge'));layers[0].append(hit);
+  if(sw||fault){const x=(a.x+b.x)/2,y=(a.y+b.y)/2,color=fault?'#c43b42':e.kind==='virtual'?'#7c4db3':e.id==='SW7'||e.id==='SW8'?'#087e9a':'#d98a20';const label=e.kind==='virtual'?'NEW?':e.id.replace('SW','Sw');let c=svgEl('circle',{cx:x,cy:y,r:8.5,fill:color,stroke:'#fff','stroke-width':2,class:'edgeBadge'});c.onclick=()=>setSelection(e.id,'edge');layers[2].append(c);let t=svgEl('text',{x:x+11,y:y-9,class:'svglabel','font-size':16,'font-weight':800,fill:color},fault?'× '+label:label);t.onclick=()=>setSelection(e.id,'edge');layers[2].append(t)}
+ }
+ for(const n of D.nodes){let live=[1,2,3].some(p=>reach.has(n.id+':'+p));let circ=svgEl('circle',{cx:n.x,cy:n.y,r:n.id===D.source?9:n.loads.length?4.1:3.1,fill:n.id===D.source?'#0b8466':live?'#8196a7':'#d3dae4',stroke:'#fff','stroke-width':n.id===D.source?2:0.8,class:'nodedot'});circ.onclick=()=>setSelection(n.id,'bus');circ.append(svgEl('title',{},'Bus '+n.id));layers[1].append(circ);if(n.id===D.source){layers[2].append(svgEl('text',{x:n.x+13,y:n.y-12,'font-size':20,fill:'#087557',class:'svglabel','font-weight':'800'},'SOURCE 150'))}}
+ const labels=new Set();for(let e of edges)if(e.kind==='switch'||e.kind==='virtual'||state.faults.has(e.id)){labels.add(e.a);labels.add(e.b)}
+ for(const id of labels){if(id===D.source)continue;const n=byBus.get(id);if(n){let t=svgEl('text',{x:n.x,y:n.y+20,'text-anchor':'middle','font-size':12,fill:'#65778c',class:'svglabel'},id);t.onclick=()=>setSelection(id,'bus');layers[2].append(t)}}
+ viewTransform();$('canvasTitle').textContent=state.faults.size?`${state.faults.size} isolated element(s) · ${r.served} loads connected`:'Intact IEEE-123 topology';$('canvasSub').textContent=`Click any of the ${D.edges.length} physical branches; fault them or operate one of 8 switches.`;
+}
+function refresh(){renderControls();const r=currentResult(),orig=originResult();state._lastReaches=new Set(r.reached);renderMetrics(r,orig);renderMap(r,orig);
+ const base=E.rank(D,state.faults,state.closed,null);const ranked=E.rank(D,state.faults,state.closed,infoVirtual());renderCandidates(base,ranked,orig,r);renderInspector();}
+function init(){for(const s of D.scenarios){let b=document.createElement('button');b.className='scenarioitem';b.dataset.id=s.id;let name=document.createElement('strong');name.textContent=s.id+' · '+s.name;let txt=document.createElement('span');txt.textContent='Faults: '+(s.faults.join(', ')||'none')+' · requested ties: '+(s.close.join(', ')||'none');b.append(name,txt);b.onclick=()=>scriptScenario(s.id);$('scenarios').appendChild(b)}
+ for(const bus of sortedBus){option($('virtualA'),bus,bus);option($('virtualB'),bus,bus);option($('components'),bus,bus)}for(const e of D.edges)option($('components'),e.id,e.id);
+ $('faultFilter').oninput=refreshFaultSelect;refreshFaultSelect();$('addFault').onclick=()=>addFault($('faultSelect').value);$('clearFaults').onclick=()=>{state.faults.clear();markCustom();refresh()};$('resetAll').onclick=()=>{state.faults.clear();state.closed=new Set(E.DEFAULT_CLOSED);state.virtualOn=false;state.selected=null;markCustom();refresh()};$('defaultSwitches').onclick=()=>{state.closed=new Set(E.DEFAULT_CLOSED);markCustom();refresh()};
+ $('virtualEnable').onchange=()=>{state.virtualOn=$('virtualEnable').checked;markCustom();refresh()};$('virtualA').onchange=()=>{state.virtual.a=$('virtualA').value;updateVirtualSelectors();markCustom();refresh()};$('virtualB').onchange=()=>{state.virtual.b=$('virtualB').value;updateVirtualSelectors();markCustom();refresh()};$('virtualPhases').onchange=()=>{state.virtual.phases=$('virtualPhases').value.split(',').map(Number);markCustom();refresh()};$('virtualClosed').onchange=()=>{if($('virtualClosed').checked)state.closed.add('VIRTUAL_TIE');else state.closed.delete('VIRTUAL_TIE');markCustom();refresh()};
+ $('lookupButton').onclick=()=>{let id=$('lookupInput').value.trim(),e=byId.get(id.toUpperCase())||byId.get(id),n=byBus.get(id);if(e)setSelection(e.id,'edge',true);else if(n)setSelection(n.id,'bus',true);else if(id.toUpperCase()==='VIRTUAL_TIE'&&infoVirtual())setSelection('VIRTUAL_TIE','edge',true);else alert('No such edge or bus in this P2 candidate.')};$('lookupInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('lookupButton').click()});
+ for(let id of ['zoomFit','fitMap'])$(id).onclick=()=>{state.scale=1;state.tx=0;state.ty=0;viewTransform()};$('zoomPlus').onclick=()=>{state.scale=Math.min(9,state.scale*1.23);viewTransform()};$('zoomMinus').onclick=()=>{state.scale=Math.max(.45,state.scale/1.23);viewTransform()};
+ const map=$('map');let drag=null;map.addEventListener('wheel',e=>{e.preventDefault();state.scale=Math.max(.45,Math.min(9,state.scale*(e.deltaY<0?1.15:1/1.15)));viewTransform()},{passive:false});map.addEventListener('pointerdown',e=>{if(e.button!==0)return;drag={x:e.clientX,y:e.clientY,tx:state.tx,ty:state.ty};map.setPointerCapture(e.pointerId);map.classList.add('dragging')});map.addEventListener('pointermove',e=>{if(!drag)return;const rect=map.getBoundingClientRect(),sx=1600/rect.width,sy=1160/rect.height;state.tx=drag.tx+(e.clientX-drag.x)*sx;state.ty=drag.ty+(e.clientY-drag.y)*sy;viewTransform()});map.addEventListener('pointerup',()=>{drag=null;map.classList.remove('dragging')});
+ $('exportReport').onclick=()=>{let original=originResult(),current=currentResult(),existing=E.rank(D,state.faults,state.closed,null),proposed=E.rank(D,state.faults,state.closed,infoVirtual());let report={schema:'OpenDSSSim.P2.TopologyLab.v02',snapshot_feeder:'ieee123_p2_restoration/V01',scope:'static phase-terminal graph only; not power-flow qualification',faulted_edges:[...state.faults].sort(),requested_closed_switches:[...state.closed].sort(),virtual_tie:infoVirtual(),baseline_after_isolation:{served:original.served,kw:original.kw},current:{served:current.served,kw:current.kw,cycles:current.cycles,missing:current.missingLoads},existing_best:existing.best?{closed:existing.best.closed,kw:existing.best.result.kw,loads:existing.best.result.served}:null,proposed_best:proposed.best?{closed:proposed.best.closed,kw:proposed.best.result.kw,loads:proposed.best.result.served}:null};let blob=new Blob([JSON.stringify(report,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='P2_TopologyLab_Study.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+ scriptScenario('S00');}
+init();
+})();
+</script>
+</body></html>

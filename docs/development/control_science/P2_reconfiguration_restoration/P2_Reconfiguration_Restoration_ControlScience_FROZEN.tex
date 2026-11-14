@@ -1,0 +1,1105 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.85in]{geometry}
+\usepackage{amsmath,amssymb,mathtools,booktabs,longtable,array,enumitem,hyperref,bm,microtype}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\argmax}{\operatorname*{arg\,max}}
+\newcommand{\lexmin}{\operatorname*{lex\,min}}
+\newcommand{\lexmax}{\operatorname*{lex\,max}}
+\title{\textbf{OpenDSSSim PESGM--2027}\\P2 Reconfiguration/Restoration Control Science\\\textbf{FROZEN Mathematical and Software Contract}}
+\author{Controller-science track}
+\date{Freeze version v01R1 --- 27 October 2026}
+\begin{document}
+\maketitle
+\begin{center}
+\begin{minipage}{0.94\linewidth}
+\textbf{Status: FROZEN FOR IMPLEMENTATION.}
+This document consolidates and supersedes the P2 Blocks 1--11 ratification discussion.
+It freezes the common P2 physical problem, graph/reference controller, LinDistFlow
+MILP MPC controller, masked-DQN RL controller, fair-information contract,
+controller-side orchestration boundary, and reproducibility contract. It is a
+science/design contract, not controller implementation code.
+\end{minipage}
+\end{center}
+\tableofcontents
+\newpage
+
+\section{Scope, contribution boundary, and provenance}
+The PESGM--2027 P2 study compares three controller paradigms on the same post-fault
+distribution-system restoration problem: graph/reference restoration, mixed-integer
+model predictive control (MPC), and reinforcement learning (RL).
+
+The controller algorithms are not claimed as algorithmic novelties. The generalized
+claim is: \emph{a generalized controller implementation can instantiate for any
+compatible OpenDSS circuit satisfying its declared capability requirements}. It is
+not claimed that every controller works on every OpenDSS circuit.
+
+Primary source anchors are Vedullapalli, Hadidi, and Bozeman~\cite{Vedullapalli2020}
+for graph restoration after multiple faults, Liu, Ding, and Zhao~\cite{Liu2020} for
+dynamic/receding-horizon restoration using MPC, and Oh, Yoon, and Kim~\cite{Oh2020}
+for online network-topology selection using deep Q-learning.
+
+\textbf{REUSE} denotes source-backed ideas retained in the design.
+\textbf{ADAPT} denotes deliberate changes needed so all three paradigms solve the
+same P2 problem. \textbf{NEW software abstraction} denotes software infrastructure
+without an algorithmic novelty claim.
+
+\section{Block 1: common P2 physical restoration problem}
+P2 is frozen as a post-fault, multi-fault, radial distribution-system
+service-restoration problem. Faulted components are known at the restoration
+boundary and unavailable. Healthy but de-energized sections are restoration targets.
+
+The primary benchmark includes multiple simultaneous faults, post-isolation
+restoration, sectionalizing/tie-switch control, radial source-connected operation,
+priority-weighted service restoration, explicit controllable load curtailment where
+declared, and voltage/thermal operational constraints.
+
+The primary benchmark excludes crew routing, repair scheduling, protection redesign,
+fault-detection optimization, grid-forming DER islands, frequency restoration,
+storage dispatch, and DER dispatch. Utility/source-side restoration is primary.
+
+The common objective philosophy is
+\[
+\boxed{\text{restore the most important healthy load safely, then minimize switching}.}
+\]
+
+\section{Block 2: graph, health, switching, source, and energization}
+Represent the feeder by
+\[
+\boxed{\mathcal G=(\mathcal N,\mathcal E)}
+\]
+and partition edges by controllability:
+\[
+\boxed{\mathcal E=\mathcal E^{fix}\,\dot\cup\,\mathcal E^{sw}.}
+\]
+This distinction says nothing about health.
+
+For every physical branch,
+\[
+\boxed{h_{e,t}\in\{0,1\}}
+\]
+with $h_{e,t}=1$ healthy/available and $h_{e,t}=0$ faulted/unavailable.
+Health is exogenous.
+
+For $e\in\mathcal E^{sw}$,
+\[
+\boxed{z_{e,t}\in\{0,1\},\qquad 0=\text{open},\quad 1=\text{closed}.}
+\]
+
+Define branch connectivity status for all edges:
+\[
+\boxed{
+\delta_{e,t}=
+\begin{cases}
+h_{e,t}, & e\in\mathcal E^{fix},\\
+h_{e,t}z_{e,t}, & e\in\mathcal E^{sw}.
+\end{cases}}
+\]
+
+Let $\mathcal S\subseteq\mathcal N$ denote source buses and
+$\sigma_{s,t}\in\{0,1\}$ their availability. Define
+\[
+\mathcal S_t^{avail}=\{s\in\mathcal S:\sigma_{s,t}=1\}.
+\]
+For every bus,
+\[
+\boxed{y_{i,t}\in\{0,1\}}
+\]
+denotes energization, with the semantic condition
+\[
+\boxed{
+y_{i,t}=1
+\iff
+\exists s\in\mathcal S_t^{avail}\text{ and a healthy closed path }s\leadsto i.
+}
+\]
+
+Healthy does not imply energized, and faulted is not synonymous with de-energized.
+Healthy de-energized zones are the primary restoration target.
+
+For every load define a physical served fraction
+\[
+\alpha_{\ell,t}\in[0,1],\qquad
+\boxed{0\le\alpha_{\ell,t}\le y_{i(\ell),t}.}
+\]
+
+Controller-side problem construction partitions
+\[
+\boxed{\mathcal L=\mathcal L^{curt}\,\dot\cup\,\mathcal L^{fixed}.}
+\]
+Only $\mathcal L^{curt}$ appears as explicit continuous curtailment action channels.
+
+\section{Block 3: restoration value, load priority, and common metrics}
+Each load has service-priority weight
+\[
+\boxed{w_\ell\in\{1,2,3,4\}}
+\]
+from normal to very-high criticality. Exact assignments are experiment configuration.
+Electrical distance is not embedded in $w_\ell$.
+
+Priority-weighted restored and unserved load are
+\[
+R_t=\sum_\ell w_\ell\alpha_{\ell,t}P_{\ell,t}^L,
+\qquad
+U_t=\sum_\ell w_\ell(1-\alpha_{\ell,t})P_{\ell,t}^L.
+\]
+
+Define
+\[
+\boxed{
+\rho_t^{restore}
+=
+\frac{\sum_\ell w_\ell\alpha_{\ell,t}P_{\ell,t}^{L}}
+{\sum_\ell w_\ell P_{\ell,t}^{L}}
+}
+\]
+and ordinary served-load fraction
+\[
+\boxed{
+\rho_t^{kW}
+=
+\frac{\sum_\ell \alpha_{\ell,t}P_{\ell,t}^{L}}
+{\sum_\ell P_{\ell,t}^{L}}.
+}
+\]
+
+Over a horizon,
+\[
+\boxed{
+E^{WU}=\sum_t\Delta t\sum_\ell w_\ell(1-\alpha_{\ell,t})P_{\ell,t}^{L}}
+\]
+and
+\[
+\boxed{
+E^{U}=\sum_t\Delta t\sum_\ell(1-\alpha_{\ell,t})P_{\ell,t}^{L}.}
+\]
+
+Switching effort is
+\[
+\boxed{
+J_{\mathrm{switch}}
+=
+\sum_t\sum_{e\in\mathcal E^{sw}}|z_{e,t}-z_{e,t-1}|.}
+\]
+
+The common hierarchy is service restoration before switching minimization.
+Voltage and thermal requirements are operational constraints.
+
+\section{Block 4: common action semantics and time}
+At each P2 timestep the controller provides all P2 control channels:
+\[
+\boxed{
+a_t^{P2,req}
+=
+\left(
+\mathbf z_t^{req},
+\boldsymbol\alpha_{\mathcal L^{curt},t}^{req}
+\right).}
+\]
+Here $\mathbf z_t^{req}\in\{0,1\}^{N_{sw}}$ is the complete switch-state vector and
+$\boldsymbol\alpha_{\mathcal L^{curt},t}^{req}\in[0,1]^{N_{curt}}$ contains only
+declared curtailable-load channels. There is no requirement that $N_{sw}=N_{curt}$.
+
+Multiple switch states may change between $t-1$ and $t$. There are no hidden
+simulator-generated switching microsteps and no simulator-side break-before-make
+sequence. Topology-transition logic belongs to the controller.
+
+The common plant step is
+\[
+x_t\rightarrow o_t\rightarrow \text{controller}\rightarrow a_t^{req}
+\rightarrow\text{admissibility}\rightarrow\text{apply admitted commands}
+\rightarrow\text{one plant solve}\rightarrow x_{t+1}.
+\]
+
+Use a conventional fixed P2 timestep
+\[
+\boxed{\Delta t_{P2}\in\{5,15,30,60\}\ {\rm min}}
+\]
+with the exact value deferred to experiment freeze.
+
+\section{Block 5: structural and operational feasibility}
+Faulted switchable edges cannot be used:
+\[
+\boxed{z_{e,t}\le h_{e,t},\qquad e\in\mathcal E^{sw}.}
+\]
+
+Source connectivity and radiality are controller responsibilities. The energized
+network must be source-connected and acyclic. Edge count alone is insufficient;
+connectivity must also be enforced.
+
+The authoritative plant is the nonlinear unbalanced AltDSS/OpenDSS solution.
+Realized operational conditions are evaluated against declared limits such as
+\[
+\boxed{V_i^{min}\le |V_{i,\phi,t}|\le V_i^{max}}
+\]
+and
+\[
+\boxed{|I_{e,\phi,t}|\le I_{e,\phi}^{max}}
+\]
+or the corresponding native thermal quantity.
+
+Power-flow convergence $c_t^{PF}\in\{0,1\}$ is recorded as a diagnostic, but is not
+by itself the scientific definition of action success/failure.
+
+OpenDSSSim admits only commands that satisfy the basic plant/action contract and
+then reports what occurred. It does not restore radiality, select a replacement
+topology, change $\boldsymbol\alpha$, optimize a substitute action, or hide violations.
+
+\textbf{Slacks are permitted only on operational constraints.}
+Fault availability, action validity, source connectivity, and radiality remain hard.
+
+\section{Block 6: graph/reference restoration controller}
+Denote the deterministic controller by $\pi^{GR}$.
+
+At time $t$, controller-side orchestration provides current plant state/health plus
+static circuit information:
+\[
+\mathcal I_t^{GR}
+=
+\{\mathcal G,\mathbf h_t,\mathbf z_{t-1}^{real},\boldsymbol\sigma_t,
+\mathbf P_t^L,\mathbf Q_t^L,\mathbf w,\text{declared limits}\}.
+\]
+
+Construct the healthy graph
+\[
+\mathcal E_t^H=\{e\in\mathcal E:h_{e,t}=1\},\qquad
+\mathcal G_t^H=(\mathcal N,\mathcal E_t^H),
+\]
+identify the current source-connected energized component(s), and form the healthy
+de-energized components $\mathcal C_t^{off}=\{C_1,\dots,C_K\}$.
+
+For component $C_k$ define restoration value
+\[
+\boxed{
+R_k=\sum_{\ell:i(\ell)\in C_k}w_\ell P_{\ell,t}^L.}
+\]
+
+Following the graph-restoration philosophy of~\cite{Vedullapalli2020}, enumerate
+healthy simple paths between healthy inactive sections and energized/source-connected
+sections. Convert each candidate to a complete switch vector
+\[
+\mathbf z^{(c)}\in\{0,1\}^{N_{sw}}.
+\]
+
+Reject controller-side candidates that use unavailable edges, fail required source
+connectivity, or create energized cycles.
+
+For candidate $c$, compute graph-level restored value
+\[
+R^{(c)}=\sum_\ell w_\ell\hat y_\ell^{(c)}P_{\ell,t}^{L}
+\]
+and switching effort
+\[
+N_{\rm sw}^{(c)}
+=
+\sum_{e\in\mathcal E^{sw}}|z_e^{(c)}-z_{e,t-1}^{real}|.
+\]
+Rank
+\[
+\boxed{
+\lexmax_c\left(R^{(c)},-N_{\rm sw}^{(c)}\right).}
+\]
+
+The controller may use a non-mutating controller-side current-state evaluator
+\[
+\boxed{
+\mathcal E_{\rm eval}^{ctrl}
+(x_t,\mathbf z^{(c)},\boldsymbol\alpha^{(c)})}
+\]
+to estimate voltage/loading and violations. This is not an OpenDSSSim service and
+does not mutate the plant. The initial implementation may use a simpler
+current-state multiphase LinDistFlow evaluation.
+
+Among otherwise tied candidates, voltage quality may be used as a tertiary tie-break.
+
+For the selected topology, the deterministic priority-aware curtailment decoder
+starts with full service for reconnectable curtailable loads. If operational
+violations are predicted, it curtails lower $w_\ell$ first; within equal priority
+it chooses reductions that best relieve the active violation under the declared
+heuristic, and stops at the minimum required heuristic curtailment.
+
+The final output is
+\[
+\boxed{
+a_t^{GR}
+=
+(\mathbf z_t^{req},\boldsymbol\alpha_{\mathcal L^{curt},t}^{req}).}
+\]
+
+\textbf{REUSE}: graph representation, known-fault isolation, active/inactive
+subgraphs, path search, minimum-switch preference, operational checking,
+priority-aware curtailment, and feasible-topology voltage tie-break
+from~\cite{Vedullapalli2020}.
+
+\textbf{ADAPT}: common lexicographic restoration metric, full-vector action,
+controller-side radiality, utility-source primary benchmark, no crew scheduling,
+no distance term in priority, explicit curtailment action, closed-loop recomputation.
+
+\textbf{NEW software abstraction}: typed controller context, circuit/model compiler,
+candidate evaluator, diagnostics, and provenance.
+
+\section{Block 7: LinDistFlow MILP MPC controller}
+Denote the controller by $\pi_{P2}^{MPC}$.
+
+At time $t$, MPC optimizes $k=0,\dots,H-1$ and applies only the first decision:
+\[
+\boxed{
+a_t^{MPC}
+=
+\left(
+\mathbf z_{t|t}^{\star},
+\boldsymbol\alpha_{\mathcal L^{curt},t|t}^{\star}
+\right).}
+\]
+At the next time step it observes the authoritative plant and resolves.
+
+The common load forecast is
+\[
+\hat{\mathbf D}_t
+=
+\{\hat P_{\ell,t+k|t}^{L},\hat Q_{\ell,t+k|t}^{L}\}_{k=0}^{H-1}.
+\]
+Observed faults are treated as persistent across the prediction horizon unless an
+external scenario explicitly changes them. No future-fault oracle is used.
+
+Decision variables include
+\[
+z_{e,k}\in\{0,1\},\quad
+y_{i,k}\in\{0,1\},\quad
+\alpha_{\ell,k}\in[0,1],
+\]
+phase-wise $P_{ij,k}^{\phi}$, $Q_{ij,k}^{\phi}$, squared voltage
+$v_{i,k}^{\phi}=|V_{i,k}^{\phi}|^2$, energized-edge binary $g_{e,k}$, and
+fictitious connectivity flow $F_{ij,k}\ge0$.
+
+The variable $y_{i,k}$ is an auxiliary energization decision variable. It does not
+directly actuate bus $i$; it is constrained so that it represents source connectivity
+under the chosen topology.
+
+For all physical edges,
+\[
+\boxed{
+\delta_{e,k}=
+\begin{cases}
+h_{e,t}, & e\in\mathcal E^{fix},\\
+h_{e,t}z_{e,k}, & e\in\mathcal E^{sw}.
+\end{cases}}
+\]
+
+Distinguish physical closed/healthy status from participation in the energized tree
+using
+\[
+g_{e,k}\in\{0,1\},\qquad e\in\mathcal E.
+\]
+For edge $e=(i,j)$,
+\[
+g_{e,k}\le \delta_{e,k},\qquad
+g_{e,k}\le y_{i,k},\qquad
+g_{e,k}\le y_{j,k},
+\]
+and
+\[
+g_{e,k}\ge \delta_{e,k}+y_{i,k}+y_{j,k}-2.
+\]
+
+For controllably curtailable load,
+\[
+\boxed{0\le\alpha_{\ell,k}\le y_{i(\ell),k}.}
+\]
+Use proportional $P/Q$ service to preserve power factor:
+\[
+p_{\ell,k}^{served}=\alpha_{\ell,k}\hat P_{\ell,k}^{L},\qquad
+q_{\ell,k}^{served}=\alpha_{\ell,k}\hat Q_{\ell,k}^{L}.
+\]
+
+For the primary single-source formulation, set $y_{s,k}=1$ when the source is
+available. Fictitious flow proves source connectivity:
+\[
+\boxed{
+\sum_{j:(j,i)}F_{ji,k}-\sum_{j:(i,j)}F_{ij,k}=y_{i,k},
+\qquad i\neq s,}
+\]
+\[
+\boxed{
+\sum_jF_{sj,k}-\sum_jF_{js,k}=\sum_{i\neq s}y_{i,k},}
+\]
+and
+\[
+\boxed{
+0\le F_{ij,k}\le M_F g_{e(i,j),k}.}
+\]
+
+Connectivity flow alone does not prohibit loops, so enforce energized-tree
+cardinality:
+\[
+\boxed{
+\sum_{e\in\mathcal E}g_{e,k}
+=
+\sum_{i\in\mathcal N}y_{i,k}-1.}
+\]
+Together with the connectivity equations, this yields a source-connected acyclic
+energized topology for the primary single-source case. A future generalized
+multi-source implementation may use a super-root/forest extension.
+
+The MPC prediction model is frozen as
+\[
+\boxed{\text{multiphase unbalanced LinDistFlow}.}
+\]
+
+For intuition, scalar exact radial DistFlow contains
+\[
+P_{ij}=p_j+\sum_{m:j\to m}P_{jm}+r_{ij}\ell_{ij},
+\]
+\[
+Q_{ij}=q_j+\sum_{m:j\to m}Q_{jm}+x_{ij}\ell_{ij},
+\]
+\[
+v_j=v_i-2(r_{ij}P_{ij}+x_{ij}Q_{ij})
++(r_{ij}^2+x_{ij}^2)\ell_{ij},
+\]
+\[
+v_i\ell_{ij}=P_{ij}^2+Q_{ij}^2.
+\]
+
+LinDistFlow neglects the quadratic loss terms:
+\[
+P_{ij}\approx p_j+\sum_{m:j\to m}P_{jm},
+\]
+\[
+Q_{ij}\approx q_j+\sum_{m:j\to m}Q_{jm},
+\]
+\[
+v_j\approx v_i-2(r_{ij}P_{ij}+x_{ij}Q_{ij}).
+\]
+
+For the unbalanced three-phase controller model, retain cross-phase coupling:
+\[
+\boxed{
+\mathbf v_{j,k}
+=
+\mathbf v_{i,k}
+-
+\mathbf R_{ij}\mathbf P_{ij,k}
+-
+\mathbf X_{ij}\mathbf Q_{ij,k}.}
+\]
+The matrices $\mathbf R_{ij}$ and $\mathbf X_{ij}$ are compiled controller-side
+from the static OpenDSS circuit data and the adopted linearization convention.
+
+Apply the voltage-drop relation only on energized tree edges:
+\[
+\boxed{
+-M_V(1-g_{e,k})
+\le
+\mathbf v_{j,k}-\mathbf v_{i,k}
++\mathbf R_{ij}\mathbf P_{ij,k}
++\mathbf X_{ij}\mathbf Q_{ij,k}
+\le
+M_V(1-g_{e,k}).}
+\]
+
+Phase-wise power balance is
+\[
+\boxed{
+\sum_{i:i\to j}P_{ij,k}^{\phi}
+-
+\sum_{m:j\to m}P_{jm,k}^{\phi}
+=
+\sum_{\ell\in\mathcal L_j}p_{\ell,k}^{served,\phi}}
+\]
+and similarly
+\[
+\boxed{
+\sum_{i:i\to j}Q_{ij,k}^{\phi}
+-
+\sum_{m:j\to m}Q_{jm,k}^{\phi}
+=
+\sum_{\ell\in\mathcal L_j}q_{\ell,k}^{served,\phi}.}
+\]
+Implementation must use one consistent sign/orientation convention.
+
+Operational voltage constraints may use slacks:
+\[
+\boxed{
+(V_i^{min})^2y_{i,k}-\xi_{i,\phi,k}^{V,-}
+\le
+v_{i,\phi,k}
+\le
+(V_i^{max})^2y_{i,k}+\xi_{i,\phi,k}^{V,+}}
+\]
+with $\xi_{i,\phi,k}^{V,\pm}\ge0$.
+
+Thermal limits use a conservative eight-sided polygon so the controller remains MILP.
+Let
+\[
+\theta_m=\frac{(2m+1)\pi}{8},\qquad m=0,\dots,7.
+\]
+For each facet,
+\[
+\boxed{
+P_{e,k}\cos\theta_m+Q_{e,k}\sin\theta_m
+\le
+S_e^{max}\cos\left(\frac{\pi}{8}\right)+\xi_{e,k}^{S}.}
+\]
+Here $\xi_{e,k}^{S}\ge0$ is an operational slack.
+
+Define
+\[
+J_{\rm op}
+=
+\sum_k\left[
+\sum_{i,\phi}
+(\xi_{i,\phi,k}^{V,+}+\xi_{i,\phi,k}^{V,-})
++
+\sum_e\xi_{e,k}^{S}
+\right],
+\]
+\[
+J_{\rm service}
+=
+\sum_{k=0}^{H-1}\Delta t
+\sum_\ell
+w_\ell(1-\alpha_{\ell,k})\hat P_{\ell,k}^{L},
+\]
+and use switching auxiliaries
+\[
+s_{e,k}\ge z_{e,k}-z_{e,k-1},\qquad
+s_{e,k}\ge z_{e,k-1}-z_{e,k}
+\]
+with
+\[
+J_{\rm switch}=\sum_{k,e}s_{e,k}.
+\]
+
+An optional final voltage-quality tie-break may be retained. The frozen hierarchy is
+\[
+\boxed{
+\lexmin\left(
+J_{\rm op},
+J_{\rm service},
+J_{\rm switch},
+J_V^{dev}\ {\rm(optional)}
+\right).}
+\]
+
+Only operational constraints receive slacks. Fault safety, valid action semantics,
+source connectivity, and radiality remain hard constraints.
+
+LinDistFlow is the MPC prediction model; AltDSS is the authoritative nonlinear
+unbalanced plant. Therefore
+\[
+\boxed{
+\text{LinDistFlow feasibility}\neq
+\text{AltDSS realized feasibility/convergence}.}
+\]
+MPC solver status and plant convergence are separate diagnostics.
+
+\textbf{REUSE}: dynamic/receding-horizon restoration and updated disturbance/forecast
+use from~\cite{Liu2020}.
+
+\textbf{ADAPT}: utility-source restoration; no DER dispatch; explicit priority-weighted
+load service; multiphase LinDistFlow MILP; eight-sided thermal polygon; operational
+slacks only; full-vector action; explicit plant-model mismatch accounting.
+
+\textbf{NEW software abstraction}: controller-side model compiler, typed MPC
+context/output, Gurobi formulation layer, diagnostics, and provenance.
+
+\section{Block 8: masked-DQN RL controller}
+Denote the RL controller by $\pi_{P2}^{RL}$.
+
+Controller-side orchestration constructs a circuit-specific finite topology catalogue
+\[
+\boxed{
+\mathcal C=\{\mathbf z^{(1)},\dots,\mathbf z^{(N_C)}\}}
+\]
+instead of using the monolithic $2^{N_{sw}}$ action space.
+
+At time $t$, a state-dependent structural mask
+\[
+\boxed{m_t(c)\in\{0,1\}}
+\]
+excludes catalogue actions that violate hard structural logic such as use of faulted
+equipment, radiality, or required source connectivity. The DQN selects
+\[
+\boxed{
+c_t^\star=
+\argmax_{c:m_t(c)=1}Q_\theta(s_t,c).}
+\]
+
+The RL state contains current common observation and the same load forecast used by MPC:
+\[
+\boxed{s_t^{RL}=[o_t,\hat{\mathbf D}_{t:t+H-1}].}
+\]
+Current information includes health/fault status, realized topology, source status,
+load $P/Q$, realized voltage/loading, and priorities. Continuous variables are normalized.
+
+The exact origin of the physical action is:
+\[
+\boxed{
+c_t^\star\longrightarrow\mathbf z_t^{req}}
+\]
+by deterministic catalogue lookup, then
+\[
+\boxed{
+\mathbf z_t^{req}+x_t+\mathcal E_{\rm eval}^{ctrl}
+\longrightarrow
+\boldsymbol\alpha_{\mathcal L^{curt},t}^{req}}
+\]
+using the same deterministic priority-aware curtailment logic already frozen for the
+graph/reference controller. The baseline RL controller does not solve a separate OPF
+merely to compute $\boldsymbol\alpha_t$.
+
+Thus
+\[
+\boxed{
+a_t^{RL}
+=
+(\mathbf z_t^{req},\boldsymbol\alpha_{\mathcal L^{curt},t}^{req}).}
+\]
+
+The authoritative transition is
+\[
+s_t\xrightarrow{a_t}\text{OpenDSSSim/AltDSS}\rightarrow s_{t+1}.
+\]
+Replay stores conventional transitions $(s_t,a_t,r_t,s_{t+1},d_t)$. The state may
+contain previous realized action/state information needed for Markov sufficiency.
+
+Define normalized priority-weighted unserved service
+\[
+\boxed{
+J_{service,t}^{RL}
+=
+\frac{\sum_\ell w_\ell(1-\alpha_{\ell,t}^{real})P_{\ell,t}^{L}}
+{\sum_\ell w_\ell P_{\ell,t}^{L}}.}
+\]
+
+Define normalized switching effort
+\[
+\boxed{
+J_{switch,t}^{RL}
+=
+\frac{1}{N_{sw}}
+\sum_e|z_{e,t}^{real}-z_{e,t-1}^{real}|.}
+\]
+
+Realized operational violation quantities may be defined by
+\[
+\xi_{i,\phi,t}^{V,-}=\max(0,V_i^{min}-|V_{i,\phi,t}|),
+\]
+\[
+\xi_{i,\phi,t}^{V,+}=\max(0,|V_{i,\phi,t}|-V_i^{max}),
+\]
+\[
+\xi_{e,\phi,t}^{I}=\max(0,|I_{e,\phi,t}|-I_{e,\phi}^{max}).
+\]
+
+Use documented normalization weights $\omega_V,\omega_I$ to form
+\[
+J_{op,t}^{RL}=\omega_VJ_{V,t}^{viol}+\omega_IJ_{I,t}^{viol}.
+\]
+
+The scalar reward is
+\[
+\boxed{
+r_t=
+-\left[
+\lambda_{op}J_{op,t}^{RL}
++\lambda_{service}J_{service,t}^{RL}
++\lambda_{sw}J_{switch,t}^{RL}
++\lambda_VJ_{V,t}^{dev}
+\right].}
+\]
+The intended ordering is
+\[
+\boxed{
+J_{op}\succ J_{service}\succ J_{switch}\succ J_V^{dev}\ {\rm(optional)}.}
+\]
+The $\lambda$ reward coefficients are distinct from service-priority weights $w_\ell$.
+
+The DQN action value is
+\[
+Q^\pi(s_t,c_t)
+=
+\mathbb E_\pi\left[
+\sum_{j=0}^{\infty}\gamma^jr_{t+j}
+\mid s_t,c_t
+\right].
+\]
+With target network $\theta^-$ and replay,
+\[
+\boxed{
+y_t^{DQN}
+=
+r_t+\gamma(1-d_t)
+\max_{c':m_{t+1}(c')=1}Q_{\theta^-}(s_{t+1},c')}
+\]
+and
+\[
+\boxed{
+L(\theta)
+=
+\mathbb E[(y_t^{DQN}-Q_\theta(s_t,c_t))^2].}
+\]
+
+Training uses $\epsilon$-greedy exploration over admissible actions only. Official TEST
+uses $\epsilon=0$.
+
+The backend is frozen as
+\[
+\boxed{\text{Stable-Baselines3 infrastructure + custom masked-DQN logic}.}
+\]
+The mask must be respected in both action selection and Bellman target maximization.
+
+\textbf{REUSE}: deep-Q topology selection, online reconfiguration concept, and
+switching-frequency concern from~\cite{Oh2020}.
+
+\textbf{ADAPT}: post-fault restoration; priority-weighted service; common MPC/RL
+forecast; controller-generated topology catalogue; state-dependent structural mask;
+reused rule-based curtailment decoder; realized operational reward; thin plant boundary.
+
+\textbf{NEW software abstraction}: generalized catalogue generator, mask interface,
+topology-index mapping, SB3 masked-DQN extension, diagnostics, and provenance.
+
+\section{Block 9: common information and fair-comparison contract}
+At a given experiment time, all controllers receive the same realized current physical
+information:
+\[
+o_t^{P2}
+=
+[
+\mathbf h_t,
+\mathbf z_{t-1}^{real},
+\boldsymbol\sigma_t,
+\mathbf P_t^L,
+\mathbf Q_t^L,
+\mathbf V_t^{real},
+\mathbf I_t^{real},
+\mathbf w,
+\text{time metadata}
+].
+\]
+
+The exact same feeder, fault realization, initial topology, load realization, sources,
+controllable switches, curtailable channels, priorities, bounds, and time axis are used.
+
+MPC and RL receive the identical load forecast:
+\[
+\boxed{\hat{\mathbf D}_t^{MPC}=\hat{\mathbf D}_t^{RL}.}
+\]
+The graph/reference controller intentionally uses current information only.
+
+No controller receives realized future loads, realized future voltage/current, or future
+fault information not already declared by the scenario.
+
+For official scenario $j$,
+\[
+\Omega_j
+=
+\{\text{feeder},\mathcal F_j,\mathbf z_{0,j},
+\mathbf P_{0:T,j}^{L},\mathbf Q_{0:T,j}^{L},
+\mathbf w_j,\boldsymbol\sigma_{0:T,j},\Delta t,T\},
+\]
+and
+\[
+\boxed{\Omega_j^{GR}=\Omega_j^{MPC}=\Omega_j^{RL}.}
+\]
+
+Any candidate electrical evaluator used by Reference or the RL curtailment decoder begins
+from the current plant state $x_t$. It is a controller-side evaluator, not a future-state
+oracle and not an OpenDSSSim service.
+
+Internal MPC objective values and RL reward are not directly compared. Common plant-level
+metrics include $\rho^{kW}$, $\rho^{restore}$, $E^U$, $E^{WU}$, $N^{sw}$, voltage
+violation magnitude/duration, thermal violation magnitude/duration, realized voltage
+extrema, maximum branch loading, convergence diagnostic, controller computation time,
+and restoration trajectory/final state.
+
+Intentional algorithmic differences are:
+\begin{center}
+\begin{tabular}{p{0.23\linewidth}p{0.67\linewidth}}
+\toprule
+Controller & Internal reasoning\\
+\midrule
+Graph/reference & Graph search + current-state controller-side electrical evaluation +
+deterministic priority-aware curtailment.\\
+MPC & MILP + multiphase LinDistFlow + load forecast + joint topology/curtailment decision.\\
+RL & SB3 masked DQN + topology catalogue + load forecast + reused deterministic
+curtailment decoder.\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Block 10: controller-side capabilities and orchestration boundary}
+OpenDSSSim is a thin authoritative plant interface. At runtime it exposes realized plant
+state/health required by the observation/action contract, accepts $a_t^{req}$, performs
+the physical transition, and reports realized outcomes/history.
+
+OpenDSSSim does \emph{not} provide controller intelligence, topology search, source
+identification, LinDistFlow compilation, candidate evaluation, forecast generation,
+curtailment logic, or RL catalogue generation.
+
+Controller-side/orchestration code may read the static OpenDSS circuit folder/files to
+derive what the controllers need, including graph topology, fixed/switchable edges,
+candidate source buses, phase connectivity, impedances, ratings, load locations,
+topology catalogue, and LinDistFlow matrices.
+
+Source identification is controller-side. Curtailability is controller/problem-side.
+Operational limits are controller-side problem data derived from justified circuit
+metadata or explicit experiment configuration; missing limits are not silently invented
+as native feeder facts.
+
+All computational services are controller/orchestration side:
+\begin{itemize}
+\item topology parser/model compiler;
+\item source identification;
+\item curtailability declaration;
+\item operational-limit construction;
+\item current-state LinDistFlow evaluator;
+\item forecast provider;
+\item MPC LinDistFlow compiler;
+\item RL topology catalogue/mask generator.
+\end{itemize}
+
+A controller-independent orchestration/problem description may bind
+\[
+\mathcal P_{P2}
+=
+\{\text{state schema},\text{action schema},\text{disturbances},
+\text{constraints},\text{resources},\text{time semantics}\}.
+\]
+It contains no graph-algorithm details, Gurobi tuning, or DQN architecture.
+
+Controllers return
+\[
+\boxed{O_t^{ctrl}=(a_t^{req},d_t,p_t)}
+\]
+where $d_t$ is diagnostics and $p_t$ is provenance. Only $a_t^{req}$ is required for
+physical application.
+
+The orchestration layer lies between controller and plant:
+\[
+\boxed{
+\text{controller}
+\rightarrow
+\text{orchestration}
+\rightarrow
+a_t^{req}
+\rightarrow
+\texttt{env.step}(a_t^{req})
+\rightarrow
+\text{OpenDSSSim/AltDSS}.}
+\]
+
+The orchestration layer routes current state, static models, forecasts, controller
+configuration, diagnostics, and action translation. It does not repair the scientific
+decision.
+
+\[
+\boxed{\texttt{env.step}(a_t^{req})}
+\]
+is the authoritative physical mutation boundary. Controller code never imports or
+manipulates AltDSS to enact actions.
+
+OpenDSSSim records
+\[
+a_t^{req}\rightarrow a_t^{applied}\rightarrow a_t^{realized}.
+\]
+The applied action is not a scientifically optimized replacement. The plant may reject
+fundamentally inadmissible actuator commands but does not substitute a different
+restoration choice.
+
+Missing required static/runtime capabilities produce an explicit machine-readable
+\texttt{UNSUPPORTED} result. Support may be controller-specific. Generalized controller
+source contains no hard-coded IEEE-123 object names.
+
+\section{Block 11: training, tuning, full-horizon evaluation, and reproducibility}
+Every official run has a scenario identity
+\[
+\Omega_j
+=
+(\text{feeder version},F_j,L_j,\mathbf z_0,\mathbf w,\boldsymbol\sigma,\Delta t,T).
+\]
+
+Only RL has explicit data partitions in this version:
+\[
+\boxed{
+\mathcal D^{RL}
+=
+\mathcal D^{train}\,\dot\cup\,\mathcal D^{test}.}
+\]
+There is no VALIDATION partition and no HPO campaign.
+
+Reference and MPC have no train/validation/test fitting process. Their mathematical and
+numerical configurations are fixed a priori before official evaluation. For fair
+comparison they are run on the same official TEST load trajectories used to evaluate the
+frozen RL policy.
+
+Let
+\[
+\mathcal F=\{F_1,\dots,F_M\}
+\]
+be a small predetermined set of P2 fault scenarios. For every reported case,
+Reference, MPC, and RL use the identical fault condition.
+
+The baseline RL training approach keeps a selected fault scenario fixed and varies TRAIN
+load trajectories:
+\[
+(F_j,L_1^{train}),(F_j,L_2^{train}),\dots.
+\]
+A scenario-specific RL policy $\pi_{RL}^{(j)}$ is permitted. Training one policy across
+multiple faults is a separate experiment.
+
+There is no HPO in this P2 version. RL uses one documented predeclared DQN
+configuration. MPC formulation/horizon/tolerances are fixed experiment configuration,
+not fitted on TEST results.
+
+Use
+\[
+\boxed{N_{\rm seed}\ge1.}
+\]
+
+Record RL settings including $\gamma$, learning rate, replay size, batch size,
+$\epsilon$ schedule, target-network update, architecture, and total training budget.
+The frozen checkpoint is chosen by a predeclared TRAIN-only rule, with the final
+checkpoint after a fixed training budget as the default. TEST is never used for
+checkpoint selection or retuning.
+
+Reward coefficients are fixed before TEST and preserve the intended ordering
+\[
+J_{op}\succ J_{service}\succ J_{switch}\succ J_V^{dev}\ {\rm(optional)}.
+\]
+
+Official evaluation runs all controllers closed loop over the entire common horizon:
+\[
+\boxed{t=0,\Delta t,\dots,T_{\rm eval}.}
+\]
+Evaluation does not stop merely because a temporarily good restoration state has been
+reached. Loads may continue to change. If the current topology remains best, the
+controller may request the same action again, yielding zero switching effort for that
+step.
+
+Every P1 and P2 controller instance retains the most recent successfully computed control
+command:
+\[
+\boxed{a_{\rm last}^{success}.}
+\]
+If the current control computation cannot produce a usable solution under the
+controller's declared success rule,
+\[
+\boxed{a_t^{req}=a_{\rm last}^{success}.}
+\]
+This is controller memory, not environment correction. Initialize the memory from the
+current realized/hold control state so fallback is defined from episode start. Record
+\[
+f_t^{fallback}\in\{0,1\}.
+\]
+
+No silent retry-until-success behavior is permitted. Record controller statuses such as
+MPC solver state, reference candidate status, and RL admissible-action status.
+
+Separate controller computation time from plant time:
+\[
+T_t^{ctrl}\neq T_t^{plant}.
+\]
+
+Every official run records feeder/source hash, experiment-config hash, fault ID, load
+trajectory ID, controller family/version, controller-config hash, random seed where
+applicable, software/environment versions, MPC solver version/settings, and RL
+checkpoint hash where applicable.
+
+\section{Frozen cross-controller implementation mapping}
+The implementation-facing contract is
+\[
+\boxed{
+\text{current plant state/health}
++
+\text{controller-side static model/config}
+\rightarrow
+\text{controller}
+\rightarrow
+a_t^{req}
+\rightarrow
+\text{orchestration}
+\rightarrow
+\texttt{env.step}.}
+\]
+
+All P2 controller families return the same physical action schema:
+\[
+a_t^{req}
+=
+(\mathbf z_t^{req},\boldsymbol\alpha_{\mathcal L^{curt},t}^{req}).
+\]
+
+The intended controller package organization is:
+\begin{verbatim}
+src/opendsssim/controllers/
+    common/
+        base.py
+        contracts.py
+        capability_requirements.py
+        registry.py
+        results.py
+
+    restoration/
+        reference/
+            controller.py
+            graph_restoration.py
+            config.py
+
+        optimization/
+            controller.py
+            formulation.py
+            config.py
+
+        rl/
+            controller.py
+            training.py
+            policy.py
+            config.py
+\end{verbatim}
+
+P1 and P2 share these runtime invariants:
+\begin{itemize}
+\item controllers never mutate AltDSS directly;
+\item \texttt{env.step} is the authoritative mutation boundary;
+\item requested/applied/realized history is retained;
+\item controller intelligence stays out of the environment;
+\item every controller retains $a_{\rm last}^{success}$;
+\item experiment-specific object IDs live in configuration, not generalized source.
+\end{itemize}
+
+\section{Frozen items and experiment-freeze items}
+This document freezes the common P2 problem, graph/health/source semantics, priority
+objective, full-vector action, controller responsibility for radiality/source connectivity,
+operational-slack-only rule, graph/reference formulation, multiphase LinDistFlow MILP
+MPC, conservative eight-sided thermal polygon, SB3 masked-DQN RL, fair-information
+contract, thin OpenDSSSim boundary, controller-side orchestration services, RL
+TRAIN/TEST-only no-HPO protocol, full-horizon evaluation, and last-successful-control memory/fallback.
+
+The following remain deferred to the P2 IEEE-123 experiment freeze:
+\begin{itemize}
+\item exact P2 working-feeder copy and switch/tie modifications;
+\item exact fault scenarios;
+\item exact load-priority assignments;
+\item exact curtailable-load set;
+\item exact timestep from $\{5,15,30,60\}$ min;
+\item MPC horizon $H$;
+\item exact numerical operating bounds where configuration-supplied;
+\item exact operational-slack normalization;
+\item exact RL architecture/hyperparameter/reward coefficient values;
+\item exact RL seed count, subject to $N_{\rm seed}\ge1$.
+\end{itemize}
+
+No deferred choice may silently alter the frozen mathematical problem.
+
+\section{P2 freeze statement}
+Blocks 1--11 are frozen for implementation. Controller classes and controller-side
+orchestration/model services may now be developed against this contract. Any
+implementation change that alters the common physical problem, action meaning,
+structural constraints, objective hierarchy, plant/controller boundary, or
+fair-information contract requires explicit science-contract change control.
+
+\bibliographystyle{plain}
+\bibliography{P2_Reconfiguration_Restoration_References}
+\end{document}

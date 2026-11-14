@@ -1,0 +1,202 @@
+{
+  "evidence_sha256": "125BB06039DADCF809129F7FD941CD4B98641F3B8D20A67107768A372F1308A4",
+  "evidence_zip": "C:\\Users\\ninad\\Downloads\\RBC_S10C_Results_20261110T212402030029Z.zip",
+  "issues": [],
+  "manifest_json": "C:\\Users\\ninad\\Downloads\\RBC_S10C_Manifest_20261110T212402030029Z.json",
+  "manifest_sha256": "D4FC32437BAAD8FA930AFC18245E5483BEABEACA9BCE4EA9D6BA815D2A3604C0",
+  "milestone": "RBC_S10C_NATIVE_RESULTS_PILOT",
+  "read_only_repo": true,
+  "repo": "C:\\Users\\ninad\\Dropbox\\NinadGaikwad_PhD\\Gaikwad_Research\\Gaikwad_Research_Work\\OpenDSSSim",
+  "results": {
+    "p1_b00": {
+      "native_case_file": "b00_native/ieee123_pesgm2027/result.json",
+      "samples": 25,
+      "status": "B00I1_NATIVE_PILOT_PASS_TELEMETRY_GAPS_REPORTED"
+    },
+    "p1_comparison": {
+      "comparison_csv": "p1_comparison.csv",
+      "comparison_svg": "p1_comparison.svg",
+      "matched_samples": 25,
+      "native_total_out_band": 0,
+      "rbc_total_out_band": 133
+    },
+    "p1_rbc": {
+      "commands": 24,
+      "mapping_file": "device_mapping.json",
+      "note": "Synthetic diagnostic, not field observations; external RegControl authority.",
+      "profile": {
+        "irradiance_kw_m2": [
+          0.0,
+          0.13617,
+          0.2698,
+          0.3984,
+          0.51958,
+          0.63109,
+          0.73084,
+          0.81697,
+          0.88789,
+          0.94226,
+          0.97908,
+          0.99767,
+          0.99767,
+          0.97908,
+          0.94226,
+          0.88789,
+          0.81697,
+          0.73084,
+          0.63109,
+          0.51958,
+          0.3984,
+          0.2698,
+          0.13617,
+          0.0
+        ],
+        "load_multiplier_pu": [
+          0.78,
+          0.78545,
+          0.80144,
+          0.82686,
+          0.86,
+          0.89859,
+          0.94,
+          0.98141,
+          1.02,
+          1.05314,
+          1.07856,
+          1.09455,
+          1.1,
+          1.09455,
+          1.07856,
+          1.05314,
+          1.02,
+          0.98141,
+          0.94,
+          0.89859,
+          0.86,
+          0.82686,
+          0.80144,
+          0.78545
+        ],
+        "load_objects": 91,
+        "profile_type": "SYNTHETIC_DEMONSTRATION_NOT_FIELD_MEASUREMENTS",
+        "pv_objects": 10,
+        "timestamps_utc": [
+          "2026-11-10T00:00:00Z",
+          "2026-11-10T01:00:00Z",
+          "2026-11-10T02:00:00Z",
+          "2026-11-10T03:00:00Z",
+          "2026-11-10T04:00:00Z",
+          "2026-11-10T05:00:00Z",
+          "2026-11-10T06:00:00Z",
+          "2026-11-10T07:00:00Z",
+          "2026-11-10T08:00:00Z",
+          "2026-11-10T09:00:00Z",
+          "2026-11-10T10:00:00Z",
+          "2026-11-10T11:00:00Z",
+          "2026-11-10T12:00:00Z",
+          "2026-11-10T13:00:00Z",
+          "2026-11-10T14:00:00Z",
+          "2026-11-10T15:00:00Z",
+          "2026-11-10T16:00:00Z",
+          "2026-11-10T17:00:00Z",
+          "2026-11-10T18:00:00Z",
+          "2026-11-10T19:00:00Z",
+          "2026-11-10T20:00:00Z",
+          "2026-11-10T21:00:00Z",
+          "2026-11-10T22:00:00Z",
+          "2026-11-10T23:00:00Z"
+        ],
+        "truth_files_sha256": {
+          "truth_load_multiplier.csv": "08F24DF35D92EF97B6D921E2B3D0721B0FC48A724A84F47715C55C0A3DF6882C",
+          "truth_pv_irradiance.csv": "F0C4CBB54B0AC0F55436EE0B6E44F6074B585834CDBF04288BB37B0F1252FE4D"
+        }
+      },
+      "samples": 25,
+      "status": "P1_NATIVE_CLOSED_LOOP_PASS",
+      "steps": 24,
+      "summary": {
+        "all_converged": true,
+        "samples": 25,
+        "vmax_pu": 1.026531976760499,
+        "vmin_pu": 0.9416982177025808,
+        "voltage_out_of_band_total": 133
+      }
+    },
+    "p2_ieee123_p2_mf01_simple": {
+      "candidate_rows": [
+        {
+          "feeder": "ieee123_p2_mf01_simple",
+          "route": "MF01_RATIFIED_PARTIAL",
+          "status": "STRUCTURALLY_NOT_ADMISSIBLE"
+        }
+      ],
+      "feeder": "ieee123_p2_mf01_simple",
+      "limitations": [
+        "thermal ratings unavailable: no thermal constraint certification",
+        "equal priorities declared as illustration, not validated customer priorities",
+        "no curtailable loads declared; no load service optimization exercised",
+        "bus-graph radiality is not a phase-aware radiality proof",
+        "native electrical snapshots are current-state, no time-varying resilience comparison",
+        "native shadow screens are experiment evaluation, not a globally qualified P2 decoder"
+      ],
+      "live_steps": 0,
+      "live_summary": {
+        "all_converged": true,
+        "samples": 0,
+        "vmax_pu": null,
+        "vmin_pu": null,
+        "voltage_out_of_band_total": 0
+      },
+      "native_evaluated_routes": 0,
+      "screened_routes": 1,
+      "selected_route": null,
+      "status": "P2_NO_CONVERGED_ROUTE_NO_ACTION"
+    },
+    "p2_ieee123_p2_mf02_exotic": {
+      "candidate_rows": [
+        {
+          "feeder": "ieee123_p2_mf02_exotic",
+          "route": "MF02_ROUTE_A",
+          "status": "STRUCTURALLY_NOT_ADMISSIBLE"
+        },
+        {
+          "feeder": "ieee123_p2_mf02_exotic",
+          "route": "MF02_ROUTE_B",
+          "status": "STRUCTURALLY_NOT_ADMISSIBLE"
+        },
+        {
+          "feeder": "ieee123_p2_mf02_exotic",
+          "route": "MF02_ROUTE_C",
+          "status": "STRUCTURALLY_NOT_ADMISSIBLE"
+        }
+      ],
+      "feeder": "ieee123_p2_mf02_exotic",
+      "limitations": [
+        "thermal ratings unavailable: no thermal constraint certification",
+        "equal priorities declared as illustration, not validated customer priorities",
+        "no curtailable loads declared; no load service optimization exercised",
+        "bus-graph radiality is not a phase-aware radiality proof",
+        "native electrical snapshots are current-state, no time-varying resilience comparison",
+        "native shadow screens are experiment evaluation, not a globally qualified P2 decoder"
+      ],
+      "live_steps": 0,
+      "live_summary": {
+        "all_converged": true,
+        "samples": 0,
+        "vmax_pu": null,
+        "vmin_pu": null,
+        "voltage_out_of_band_total": 0
+      },
+      "native_evaluated_routes": 0,
+      "screened_routes": 3,
+      "selected_route": null,
+      "status": "P2_NO_CONVERGED_ROUTE_NO_ACTION"
+    }
+  },
+  "s09a_predecessor_manifest_sha256": "9BCB14EC9551E18E45A93751B3F5ECB029517F65082BE62B2A1B9C910F0975C3",
+  "s10b_directed_manifest_sha256": "2DD98724E846BBE9B46C9C9C36E05C5E0E5EF0413B8A8A352B6AD695A9F77707",
+  "source_files": 331,
+  "source_files_verified_after": 331,
+  "status": "PARTIAL_RESULTS_SAVED_S10C_NOT_FULLY_QUALIFIED",
+  "timestamp_utc": "20261110T212402030029Z"
+}

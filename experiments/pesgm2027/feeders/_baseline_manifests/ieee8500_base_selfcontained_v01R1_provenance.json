@@ -1,0 +1,18 @@
+{
+  "schema": "opendsssim.large_ieee_baseline.selfcontained.v1",
+  "package_id": "OpenDSSSim_IEEE_LargeBaselineFeeders_906_8500_SelfContained_v01R1_20261111",
+  "installed_name": "ieee8500_base",
+  "source_repository": "dss-extensions/electricdss-tst",
+  "source_branch": "opendss-official-svn",
+  "source_archive_url": "https://codeload.github.com/dss-extensions/electricdss-tst/zip/refs/heads/opendss-official-svn",
+  "source_archive_sha256": "B67A600BCEE40C49AC0DD1ADBBF15303BD137C1D30F8715E81FD260345C8AFBD",
+  "upstream_relative_path": "Version8/Distrib/IEEETestCases/8500-Node",
+  "payload_file_count": 31,
+  "payload_bytes": 2512343,
+  "master": "Master.dss",
+  "runtime_download_required": false,
+  "payload_identity_source": {
+    "directed_evidence_sha256": "1B059CA834091141B7C4CC5B73E6F6FCD634BD14CA8CD41C5891EF8167B0FCAB",
+    "fresh_tree_evidence_sha256": "425BE12B095E674EC6A74DC19C111F22C86E66B676A3C080C6EBC567612284E2"
+  }
+}

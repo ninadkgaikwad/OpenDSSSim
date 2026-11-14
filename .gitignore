@@ -1,0 +1,37 @@
+# Environments / credentials
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+.envrc
+*.pem
+*.key
+*credentials*
+
+# Python and testing caches (not scientific source)
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db
+
+# All new generated examples run output; the teaching folder stays present
+examples/ieee123_course/output/*
+!examples/ieee123_course/output/README.md
+!examples/ieee123_course/output/.gitkeep
+!examples/ieee123_course/output/sample_offline/
+!examples/ieee123_course/output/sample_offline/**
+
+# No nested archived release ZIPs in an ordinary Git history
+*.zip
+!results/**/*.zip
+!examples/ieee123_course/input/qualified_routes/*.zip
