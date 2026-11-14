@@ -4,49 +4,79 @@
 
 OpenDSSSim separates a physical feeder and power-flow engine from its **problem declaration**, **semantic observations**, **authorized actions**, **time-series environment**, and **controller algorithms**. The objective is to make distribution-system control studies reproducible without embedding one control problem—or one controller—inside the simulator itself.
 
-> **Research software / prerelease (`0.1.0a6`).** This repository is a teaching/research snapshot, not a certified utility operations platform. It is not suitable for safety-critical grid switching. A project-level public license has **not yet been selected**; review [LICENSE_REVIEW_REQUIRED.md](LICENSE_REVIEW_REQUIRED.md) before publishing or inviting external redistribution.
+> **Research software / prerelease (`0.1.0a6`).** This repository is a teaching/research snapshot, not a certified utility operations platform. It is not suitable for safety-critical grid switching. The current tree contains a `LICENSE` file, but its approved scope, software attribution and third-party feeder permissions still require publication review; see [LICENSE_REVIEW_REQUIRED.md](LICENSE_REVIEW_REQUIRED.md).
 
-## Documentation map: choose your starting point
+## Start here: the supported standalone IEEE-123 examples
 
-| Your goal | Start here | What you will achieve |
+**The recommended learning path is now [`examples/`](examples/README.md), Scripts 01-10.** Each script is a standalone, extensively commented Python program with a preamble, numbered sections, editable input/output settings, and direct calls to the installed `OpenDSSSimulator` APIs. You do not need a separate tutorial runner or extra course abstraction to understand what the simulator does. The scripts make `env.reset()`, public information services, `env.step(action)`, and optional CSV/JSON output visible in the user code.
+
+### Learning sequence
+
+| Script | Topic | What you will practice |
 |---|---|---|
-| Install and verify the repository | [Installation](#installation-and-dependencies), [test guide](docs/tutorial/05_TESTING_AND_REPRODUCIBILITY.md) | Set up the package and run integrity/native smoke tests |
-| Learn OpenDSSSim from zero | [IEEE-123 course](examples/ieee123_course/README.md) | Complete 11 lessons with inputs, outputs and annotated code |
-| Understand the simulator layers | [Architecture](docs/tutorial/02_ARCHITECTURE.md) | Trace feeder, registries, problem contract, controller context and `env.step` |
-| Write a new problem/controller | [Public API](docs/tutorial/01_PUBLIC_API.md), [controller programming](docs/tutorial/03_CONTROLLER_PROGRAMMING.md) | Use `ProblemSpec`, layouts and authorized actions without backend bypass |
-| Study RBC and MPC | [Lesson 06–09 guide](examples/ieee123_course/README.md) | Compare P1 Volt/VAR with P2 MF01/MF02 restoration |
-| Reproduce a campaign | [Course campaign](examples/ieee123_course/README.md), [testing](docs/tutorial/05_TESTING_AND_REPRODUCIBILITY.md) | Generate independent run directories and evidence receipts |
-| Make plots and cite results | [Lesson 10](examples/ieee123_course/README.md), [citation](docs/tutorial/06_CITATION_AND_REPRODUCIBILITY.md) | Plot bus voltages, switch maps and report precise software/protocol versions |
+| [`01`](examples/01_IEEE123_Environment_Basics.py) | Environment basics | Open an IEEE-123 feeder, reset, discover engine/circuit capabilities and diagnostics |
+| [`02`](examples/02_IEEE123_TimeSeries_NoController.py) | Uncontrolled time series | Bind synthetic hourly load profiles with replay services, step through AC solutions, record results |
+| [`03`](examples/03_Inspect_Saved_Results.py) | Inspect saved results | Read CSV/JSON, summarize results, optionally plot without re-running AltDSS |
+| [`04`](examples/04_IEEE123_ProblemSpec_Observations.py) | `ProblemSpec` observations | Select semantic quantities, resolve the problem, and inspect Gymnasium observations |
+| [`05`](examples/05_IEEE123_ProblemSpec_Actions.py) | `ProblemSpec` actions | Author actuator authority, encode a PV-Q command, inspect requested/applied/realized actions |
+| [`06`](examples/06_IEEE123_Controller_Context_Forecasts.py) | Information and forecasts | Use read-only `ControllerContext`, decision-time exogenous forecasts, and feedback |
+| [`07`](examples/07_IEEE123_P1_RBC.py) | P1 Volt/VAR RBC | Reuse the installed rule-based controller in an explicit AC closed-loop `for` loop |
+| [`08`](examples/08_IEEE123_P1_MPC.py) | P1 Volt/VAR MPC | Reuse the qualified horizon-12 Gurobi MIQP, apply the first action, repeat |
+| [`09`](examples/09_IEEE123_P2_RBC.py) | P2 restoration RBC | Study graph preview, fault locks, and continuation of previously screened switching routes |
+| [`10`](examples/10_IEEE123_P2_MPC.py) | P2 restoration MPC | Reuse the horizon-2 MILP; compare original slack-first with the labeled service-first sensitivity |
 
-## Start here: the interactive IEEE-123 course
+For detailed annotations and the input/output folder guide, read the [standalone examples README](examples/README.md). The first three scripts do **not** require a `ProblemSpec` or an external controller. Scripts 04-06 introduce contracts before optimization, and 07-10 show the controller integrations without modifying the physical simulator.
 
-The new [IEEE-123 self-contained course](examples/ieee123_course/README.md) is the recommended entry point. It includes **four original feeder variants**, qualified static MPC case inputs, original S10D RBC route evidence, example observations/plotting data, and a run-isolated `output/` folder. Examples are richly commented and never patch the simulator or feeder.
+### Quick installation and first runs
+
+From this repository's **root directory** in a Python environment with AltDSS installed:
 
 ```powershell
-# Windows PowerShell, from this repository's root
 conda create -n opendsssim-demo python=3.11 -y
 conda activate opendsssim-demo
 python -m pip install -e ".[dev]"
-python -m pip install -r examples/ieee123_course/requirements-tutorial.txt
 
-# No Gurobi needed: provenance and input-integrity verification
-python examples/ieee123_course/run_course.py --lesson 00 --run-id check_001
+# Read/edit USER SETTINGS near the top of each script before running it.
+python examples/01_IEEE123_Environment_Basics.py
+python examples/02_IEEE123_TimeSeries_NoController.py
+python examples/03_Inspect_Saved_Results.py
 
-# Native AltDSS / Gymnasium circuit loading
-python examples/ieee123_course/run_course.py --lesson 01 --run-id snapshot_001
-
-# Full course (MPC lessons require gurobipy and a valid solver license)
-python examples/ieee123_course/run_course.py --all --steps 3 --run-id course_001
+# Learn ProblemSpec and controller-visible information.
+python examples/04_IEEE123_ProblemSpec_Observations.py
+python examples/05_IEEE123_ProblemSpec_Actions.py
+python examples/06_IEEE123_Controller_Context_Forecasts.py
 ```
 
-The full six-run **24-step research demonstration** (P1 RBC/MPC and P2 MF01/MF02 RBC/MPC) is explicitly opt-in because it requires a working Gurobi license and is computationally more expensive:
+The controller examples use the same direct script pattern. **MPC requires Gurobi (`gurobipy`) and an appropriate license**; the other scripts do not require Gurobi:
 
 ```powershell
+# RBC examples
+python examples/07_IEEE123_P1_RBC.py
+python examples/09_IEEE123_P2_RBC.py
+
+# MPC examples (install/configure licensed Gurobi first)
 python -m pip install gurobipy
-python examples/ieee123_course/run_course.py --paper-campaign --steps 24 --run-id pesgm_trial_001
+python examples/08_IEEE123_P1_MPC.py
+python examples/10_IEEE123_P2_MPC.py
 ```
 
-A single command creates `examples/ieee123_course/output/<run-id>/`, with individual lesson results, native voltage data, local registry/inventory/preflight receipts, and a final campaign receipt. Existing output folders are never overwritten.
+The scripts have settings such as `STEPS`, `RUN_NAME`, `SAVE_RESULTS`, and scenario/policy selections where applicable. They read pinned feeder and controller inputs from `examples/Input/` and optionally create isolated runs in `examples/Output/<RUN_NAME>/`. An existing output run directory is not overwritten. **These newly written examples have passed offline checks but have not yet been independently native-run end to end; treat the commands as usage instructions, not a claim of runtime qualification.**
+
+### Development status and alternative tutorial
+
+- **Current recommended examples:** `examples/01_...py` through `examples/10_...py` as listed above. Script source and input data are present; native tutorial validation is pending.
+- **Reinforcement-learning controller integration:** **planned / coming up**, not yet provided as a qualified example. No RL example is promised as working in this release.
+- **Legacy [`examples/ieee123_course/`](examples/ieee123_course/README.md): under construction.** This earlier 11-lesson course uses an additional `run_course.py` / `course_utils` layer. It remains in the repository for research/development reference but **is not the recommended entry point and is not considered sufficiently polished or runtime-qualified for new users**. Its earlier README/commands may not reflect the current preferred API-teaching approach.
+
+### Other documentation
+
+| Goal | Reference |
+|---|---|
+| Understand simulator architecture | [Architecture](docs/tutorial/02_ARCHITECTURE.md) |
+| Develop `ProblemSpec` and public API integrations | [Public API](docs/tutorial/01_PUBLIC_API.md) |
+| Integrate controllers without touching the plant | [Controller programming](docs/tutorial/03_CONTROLLER_PROGRAMMING.md) |
+| Understand limitations and evidence standards | [Scientific limitations](docs/tutorial/04_SCIENTIFIC_LIMITS.md), [testing](docs/tutorial/05_TESTING_AND_REPRODUCIBILITY.md) |
+| Cite the software and reproduce study conditions | [Citation](#how-to-cite-opendsssim), [reproducibility](docs/tutorial/06_CITATION_AND_REPRODUCIBILITY.md) |
 
 ## Features
 
@@ -84,49 +114,54 @@ Every controller must use the published observation/action contracts. Changing a
 
 ## Repository layout
 
-| Directory | Purpose |
+| Directory | Purpose and status |
 |---|---|
-| `src/opendsssim/` | Physical backend, discovery, persistence, semantic registries, problem resolution, runtime, environment, controllers |
-| `experiments/pesgm2027/feeders/` | Source feeder variants, including IEEE-123, IEEE-8500, European LV feeders |
-| `experiments/pesgm2027/` | Original research experimentation code and baseline studies |
-| `examples/ieee123_course/` | **New, self-contained and annotated** learning campaign with `input/` and `output/` |
-| `tests/` | Existing simulator/controller unit and integration tests |
-| `docs/development/` | Authoritative research and ratified mathematical contracts |
-| `docs/tutorial/` | Task-oriented public-API programming guide |
-| `docs/release/` | Input provenance, release differences, publication checklist |
-| `results/pesgm2027/` | Existing archived qualified research evidence |
+| [`examples/`](examples/README.md) | **Recommended standalone 01-10 examples**; editable configuration, clear closed-loop loops, input/output conventions |
+| `examples/Input/` | IEEE-123 feeder files, synthetic time series, controller cases and provenance; keep inputs unchanged |
+| `examples/Output/` | Optional per-example output, including histories, diagnostics, audits, CSV/JSON; typically ignored by Git |
+| `examples/ieee123_course/` | **Legacy course under construction**; retained for reference, not recommended as the primary tutorial |
+| `src/opendsssim/` | AltDSS backend, semantic registries, `ProblemSpec`, environment, runtime, information services, controllers |
+| `experiments/pesgm2027/` | Original research feeder definitions, pilots and scientific experiment scripts |
+| `tests/` | Simulator/controller tests |
+| `docs/tutorial/` | Architecture, public APIs, programming contracts, science limitations, testing, citations |
+| `docs/development/` | Detailed scientific design contracts and development records |
+| `docs/release/` | Source provenance and publication checklist |
+| `results/pesgm2027/` | Historical research evidence (do not conflate archived results with fresh tutorial runs) |
 
-### Detailed learning-tree view
+### Recommended examples directory
 
 ```text
 OpenDSSSim/
-├── README.md                         main installation, learning and citation guide
-├── CITATION.cff                      provisional GitHub software citation
-├── pyproject.toml                    Python package and dependency metadata
-├── src/opendsssim/                   existing simulator, contracts and controllers
-├── experiments/pesgm2027/           original feeder definitions and research runners
-├── examples/ieee123_course/
-│   ├── README.md                     full syllabus and commands
-│   ├── input/                        feeders, static cases, RBC routes, geometry, manifests
-│   ├── lessons/                      annotated lessons 00 through 10
-│   ├── course_utils/                 shared public-interface teaching utilities
-│   ├── run_course.py                 lesson and paper-campaign CLI
-│   ├── tests/                         offline tutorial checks
-│   └── output/                       run-specific results, kept out of source control
-├── docs/tutorial/                    API, architecture, controller, scientific and test guides
-├── docs/development/                 full research/development records
-├── docs/release/                     provenance and publication checklists
-├── tests/                            existing OpenDSSSim unit/integration tests
-└── scripts/                          release verification
+|-- README.md
+|-- CITATION.cff
+|-- pyproject.toml
+|-- src/opendsssim/
+|-- examples/
+|   |-- README.md
+|   |-- 01_IEEE123_Environment_Basics.py
+|   |-- 02_IEEE123_TimeSeries_NoController.py
+|   |-- 03_Inspect_Saved_Results.py
+|   |-- 04_IEEE123_ProblemSpec_Observations.py
+|   |-- 05_IEEE123_ProblemSpec_Actions.py
+|   |-- 06_IEEE123_Controller_Context_Forecasts.py
+|   |-- 07_IEEE123_P1_RBC.py
+|   |-- 08_IEEE123_P1_MPC.py
+|   |-- 09_IEEE123_P2_RBC.py
+|   |-- 10_IEEE123_P2_MPC.py
+|   |-- Input/                       # IEEE123_Base, IEEE123_P1, P2 variants, cases, replay
+|   |-- Output/                      # Optional saved run results
+|   `-- ieee123_course/              # Legacy, under construction
+|-- docs/
+|-- experiments/pesgm2027/
+|-- results/pesgm2027/
+`-- tests/
 ```
-
-The `input/` directory is source-pinned and read-only by convention. Each invocation uses a unique `output/<run-id>/` and does not overwrite earlier results. Source-feeder and diagram-coordinate files are preserved with attribution/provenance notes; diagram XY positions are **not** geographic coordinates.
 
 ## Installation and dependencies
 
-Python **3.10+** is required (`pyproject.toml`). Core dependencies are `altdss==0.2.4` and `gymnasium>=1.2,<2`; the tutorial additionally uses NumPy and Matplotlib. Gurobi is **optional** and required only for MPC lessons; follow Gurobi's separate licensing conditions. `pip install -e ".[dev]"` enables the existing pytest suite.
+Python **3.10+** is required (`pyproject.toml`). Core dependencies are `altdss==0.2.4` and `gymnasium>=1.2,<2`; plotting and data inspection may additionally use NumPy and Matplotlib. Gurobi is **optional** and required only for MPC lessons; follow Gurobi's separate licensing conditions. `pip install -e ".[dev]"` enables the existing pytest suite.
 
-A native AltDSS, Gurobi or full scientific campaign run has **not been executed in the package-building environment**. We verified syntax, input case hashes, teaching CLI, offline lesson tests, and reference plotting; run the documented native smoke sequence on a configured machine before publishing execution claims. See [test guide](docs/tutorial/05_TESTING_AND_REPRODUCIBILITY.md).
+The **standalone examples 01-10** were authored and checked offline but have **not** been independently native-run as a complete tutorial sequence. Run native AltDSS and (for MPC) licensed Gurobi smoke tests before publishing execution-success claims. The older course has separate development-only checks and is not the supported tutorial path. See [test guide](docs/tutorial/05_TESTING_AND_REPRODUCIBILITY.md).
 
 ## Scientific scope and honest comparisons
 
@@ -167,4 +202,4 @@ For research reproducibility, report the OpenDSSSim version **and exact Git comm
 
 See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), [scientific limitations](docs/tutorial/04_SCIENTIFIC_LIMITS.md), [testing and reproducibility](docs/tutorial/05_TESTING_AND_REPRODUCIBILITY.md), and the [GitHub publication checklist](docs/release/GITHUB_PUBLICATION_CHECKLIST.md).
 
-A project-level **license has not been approved**; the original feeder files and external reference data may have separate license conditions. Review the 12 machine-local path matches identified in the release audit before a public push. Until these are resolved, keep the GitHub repository private. Do not treat an absent license as permission to redistribute.
+The current repository tree includes a `LICENSE` file, but public distribution rights, attribution and the status of that license still need confirmation; original feeder files and reference data may carry different terms. Review the 12 machine-local path matches identified in the release audit before a public push. Until these are resolved, keep the GitHub repository private. Do not treat the presence of a file named `LICENSE` as proof that all third-party materials can be redistributed under its terms.

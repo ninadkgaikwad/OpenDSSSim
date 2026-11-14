@@ -1,0 +1,36 @@
+{
+  "constant_native_equipment": "91 original load definitions; 7 native RegControls; 4 native capacitors; no PV addition",
+  "default_health": "all healthy; scenario health separately imposed by runtime/qualification script",
+  "important_note": "New tie switches currently use explicitly low impedance placeholders; physical line corridors, protective ratings and full voltage/thermal feasibility are not yet fixed or qualified.",
+  "initial_closed_switches": [
+    "Sw1",
+    "Sw2",
+    "Sw3",
+    "Sw4",
+    "Sw5",
+    "Sw6"
+  ],
+  "initial_open_switches": [
+    "Sw7",
+    "Sw8",
+    "Sw9"
+  ],
+  "modifications": [
+    "Sw9 81-87 ABC, initially OPEN"
+  ],
+  "parent_master_sha256": "1F14D24852C9E998C18D8423A74596A13DDECBCE3691E6951A7700582522AE0A",
+  "schema": "opendsssim.p2.ieee123.ratified_design_feeder.v01",
+  "science_reference": "docs/development/control_science/P2_reconfiguration_restoration/P2_ControlScience_Contract.json",
+  "source_parent": "experiments/pesgm2027/feeders/ieee123_p2_restoration",
+  "source_sha256": {
+    "IEEE123Loads.DSS": "FD28F52836205506A1980B52C5A7E12CA585AA626C52A6249502C1C3B2FC2255",
+    "IEEE123Master.dss": "9EBC5873E039F4488797606B8E1F79BFBDA0EAFBE26053361EE725A0724C7AC2",
+    "IEEE123Regulators.DSS": "CD6AD77980DC018631CE39FAAB528AFCE40B0B9A50A6BC1C9AC8049FFB8207D7",
+    "IEEELineCodes.DSS": "4BC8E3A0B24AD7B1CB4321F1C3B6C8458B646DD3A83B3CD11CCCC02444624CB2",
+    "OpenDSS_License.txt": "72E6CB08D3397A969F7763D87AE46BEA03F2246A4A996524D0DF19285A422560",
+    "Run_IEEE123Bus.DSS": "559CCD5D3173F9204A7A5A1A764C3F405A0F46941F5E4FD7713F1EBF7EBBC0EF"
+  },
+  "status": "RATIFIED_TOPOLOGY_AND_SCENARIO_DESIGN__ELECTRICAL_QUALIFICATION_PENDING",
+  "switch_count": 9,
+  "variant": "MF01"
+}
