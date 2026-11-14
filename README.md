@@ -148,8 +148,8 @@ A native AltDSS, Gurobi or full scientific campaign run has **not been executed 
 Use this BibTeX template now, and replace the provisional author group, repository URL and commit with the approved publication information:
 
 ```bibtex
-@software{OpenDSSSim_v0_1_0a6,
-  author  = {{OpenDSSSim contributors}},
+@software{OpenDSSSim_v0_1,
+  author  = {{Ninad Gaikwad and Anamika Dubey}},
   title   = {{OpenDSSSim}: A Generalized Gymnasium Framework for Distribution-System Simulation and Control},
   year    = {2026},
   version = {0.1.0a6},
@@ -157,14 +157,3 @@ Use this BibTeX template now, and replace the provisional author group, reposito
 }
 ```
 
-The repository contains a **provisional** [`CITATION.cff`](CITATION.cff), enabling GitHub's **Cite this repository** interface once pushed. **Before making the repository public**, the copyright holder(s) must approve the actual software author roster and fill in the GitHub repository URL; do not assume the provisional collective author represents the final paper authors.
-
-**Associated paper:** *OpenDSSSim: A Generalized Gymnasium Framework for Distribution-System Simulation and Control*, planned for IEEE PES General Meeting 2027. **Do not invent a DOI, proceedings page number, acceptance status, or publication date.** Cite the manuscript as *in preparation* only when appropriate and approved; replace with the final IEEE citation once published.
-
-For research reproducibility, report the OpenDSSSim version **and exact Git commit**, feeder variant (`ieee123_pesgm2027`, `ieee123_p2_mf01_simple`, or `ieee123_p2_mf02_exotic`), controller and objective policy, timestep, AltDSS and Gurobi versions where applicable, random seed, and result evidence hashes. See [Citation and reproducibility](docs/tutorial/06_CITATION_AND_REPRODUCIBILITY.md).
-
-## Contributing, licensing and responsible public release
-
-See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), [scientific limitations](docs/tutorial/04_SCIENTIFIC_LIMITS.md), [testing and reproducibility](docs/tutorial/05_TESTING_AND_REPRODUCIBILITY.md), and the [GitHub publication checklist](docs/release/GITHUB_PUBLICATION_CHECKLIST.md).
-
-A project-level **license has not been approved**; the original feeder files and external reference data may have separate license conditions. Review the 12 machine-local path matches identified in the release audit before a public push. Until these are resolved, keep the GitHub repository private. Do not treat an absent license as permission to redistribute.
