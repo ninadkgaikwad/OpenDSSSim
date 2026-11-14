@@ -192,6 +192,7 @@ Use this BibTeX template now, and replace the provisional author group, reposito
 }
 ```
 
+<<<<<<< HEAD
 The repository contains a **provisional** [`CITATION.cff`](CITATION.cff), enabling GitHub's **Cite this repository** interface once pushed. **Before making the repository public**, the copyright holder(s) must approve the actual software author roster and fill in the GitHub repository URL; do not assume the provisional collective author represents the final paper authors.
 
 **Associated paper:** *OpenDSSSim: A Generalized Gymnasium Framework for Distribution-System Simulation and Control*, planned for IEEE PES General Meeting 2027. **Do not invent a DOI, proceedings page number, acceptance status, or publication date.** Cite the manuscript as *in preparation* only when appropriate and approved; replace with the final IEEE citation once published.
@@ -203,3 +204,5 @@ For research reproducibility, report the OpenDSSSim version **and exact Git comm
 See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), [scientific limitations](docs/tutorial/04_SCIENTIFIC_LIMITS.md), [testing and reproducibility](docs/tutorial/05_TESTING_AND_REPRODUCIBILITY.md), and the [GitHub publication checklist](docs/release/GITHUB_PUBLICATION_CHECKLIST.md).
 
 The current repository tree includes a `LICENSE` file, but public distribution rights, attribution and the status of that license still need confirmation; original feeder files and reference data may carry different terms. Review the 12 machine-local path matches identified in the release audit before a public push. Until these are resolved, keep the GitHub repository private. Do not treat the presence of a file named `LICENSE` as proof that all third-party materials can be redistributed under its terms.
+=======
+>>>>>>> a981684afa7018fb8e338fd5cccf967d74089e64
